@@ -11,7 +11,7 @@
         <input type="password" placeholder="请输入密码" />
         <input type="password" placeholder="请确认密码" />
       </div>
-      <button>创建</button>
+      <button> <router-link to="/Home">注册 </router-link></button>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
 
 <style scoped>
 .login-container {
+  margin-top: 100px;
   width: 100%;
   height: 100%;
   background-color: #f0f0f0;
