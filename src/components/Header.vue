@@ -4,12 +4,12 @@
       <h2>【florum】</h2>
       <!-- 左侧内容 -->
     </div>
-    <div class="navbar-center">
+    <div class="navbar-center" >
       <router-link to="/">首页</router-link>
       <router-link to="/">分类</router-link>
-      <router-link to="/">购物车</router-link>
+      <router-link to="/">社区</router-link>
       <router-link to="/">我的</router-link>
-      <router-link to="/">我的</router-link>
+      <router-link to="/">关于我们</router-link>
       <!-- 中间内容 -->
     </div>
     <div class="navbar-right">
@@ -22,6 +22,7 @@
 </template>
 
 <script setup>
+
 // 这里可以添加任何需要的逻辑
 </script>
 
