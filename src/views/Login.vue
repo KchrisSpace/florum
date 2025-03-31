@@ -1,33 +1,38 @@
-<!--  -->
 <template>
   <div class="login-container">
-    <div class="login-box">
-      <div class="login-title">
-        <p>注册账号</p>
+    <h1>登录你的账户</h1>
+    <p>登录账户之后，将带您走进鲜花的浪漫世界</p>
+    <form @submit.prevent="login">
+      <div class="input-group">
+        <input type="text" placeholder="用户名" id="username" v-model="username" />
       </div>
-      <div class="login-form">
-        <input type="text" placeholder="请输入用户名" v-model="username" />
-        <!-- 可无邮箱 -->
-        <input type="text" placeholder="请输入邮箱" />
-        <input type="password" placeholder="请输入密码" v-model="password" />
-        <input type="password" placeholder="请确认密码" />
+      <div class="input-group">
+        <input
+          type="password"
+          placeholder="密码"
+          id="password"
+          v-model="password"
+        />
       </div>
-      <button @click="handleLogin">login</button>
-    </div>
+      <button type="submit" class="login-button" @click="handleLogin">登录</button>
+    </form>
+    <p class="forgot-password">忘记密码?</p>
+    <p class="register-link">
+      没有账户? <a href="#" @click.prevent="goToRegister">去创建</a>
+    </p>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
 import axios from "axios";
-
 const router = useRouter();
 const username = ref("");
+const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const validCredentials = ref([]);
-
 
 onMounted(async () => {
   try {
@@ -51,72 +56,83 @@ const handleLogin = () => {
 
     router.push({ name: "Home" });
     console.log("登录成功");
-
   } else {
     // 显示错误消息提示用户名或密码错误
- alert("用户名或密码错误");
+    alert("用户名或密码错误");
     // 并清空输入框
     username.value = "";
-
   }
+};
+
+
+
+const goToRegister = () => {
+  router.push("/register");
 };
 </script>
 
 <style scoped>
 .login-container {
-  margin-top: 100px;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f0f0;
-}
-.login-box {
-  width: 400px;
-  height: 500px;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-}
-.login-title {
-  font-size: 32px;
-  font-weight: bold;
+  width: 100vw;
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 150px;
 }
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  input {
-    width: 100%;
-    height: 50px;
-    font-weight: 400;
-    border: none;
-    background-color: #f0f0f0;
-    opacity: 0.6;
-    padding: 0 10px;
-    color: #a6a6a6;
-    transition: all 0.3s ease;
-    outline: 2px solid transparent;
-    &:focus {
-      outline: 2px solid #f26371;
-      /* background-color: #fff; */
-      color: #333;
-    }
-  }
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-weight: 1200;
+  margin-bottom: 10px;
 }
-button {
-  margin-top: 20px;
-  width: 100%;
-  height: 50px;
+
+p {
+  font-size: 14px;
+  color: #4d4a4a;
+}
+
+.input-group {
+  margin: 10px 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 30%;
+  padding: 10px;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-button {
+  width: 30%;
+  padding: 10px;
+  background-color: #f76c6c;
+  color: white;
   border: none;
-  outline: none;
-  background-color: #f26371;
-  color: #fff;
-  font-weight: 500;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    background-color: #9c7c80;
-  }
+  margin-top: 20px;
+}
+
+.forgot-password {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.register-link {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+}
+
+.register-link a {
+  color: #f76c6c;
+  text-decoration: none;
 }
 </style>

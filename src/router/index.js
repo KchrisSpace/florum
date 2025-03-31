@@ -5,12 +5,12 @@ import Home from "../views/Home.vue"; // 确保路径正确
 const routes = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/home",
   },
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
   },
   {
     path: "/home",
@@ -23,12 +23,19 @@ const routes = [
     name: "About",
     component: () => import("../views/About.vue"),
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
 
   {
     path: "/WishList",
     name: "WishList",
     component: () => import("../views/Wishlist.vue"),
   }
+  
+
 ];
 
 // 创建路由实例

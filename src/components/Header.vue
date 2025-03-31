@@ -14,7 +14,7 @@
     </div>
     <div class="navbar-right">
       <button><router-link to="/search">搜索</router-link></button>
-      <button><router-link to="/admin">我的</router-link></button>
+      <button><router-link to="/login">登陆</router-link></button>
       <button><router-link to="/wishlist">心愿单</router-link></button>
       <button><router-link to="/shopping-cart">购物车</router-link></button>
     </div>
