@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="cart">
-        <a href="#/cart">购物车</a>
+       <router-link to="/cart"> 购物车</router-link>
       </div>
     </div>
 
@@ -26,6 +26,7 @@
       <router-link to="/contact">联系我们</router-link>
     </div>
   </div>
+  
 </template>
 
 <script setup>

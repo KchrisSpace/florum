@@ -1,5 +1,7 @@
 <template>
+  
   <div class="cart-item">
+    <hr>
     <button class="remove-btn" @click="removeItem">X</button>
     <img
       class="item-image"
@@ -42,6 +44,8 @@
 }
 
 .item-info {
+  display: flex;
+justify-content: space-evenly;
   flex-grow: 1;
   /* border: 1px solid #000; */
  

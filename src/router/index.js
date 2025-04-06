@@ -16,7 +16,6 @@ const routes = [
     path: "/home",
     name: "Home",
     component: () => import("../views/Home.vue"),
-   
   },
   {
     path: "/about",
@@ -28,14 +27,22 @@ const routes = [
     name: "Login",
     component: () => import("../views/Login.vue"),
   },
-
   {
-    path: "/WishList",
-    name: "WishList",
+    path: "/wishlist",
+    name: "Wishlist",
     component: () => import("../views/Wishlist.vue"),
-  }
-  
-
+    
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: () => import("../views/Cart.vue"),
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: () => import("../views/Payment.vue"),
+  },
 ];
 
 // 创建路由实例
