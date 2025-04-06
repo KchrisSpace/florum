@@ -6,17 +6,61 @@
         <p>注册账号</p>
       </div>
       <div class="login-form">
-        <input type="text" placeholder="请输入用户名" />
+        <input type="text" placeholder="请输入用户名" v-model="username" />
+        <!-- 可无邮箱 -->
         <input type="text" placeholder="请输入邮箱" />
-        <input type="password" placeholder="请输入密码" />
+        <input type="password" placeholder="请输入密码" v-model="password" />
         <input type="password" placeholder="请确认密码" />
       </div>
-      <button> <router-link to="/Home">注册 </router-link></button>
+      <button @click="handleLogin">login</button>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+
+const router = useRouter();
+const username = ref("");
+const password = ref("");
+const errorMessage = ref("");
+const validCredentials = ref([]);
+
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:3001/users");
+    validCredentials.value = response.data; // 直接提取数据
+    console.log("获取的用户数据:", validCredentials.value); // 打
+  } catch (err) {
+    console.error(err);
+  }
+});
+const handleLogin = () => {
+  // 使用some方法遍历有效凭证数组，检查是否存在匹配的用户名和密码
+  const isValid = validCredentials.value.some((cred) => {
+    console.log(cred.username, cred.password); // 移动到回调函数内部
+    return cred.username === username.value && cred.password === password.value;
+  });
+
+  // 根据凭证验证结果，执行相应的操作
+  if (isValid) {
+    // 清空错误消息并导航到RouteA
+
+    router.push({ name: "Home" });
+    console.log("登录成功");
+
+  } else {
+    // 显示错误消息提示用户名或密码错误
+ alert("用户名或密码错误");
+    // 并清空输入框
+    username.value = "";
+
+  }
+};
+</script>
 
 <style scoped>
 .login-container {
