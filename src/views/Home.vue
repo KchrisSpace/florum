@@ -4,9 +4,6 @@
     <img src="../assets/home-flower.png" alt="" />
     <Activity />
     <SalesList />
-    
-
-
   </div>
 </template>
 
@@ -19,7 +16,7 @@ import Activity from "../components/Activity.vue";
 <style scoped>
 * {
   margin: 0;
- 
+
   box-sizing: border-box;
   overflow-x: hidden;
 }

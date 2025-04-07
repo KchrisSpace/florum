@@ -5,7 +5,22 @@ import Home from "../views/Home.vue"; // 确保路径正确
 const routes = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/home",
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: () => import("../views/Home.vue"),
+  },
+  {
+    path: "/about",
+    name: "About",
+    component: () => import("../views/About.vue"),
   },
   {
     path: "/login",
@@ -13,22 +28,21 @@ const routes = [
     component: () => import("../views/Login.vue"),
   },
   {
-    path: "/home",
-    name: "Home",
-    component: () => import("../views/Home.vue"),
-   
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: () => import("../views/About.vue"),
-  },
-
-  {
-    path: "/WishList",
-    name: "WishList",
+    path: "/wishlist",
+    name: "Wishlist",
     component: () => import("../views/Wishlist.vue"),
-  }
+    
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: () => import("../views/Cart.vue"),
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: () => import("../views/Payment.vue"),
+  },
 ];
 
 // 创建路由实例
