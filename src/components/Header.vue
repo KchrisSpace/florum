@@ -4,24 +4,25 @@
       <h2>【florum】</h2>
       <!-- 左侧内容 -->
     </div>
-    <div class="navbar-center">
+    <div class="navbar-center" >
       <router-link to="/">首页</router-link>
       <router-link to="/">分类</router-link>
-      <router-link to="/">购物车</router-link>
+      <router-link to="/">社区</router-link>
       <router-link to="/">我的</router-link>
-      <router-link to="/">我的</router-link>
+      <router-link to="/">关于我们</router-link>
       <!-- 中间内容 -->
     </div>
     <div class="navbar-right">
-      <button><router-link to="/login">登录</router-link></button>
-      <button><router-link to="/register">注册</router-link></button>
-      <button><router-link to="/cart">购物车</router-link></button>
-      <button><router-link to="/collect">收藏</router-link></button>
+      <button><router-link to="/search">搜索</router-link></button>
+      <button><router-link to="/admin">我的</router-link></button>
+      <button><router-link to="/wishlist">心愿单</router-link></button>
+      <button><router-link to="/shopping-cart">购物车</router-link></button>
     </div>
   </nav>
 </template>
 
 <script setup>
+
 // 这里可以添加任何需要的逻辑
 </script>
 

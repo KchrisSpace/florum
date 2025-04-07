@@ -2,9 +2,9 @@
   <div class="home">
     <Header />
     <img src="../assets/home-flower.png" alt="" />
-
     <Activity />
     <SalesList />
+    
 
 
   </div>
