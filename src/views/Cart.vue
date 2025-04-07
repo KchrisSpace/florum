@@ -1,13 +1,7 @@
 <!--  -->
 <template>
-  <header2></header2>
+  <Header2 title="购物车" subtext="cart"/>
   <div class="cart">
-    <div class="title">
-      <br />
-      <h1>购物车</h1>
-      <h2>my cart</h2>
-      <br />
-    </div>
     <div class="cart-container">
       <hr />
       <Cart></Cart>
@@ -44,10 +38,7 @@ const handlePay = () => {
 
 .cart {
   width: 100vw;
-  background-color: #ffffff;
   position: relative;
-  min-height: 100vh;
-  overflow-x: hidden; /* 防止水平滚动 */
 }
 .cart-container {
   width: 80%;

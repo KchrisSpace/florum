@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Harmony Sans";
+  src: url('/public/fonts/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.woff2') format("woff2");
+}
+@font-face{
+  font-family:"Alibaba";
+  src: url('/public/fonts/Alibaba/Alibaba-PuHuiTi-Regular.woff2') format("woff2");
+}
+@font-face{
+  font-family:"Hanazono Mincho";
+  src: url('/public/fonts/花园明朝体/花园明朝体-HanaMinA.woff2') format("woff2");
+}
+@font-face{
+  font-family:"Hanazono";
+  src: url('/public/fonts/花园明朝体/RiBenHuaYuanMingChaoTi-2.woff2') format("woff2");
+}
+/* 自定义选择器样式 */
+@layer utilities {
+
+}
+@theme {
+  --font-PingFangSC: 'Harmony Sans', sans-serif;
+  --font-ZQK: 'Alibaba', sans-serif;
+  --color-font-primary: #F26371;
+  
+}
+
+

@@ -1,6 +1,6 @@
 <template>
+   <Header />
   <div class="home">
-    <Header />
     <img src="../assets/home-flower.png" alt="" />
     <Activity />
     <SalesList />
@@ -26,9 +26,7 @@ img {
 }
 
 .home {
-  padding: 15px;
-  width: 100vw;
-  height: 100vh;
+  padding: 0 20px;
   background-color: #fefdfd;
 }
 </style>
