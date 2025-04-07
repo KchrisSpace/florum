@@ -13,6 +13,9 @@
         <input type="password" placeholder="请确认密码" />
       </div>
       <button @click="handleRejister">register</button>
+      <p class="login-link">
+        已有账户? <a href="#" @click.prevent="goToLogin">去登陆</a>
+      </p>
     </div>
   </div>
 </template>
@@ -21,7 +24,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-
+const router = useRouter();
 onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:3001/users");
@@ -31,8 +34,9 @@ onMounted(async () => {
     console.error(err);
   }
 });
-
-
+const goToLogin = () => {
+  router.push("/login");
+};
 </script>
 
 <style scoped>
@@ -51,7 +55,7 @@ onMounted(async () => {
 }
 .login-title {
   font-size: 32px;
-  font-weight: bold;
+  font-weight: 500;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -91,5 +95,15 @@ button {
   &:hover {
     background-color: #9c7c80;
   }
+}
+.login-link {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+}
+
+.login-link a {
+  color: #f76c6c;
+  text-decoration: none;
 }
 </style>

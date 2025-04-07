@@ -27,10 +27,12 @@
 import { ref } from "vue";
 import Header2 from "../components/header2.vue";
 import Cart from "../components/Cart.vue";
+import { useRouter } from "vue-router";
 
 const total = ref(100);
-
+const router = useRouter();
 const handlePay = () => {
+  router.push("/payment");
   console.log("处理支付...");
 };
 </script>

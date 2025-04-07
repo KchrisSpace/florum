@@ -4,7 +4,7 @@
       <h2>【florum】</h2>
       <!-- 左侧内容 -->
     </div>
-    <div class="navbar-center" >
+    <div class="navbar-center">
       <router-link to="/">首页</router-link>
       <router-link to="/">分类</router-link>
       <router-link to="/">社区</router-link>
@@ -16,20 +16,32 @@
       <button><router-link to="/search">搜索</router-link></button>
       <button><router-link to="/login">登陆</router-link></button>
       <button><router-link to="/wishlist">心愿单</router-link></button>
-      <button><router-link to="/shopping-cart">购物车</router-link></button>
+      <button @click="toggleSidebar">购物车</button>
     </div>
   </nav>
+  <!-- 使用侧边栏组件 -->
+  <SideCart :is-open="isSidebarOpen" @close="closeSidebar" />
 </template>
 
 <script setup>
+import { ref } from "vue";
+import SideCart from "./SideCart.vue";
 
-// 这里可以添加任何需要的逻辑
+const isSidebarOpen = ref(false);
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const closeSidebar = () => {
+  isSidebarOpen.value = false;
+};
 </script>
 
 <style scoped>
-a{
-    text-decoration: none;
-    color: rgb(67, 58, 58);
+a {
+  text-decoration: none;
+  color: rgb(67, 58, 58);
 }
 .navbar {
   display: flex; /* 使用 Flexbox */
@@ -38,6 +50,8 @@ a{
   background-color: #ffffff; /* 导航栏背景色 */
   color: rgb(67, 58, 58); /* 字体颜色 */
   padding: 0 20px; /* 左右内边距 */
+  position: relative;
+  z-index: 1000;
 }
 
 .navbar-left {
@@ -57,14 +71,16 @@ a{
 
 button {
   margin-left: 10px; /* 按钮之间的间距 */
- /* 按钮背景色 */
+  /* 按钮背景色 */
   color: rgb(45, 44, 44); /* 按钮字体颜色 */
   border: none; /* 去掉边框 */
- 
   cursor: pointer; /* 鼠标悬停时显示手型 */
+  background: none;
+  padding: 8px 12px;
 }
 
 button:hover {
-  background-color: #847373; /* 鼠标悬停时按钮颜色变化 */
+  background-color: #f0f0f0;
+  border-radius: 4px;
 }
 </style>

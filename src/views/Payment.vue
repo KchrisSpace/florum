@@ -2,19 +2,20 @@
   支付页面  
    -->
 <template>
-    <div class="payment">
-        <div class="payment-container">
-            <div class="payment-header">
-                <h1>支付</h1>
-            </div>
-        </div>
+  <header2></header2>
+  <div class="payment">
+    <div class="title">
+      <br />
+      <h1>支付</h1>
+      <h2>payment</h2>
+      <br />
     </div>
+  </div>
 </template>
 
-<script setup >
+<script setup>
 import { ref } from "vue";
+import Header2 from "../components/header2.vue";
 </script>
 
-<style  scoped>
-
-</style>
+<style scoped></style>
