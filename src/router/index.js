@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue'; // 确保路径正确
-import Custom from "../pages/Custom/index.vue"
+import Custom from "../pages/Custom/Custom.vue"
 import Community from "../pages/Community/index.vue"
-import Store from "../pages/Store/index.vue"
-import Contact from "../pages/Contact/index.vue"
+import Store from "../pages/Store/Store.vue"
+import Contact from "../pages/Contact/Contact.vue"
 
 // 路由配置
 const routes = [
