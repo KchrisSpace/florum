@@ -14,7 +14,7 @@
             <font-awesome-icon
               :icon="['fas', 'cart-shopping']"
               size="xl"
-              style="color: #808080" />
+              style="color: #F26371" />
           </div>
           你的购物车</router-link
         >
@@ -109,7 +109,9 @@ export default {
   },
 };
 </script>
+<script setup>
 
+</script>
 <style scoped>
 .header2 {
   padding: 0 60px;

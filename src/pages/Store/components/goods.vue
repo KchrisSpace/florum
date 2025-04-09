@@ -13,10 +13,11 @@
       <div
         v-show="showCart"
         class="absolute bottom-0 w-full h-20 bg-bg-fourth/46 flex justify-center items-center transition-opacity duration-300">
-        <div
-          class="w-22 h-9 bg-font-primary text-white text-sm leading-9 text-center cursor-pointer hover:bg-font-primary/80">
+        <button
+          class="w-22 h-9 bg-font-primary text-white text-sm leading-9 text-center cursor-pointer hover:bg-font-primary/80"
+          @click="showJoinCart = true">
           加入购物车
-        </div>
+        </button>
         <div
           class="absolute right-4 flex items-center cursor-pointer"
           @click="showDetails = true">
@@ -33,6 +34,7 @@
       ></span
     >
     <DetailsEject v-if="showDetails" @close="showDetails = false" />
+    <JoinCart v-if="showJoinCart" @close="showJoinCart = false" />
   </div>
 </template>
 <script>
@@ -43,6 +45,9 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import DetailsEject from './details-eject.vue';
+import JoinCart from '../components/join-cart.vue';
+
 const showCart = ref(false);
 const showDetails = ref(false);
+const showJoinCart = ref(false);
 </script>

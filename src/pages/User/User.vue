@@ -1,39 +1,72 @@
 <template>
-<div class="mt-20 py-10 flex justify-center mx-10 border-t-1 border-bg-primary">
-  <!-- 左侧菜单栏 -->
-<div class="flex flex-col border-1 h-full border-bg-primary font-Alibaba text-font-secondary text-2xl px-4 py-2">
-  <button>账户详情</button>
-  <button>订单</button>
-  <button>地址</button>
-  <button>退出登录</button>
-</div>
-<!-- 右侧显示内容 -->
-<div class="w-2/3 h-screen px-10">
-  <!-- 个人信息 -->
-  <div>
-    <div class="flex flex-col w-20 mx-6"> <div class="w-20 h-20 bg-font-primary rounded-full"></div><p class="text-center">更换头像</p></div>
-    <div>
-      <label for="">昵称：</label> <input type="text" class="bg-bg-fifth/60 h-8">
-      <label for="sex">性别：</label> <input type="radio" name="sex">男</input><input type="radio" name="sex">女</input>
+  <Header />
+  <div
+    class="pt-30 flex justify-between px-40 border-t-2 bg-[#f2f3f5] border-bg-primary font-Alibaba">
+    <!-- 左侧菜单栏 -->
+    <div
+      class="w-60 flex flex-col bg-white text-font-secondary text-xl px-2 py-6 z-50">
+      <button
+        :class="{ selected: selectedButton === 'UserDetails' }"
+        @click="changeView('UserDetails')">
+        账户详情
+      </button>
+      <button
+        :class="{ selected: selectedButton === 'UserOrders' }"
+        @click="changeView('UserOrders')">
+        订单
+      </button>
+      <button
+        :class="{ selected: selectedButton === 'UserAddress' }"
+        @click="changeView('UserAddress')">
+        地址
+      </button>
+      <button>退出登录</button>
+    </div>
+    <!-- 右侧显示内容 -->
+    <div class="w-full ml-10 h-screen pb-10 px-4 bg-white overflow-y-scroll">
+      <!-- <UserDetails/> -->
+      <UserDetails v-if="currentView === 'UserDetails'" />
+      <UserAddress v-if="currentView === 'UserAddress'" />
+      <UserOrders v-if="currentView === 'UserOrders'" />
+      <!-- <UserOrders/> -->
     </div>
   </div>
-  <!-- 修改密码 -->
-  <div></div>
-  <!-- 保存更改 -->
-  <div></div>
-</div>
-</div>
 </template>
 <script>
 export default {
   name: 'User',
+};
+</script>
+<script setup>
+import { ref } from 'vue';
+import Header from '/src/components/Header.vue';
+import UserDetails from './components/user-details.vue';
+import UserAddress from './components/user-address/user-address.vue';
+import UserOrders from './components/user-orders.vue';
+const currentView = ref('UserDetails');
+const selectedButton = ref('UserDetails');
+function changeView(view) {
+  currentView.value = view;
+  selectedButton.value = view;
+  console.log(currentView.value);
 }
 </script>
 <style scoped>
-button{
+button {
   padding: 10px 0;
+  padding-left: 20px;
+  width: 100%;
+  transition: color 0.3s;
+  text-align: left;
+  border-radius: 4px;
 }
-input{
-  outline: none;
+.selected {
+  color: #f26371;
+ background: rgba(251, 228, 233, 0.6);
+  
 }
+button:hover{
+  background: rgba(251, 228, 233, 0.6);
+}
+
 </style>

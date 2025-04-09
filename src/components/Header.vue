@@ -49,7 +49,7 @@
         <font-awesome-icon
           :icon="['fas', 'cart-shopping']"
           size="xl"
-          style="color: #808080" />
+          style="color: #F26371" />
       </button>
     </div>
   </nav>
