@@ -24,17 +24,16 @@
       </button>
       <div class="user-dropdown">
         <button class="user-button">
-          <router-link to="/login"
-            ><font-awesome-icon
+        <font-awesome-icon
               :icon="['far', 'user']"
               size="xl"
               style="color: #808080"
-          /></router-link>
+          />
         </button>
         <div class="dropdown-content">
           <router-link to="/login">登录</router-link>
           <router-link to="/register">注册</router-link>
-          <router-link to="/">我的账户</router-link>
+          <router-link to="/user">我的账户</router-link>
           <a href="#" @click.prevent="handleLogout">退出登录</a>
         </div>
       </div>

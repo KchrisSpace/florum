@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue'; // 确保路径正确
 import Custom from "../pages/Custom/Custom.vue"
-import Community from "../pages/Community/index.vue"
+import Community from "../pages/Community/Community.vue"
 import Store from "../pages/Store/Store.vue"
 import Contact from "../pages/Contact/Contact.vue"
+import article from '../pages/Community/components/article.vue';
+import User from '../pages/User/User.vue';
 
 // 路由配置
 const routes = [
@@ -55,6 +57,13 @@ const routes = [
     path: '/community',
     name: 'Community',
     component: Community,
+    children: [
+      {
+        path: 'article',
+        name: 'Article',
+        component: article,
+      },
+    ],
   },
   {
     path: '/store',
@@ -65,6 +74,11 @@ const routes = [
     path: '/contact',
     name: 'Contact',
     component: Contact,
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: User,
   },
 ];
 
