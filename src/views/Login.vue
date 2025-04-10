@@ -4,7 +4,12 @@
     <p>登录账户之后，将带您走进鲜花的浪漫世界</p>
     <form @submit.prevent="login">
       <div class="input-group">
-        <input type="text" placeholder="用户名" id="username" v-model="username" />
+        <input
+          type="text"
+          placeholder="用户名"
+          id="username"
+          v-model="username"
+        />
       </div>
       <div class="input-group">
         <input
@@ -14,7 +19,9 @@
           v-model="password"
         />
       </div>
-      <button type="submit" class="login-button" @click="handleLogin">登录</button>
+      <button type="submit" class="login-button" @click="handleLogin">
+        登录
+      </button>
     </form>
     <p class="forgot-password">忘记密码?</p>
     <p class="register-link">
@@ -64,8 +71,6 @@ const handleLogin = () => {
   }
 };
 
-
-
 const goToRegister = () => {
   router.push("/register");
 };
@@ -92,31 +97,40 @@ p {
 
 .input-group {
   margin: 10px 0;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
+  width: 30%;
+  margin: 20px auto;
 }
 
 input {
-  width: 30%;
-  padding: 10px;
-  margin: 0 auto;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%;
+  height: 50px;
+  font-weight: 400;
+  border: none;
+  background-color: #f0f0f0;
+  opacity: 0.6;
+  padding: 0 10px;
+  color: #a6a6a6;
+  transition: all 0.3s ease;
+  outline: 2px solid transparent;
+  &:focus {
+    outline: 2px solid #f26371;
+    color: #333;
+  }
 }
 
 .login-button {
   width: 30%;
-  padding: 10px;
-  background-color: #f76c6c;
-  color: white;
+  height: 50px;
   border: none;
-  border-radius: 4px;
+  outline: none;
+  background-color: #f26371;
+  color: #fff;
+  font-weight: 500;
   cursor: pointer;
-  margin-top: 20px;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #9c7c80;
+  }
 }
 
 .forgot-password {

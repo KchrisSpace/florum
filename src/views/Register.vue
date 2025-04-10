@@ -44,14 +44,15 @@ const goToLogin = () => {
   margin-top: 100px;
   width: 100%;
   height: 100%;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
 }
 .login-box {
   width: 400px;
   height: 500px;
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 20px;
+  margin: 0 auto;
 }
 .login-title {
   font-size: 32px;

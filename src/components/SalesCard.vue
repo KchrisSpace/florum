@@ -1,45 +1,35 @@
 <template>
-<div class="intotal"> 共{{ filteredProducts.length }}件商品</div>
   <div class="salescards">
-    
     <div v-for="product in filteredProducts" :key="product.id" class="product">
-    <div class="image-container">
-      <img :src="product.images.thumbnail" :alt="product.title" />
-    </div>
+      <div class="image-container">
+        <img :src="product.images.thumbnail" :alt="product.title" />
+      </div>
 
-    <div class="product-info" >
-      <p>评分：{{ product.sales_data.rating }}</p>
-      <p class="title">{{ product.title }}</p>
-      <hr></hr>
-      <div class="price">
-        <span class="current-price">￥{{ product.price_info.current_price }}</span>
-        <span class="original-price">￥{{ product.price_info.original_price }}</span>
+      <div class="product-info">
+        <p>评分：{{ product.sales_data.rating }}</p>
+        <p class="title">{{ product.title }}</p>
+        <hr></hr>
+        <div class="price">
+          <span class="current-price">￥{{ product.price_info.current_price }}</span>
+          <span class="original-price">￥{{ product.price_info.original_price }}</span>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axios from "axios";
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 import { computed } from 'vue'
-// 提取 API 地址为常量，便于维护
+
 const props = defineProps(['activeName'])
+const emit = defineEmits(['update-count'])
 
 const API_URL = "http://localhost:3001/product_list";
 const ProductList = ref([]);
-onMounted(async () => {
-  try {
-    const response = await axios.get(API_URL); 
-    ProductList.value = response.data; 
-  
-    console.log("获取的用户数据:", ProductList.value); 
-  } catch (err) {
-    console.error(err);
-  }
-});
+
 // 计算属性，根据 activeName 过滤商品
 const filteredProducts = computed(() => {
   if (props.activeName === '上新') {
@@ -51,6 +41,21 @@ const filteredProducts = computed(() => {
   }
   return ProductList.value; // 默认返回所有商品
 });
+
+// 监听 filteredProducts 的变化，发送商品数量
+watch(filteredProducts, (newVal) => {
+  emit('update-count', newVal.length);
+});
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(API_URL); 
+    ProductList.value = response.data; 
+    console.log("获取的用户数据:", ProductList.value); 
+  } catch (err) {
+    console.error(err);
+  }
+});
 </script>
 
 <style scoped>
@@ -59,6 +64,9 @@ const filteredProducts = computed(() => {
   padding: 0;
 box-sizing: border-box;
 }
+hr{
+  margin: 15px 0;
+}
 .salescards{
   width: 100%;
   height: 100%;
@@ -66,20 +74,13 @@ box-sizing: border-box;
   padding: 80px;
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 22px;
 }
-.product {
-  width: 200px;
-  height: 360px;
-  background-color: #fff;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+
 .product-info {
 
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   justify-content: flex-start;
 
 }
@@ -87,10 +88,6 @@ box-sizing: border-box;
  
   width: 100%;
   height: 360px;
- 
- 
-  /* 居中 */
-
   border-radius: 5px;
 }
 /* img {
@@ -100,17 +97,11 @@ box-sizing: border-box;
 .product-info {
   text-align: center;
 }
-.product {
-  width: 180px;
-  height: 290px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-}
+
 .title {
   font-size:1.1rem;
+  margin-top: 10px;
+  font-weight: 400;
 }
 .title {
             width: 150px; /* 设置固定宽度 */
@@ -120,23 +111,21 @@ box-sizing: border-box;
         }
 
 .product {
-  width: 160px;
-  height: 290px;
+  width: 200px;
+  height: 400px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddda7;
   padding: 10px;
   border-radius: 5px;
  
 }
 
-/* .image-container {
-  flex: 1;
-} */
+
 
 .image-container img {
   width: 100%;
-  height: 190px;
+  height: 240px;
   object-fit: cover;
 }
 

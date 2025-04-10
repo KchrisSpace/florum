@@ -183,7 +183,7 @@ const decreaseQuantity = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(78, 78, 78, 0.5);
   z-index: 1000;
   transition: opacity 0.3s ease;
 }
