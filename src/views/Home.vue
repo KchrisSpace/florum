@@ -1,7 +1,8 @@
 <template>
    <Header />
   <div class="home">
-    <img src="../assets/home-flower.png" alt="" />
+    <!-- <img src="../assets/home-flower.png" alt="" /> -->
+    <Carousel />
     <Activity />
     <SalesList />
   </div>
@@ -11,6 +12,7 @@
 import Header from "../components/Header.vue";
 import SalesList from "../views/Sales-list.vue";
 import Activity from "../components/Activity.vue";
+import Carousel from "../components/Carousel.vue";
 </script>
 
 <style scoped>

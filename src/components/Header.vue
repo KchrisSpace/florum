@@ -24,10 +24,10 @@
       </button>
       <div class="user-dropdown">
         <button class="user-button">
-        <font-awesome-icon
-              :icon="['far', 'user']"
-              size="xl"
-              style="color: #808080"
+          <font-awesome-icon
+            :icon="['far', 'user']"
+            size="xl"
+            style="color: #808080"
           />
         </button>
         <div class="dropdown-content">
@@ -49,7 +49,8 @@
         <font-awesome-icon
           :icon="['fas', 'cart-shopping']"
           size="xl"
-          style="color: #F26371" />
+          style="color: #f26371"
+        />
       </button>
     </div>
   </nav>
@@ -58,8 +59,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import SideCart from './SideCart.vue';
+import { ref } from "vue";
+import SideCart from "./SideCart.vue";
 
 const isSidebarOpen = ref(false);
 
@@ -73,7 +74,7 @@ const closeSidebar = () => {
 
 const handleLogout = () => {
   // 处理退出登录逻辑
-  console.log('用户退出登录');
+  console.log("用户退出登录");
 };
 </script>
 
@@ -81,10 +82,10 @@ const handleLogout = () => {
 a {
   text-decoration: none;
   color: #000000;
-  font-family: 'Hanazono Mincho' !important;
+  font-family: "Hanazono Mincho" !important;
 }
 .navbar {
-  font-family: 'Hanazono Mincho';
+  font-family: "Hanazono Mincho";
   display: flex; /* 使用 Flexbox */
   align-items: center; /* 垂直居中 */
   justify-content: center;
@@ -94,10 +95,11 @@ a {
   color: #000000; /* 字体颜色 */
   padding: 0 20px;
   position: fixed;
+  z-index: 1000; /* 添加 z-index 确保导航栏在最上层 */
 }
 
 .navbar-left {
-  font-family: 'Hanazono';
+  font-family: "Hanazono";
   position: absolute;
   top: 50%;
   left: 0px;
@@ -116,10 +118,10 @@ a {
 }
 
 .navbar-center a:hover {
-  color: #F26371; /* 鼠标悬停时的颜色 */
+  color: #f26371; /* 鼠标悬停时的颜色 */
 }
 button a:hover {
-  color: #F26371; /* 鼠标悬停时的颜色 */
+  color: #f26371; /* 鼠标悬停时的颜色 */
 }
 
 .navbar-right {
@@ -177,7 +179,7 @@ h2 {
 
 .dropdown-content a:hover {
   background-color: #f5f5f5;
-  color: #F26371;
+  color: #f26371;
 }
 
 .user-button {
