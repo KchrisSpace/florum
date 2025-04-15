@@ -6,6 +6,28 @@
       "password": "000000"
     },
     {
+      "userId": "U20250412001",
+      "username": "flower_lover",
+      "password": "加密后的字符串",
+      "phone": "13800138000",
+      "email": "user@example.com",
+      "avatar": "https://xxx.com/avatar.jpg",
+      "roles": ["user"], 
+      "registrationDate": "2025-04-12T08:00:00Z",
+      "lastLogin": "2025-04-12T14:30:00Z"
+    },
+    {
+      "userId": "U20250412002",
+      "username": "管理员",
+      "password": "加密后的字符串",
+      "phone": "14726839224",
+      "email": "admin@example.com",
+      "avatar": "https://xxx.com/avatar.jpg",
+      "roles": ["admin"], 
+      "registrationDate": "2025-04-12T08:00:00Z",
+      "lastLogin": "2025-04-12T14:30:00Z"
+    }, 
+    {
       "id": 2,
       "username": "路人甲",
       "password": "000000"
@@ -37,7 +59,8 @@
       },
       "promotion": {
         "label": "新品尝鲜",
-        "end_time": "2023-04-30"
+        "end_time": "2023-04-30",
+        "tags": ["情人节", "高端定制"]
       },
       "specification": {
         "category": "艺术花束",
@@ -1165,5 +1188,82 @@
         "updated_at": "2023-03-20"
       }
     }
-  ]
+  ],
+  "comments": [
+  {
+    "id": "C202504131001",
+    "user_id": "U1001",
+    "product_id": "P5002",
+    "content": "花束设计非常精致！",
+    "parent_id": null,  
+    "rating": 5,       
+    "images": ["/uploads/comment/1.jpg"],
+    "like_count": 12,
+    "is_audited": true,  
+    "metadata": {
+      "device": "iPhone14",
+      "location": "上海市"
+    },
+    "created_at": "2025-04-13T10:30:00Z"
+  }
+],
+"articles": [
+  {
+    "id": "A2025041301",
+    "type": "养护指南",    
+    "title": "玫瑰保鲜技巧",
+    "content": "...HTML富文本...",
+    "author_id": "U1001",
+    "related_products": ["P5002", "P5003"], 
+    "view_count": 256,
+    "tags": ["玫瑰", "养护"],
+    "status": "published", 
+    "publish_time": "2025-04-13T09:00:00Z"
+  }
+],
+"orders": [
+  {
+    "id": "O20250413123456",
+    "user_id": "U1001",
+    "items": [
+      {
+        "product_id": "P5002",
+        "customization": {  
+          "flower_type": "红玫瑰",
+          "packaging": "礼盒装",
+          "message_card": "生日快乐！"
+        },
+        "quantity": 1,
+        "unit_price": 399.00
+      }
+    ],
+    "total": 438.00,      
+    "status": "待发货",     
+    "payment": {
+      "method": "支付宝",
+      "transaction_id": "TR202504131234"
+    },
+    "shipping_address": "A1001",
+    "logistics": {
+      "tracking_number": "SF123456789",
+      "delivery_time": "2025-04-14 15:00前"
+    },
+    "created_at": "2025-04-13T10:15:00Z"
+  }
+],
+"addresses": [
+  {
+    "id": "A1001",
+    "user_id": "U1001",
+    "consignee": "李女士",
+    "phone": "13800138000",
+    "region": ["上海市", "浦东新区", "陆家嘴街道"],
+    "detail": "世纪大道100号",
+    "is_default": true,    
+    "geo": {                
+      "lat": 31.2356,
+      "lng": 121.4963
+    }
+  }
+]
 }
