@@ -1,12 +1,17 @@
 <!-- 轮播图组件 -->
 <template>
   <div class="carousel">
-    <el-carousel indicator-position="" height="700px" width="1600px">
-      >
+    <el-carousel
+      indicator-position=""
+      height="300px"
+      width="1400px"
+      :autoplay="true"
+      :interval="2000"
+    >
       <el-carousel-item v-for="item in carouselList" :key="item.id">
-        <h3 text="2xl" justify="center">
-          <img :src="item.img" alt="出现问题啦" />
-        </h3>
+        <div class="carousel-item">
+          <img :src="item.img" :alt="item.title || '轮播图'" />
+        </div>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -15,39 +20,42 @@
 import axios from "axios";
 import { ref } from "vue";
 const activeIndex = ref(0);
-const carouselList = ref([
-  {
-    id: 1,
-    img: "https://picsum.photos/1600?random=1",
-  },
-  {
-    id: 2,
-    img: "https://picsum.photos/1600?random=2",
-  },
-  {
-    id: 3,
-    img: "https://picsum.photos/1600?random=3",
-  },
-  {
-    id: 4,
-    img: "https://picsum.photos/1600?random=4",
-  },
-]);
+const carouselList = ref([]);
+axios.get("http://localhost:3001/carousel").then((res) => {
+  carouselList.value = res.data;
+  console.log(carouselList.value);
+});
 </script>
 <style scoped>
-.el-carousel__item h3 {
+.carousel {
+  margin: 20px auto;
+  width: 1200px;
+  
+}
+
+.carousel-item {
+  width: 100%;
+  height: 100%;
   display: flex;
-  color: #475669;
-  opacity: 0.75;
-  line-height: 300px;
-  margin: 0;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #847373;
+.carousel-item img {
+  /* max-width: 100%; */
+  /* max-height: 100%; */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+.el-carousel__item {
+  background-color: #f5f5f5;
+}
+ ::v-deep .el-carousel__button {
+  background-color: #6c4141 !important;
+  height: 3px;
+  border-radius: 3px;
 }
 </style>

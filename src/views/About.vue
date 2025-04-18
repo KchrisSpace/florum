@@ -1,5 +1,5 @@
 <template>
-  <Header2 />
+   <Header2 title="关于我们" subtext="about us" />
   <div class="about">
     <!-- 主标语 -->
     <div class="hero-section">
@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import Header2 from "../components/header2.vue";
+import Header2 from "../components/Header2.vue";
 </script>
 
 <style scoped>

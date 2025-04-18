@@ -14,7 +14,7 @@
         <span class="item-price">¥149</span>
         <div class="counter">
           <button @click="decrement">-</button>
-          <span><input type="number" v-model="count" /></span>
+          <span class="count-input"><input type="number" v-model="count" /></span>
           <button @click="increment">+</button>
         </div>
       </div>
@@ -79,6 +79,8 @@ const removeItem = () => {
 
 .counter {
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 5px;
     button{
         width: 30px;
@@ -88,6 +90,7 @@ const removeItem = () => {
   
     input{
         width: 60px;
+        text-align: center;
     }
 }
 .item-name {
