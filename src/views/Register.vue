@@ -12,7 +12,7 @@
         <input type="password" placeholder="请输入密码" v-model="password" />
         <input type="password" placeholder="请确认密码" />
       </div>
-      <button @click="handleRejister">register</button>
+      <button @click="handleRejister">注册</button>
       <p class="login-link">
         已有账户? <a href="#" @click.prevent="goToLogin">去登陆</a>
       </p>

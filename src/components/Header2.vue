@@ -2,7 +2,7 @@
   <div class="header2">
     <div class="headertop">
       <div class="logo">
-        <a href="#/">「FLORUM」</a>
+        <a class="logo-text" href="#/">「FLORUM」</a>
       </div>
       <div class="search">
         <input type="text" placeholder="搜索" />
@@ -132,6 +132,9 @@ input{
   background: #f0f0f0;
   color: #000000;
   padding: 10px 0;
+}
+.logo-text{
+  font-family: "logo";
 }
 .headermenu {
   display: flex;

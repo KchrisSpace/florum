@@ -2,6 +2,8 @@
   <nav class="navbar">
     <div class="navbar-left">
       <h2>「FLORUM」</h2>
+       
+   
       <!-- 左侧内容 -->
     </div>
     <div class="navbar-center">
@@ -79,6 +81,13 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "logo";
+  src: url("../assets/ttf/engry-2.otf")  ;
+}
+h2{
+  font-family: "logo";
+}
 a {
   text-decoration: none;
   color: #000000;
