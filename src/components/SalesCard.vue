@@ -1,6 +1,11 @@
 <template>
   <div class="salescards">
-    <div v-for="product in filteredProducts" :key="product.id" class="product">
+    <div 
+      v-for="product in filteredProducts" 
+      :key="product.id" 
+      class="product"
+      @click="goToProductDetails(product.id)"
+    >
       <div class="image-container">
         <img :src="product.images.thumbnail" :alt="product.title" />
       </div>
@@ -23,7 +28,9 @@ import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import { defineProps, defineEmits } from 'vue'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const props = defineProps(['activeName'])
 const emit = defineEmits(['update-count'])
 
@@ -56,6 +63,14 @@ onMounted(async () => {
     console.error(err);
   }
 });
+
+// 跳转到商品详情页
+const goToProductDetails = (productId) => {
+  router.push({
+    name: 'ProductDetails',
+    params: { id: productId }
+  });
+};
 </script>
 
 <style scoped>
@@ -78,22 +93,19 @@ hr{
 }
 
 .product-info {
-
   display: flex;
-  /* flex-wrap: wrap; */
-  justify-content: flex-start;
+  flex-direction: column;
+  text-align: left;
+  padding: 10px 0;
+}
 
-}
 .image-container {
- 
   width: 100%;
-  height: 360px;
+  height: 240px;
   border-radius: 5px;
-}
-/* img {
-  object-fit: cover;
   overflow: hidden;
-} */
+}
+
 .product-info {
   text-align: center;
 }
@@ -118,10 +130,15 @@ hr{
   border: 1px solid #dddddda7;
   padding: 10px;
   border-radius: 5px;
- 
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(242,146,149,0.5);
+  border-color: rgba(242, 99, 113, 0.6);
+}
 
 .image-container img {
   width: 100%;
