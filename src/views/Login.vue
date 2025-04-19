@@ -43,31 +43,88 @@ const validCredentials = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:3001/users");
-    validCredentials.value = response.data; // 直接提取数据
-    console.log("获取的用户数据:", validCredentials.value); // 打
+    // 获取登录数据
+    const response = await axios.get("http://localhost:3001/login");
+    validCredentials.value = response.data;
+    console.log("获取的登录数据:", validCredentials.value);
   } catch (err) {
-    console.error(err);
+    console.error("获取登录数据失败:", err);
+    // 使用本地硬编码的测试数据作为后备
+    validCredentials.value = [
+      {
+        admin: [
+          {
+            username: "admin",
+            password: "000000",
+          },
+        ],
+        user: [
+          {
+            username: "user",
+            password: "000000",
+          },
+        ],
+      },
+    ];
   }
 });
+
 const handleLogin = () => {
-  // 使用some方法遍历有效凭证数组，检查是否存在匹配的用户名和密码
-  const isValid = validCredentials.value.some((cred) => {
-    console.log(cred.username, cred.password); // 移动到回调函数内部
-    return cred.username === username.value && cred.password === password.value;
-  });
+  // 检查是否为有效数据
+  if (!validCredentials.value || !validCredentials.value[0]) {
+    alert("登录数据无效，请重试");
+    return;
+  }
 
-  // 根据凭证验证结果，执行相应的操作
-  if (isValid) {
-    // 清空错误消息并导航到RouteA
+  const loginData = validCredentials.value[0];
 
+  // 检查是否是管理员账号
+  const isAdmin =
+    loginData.admin &&
+    loginData.admin.some(
+      (cred) =>
+        cred.username === username.value && cred.password === password.value
+    );
+
+  // 检查是否是普通用户账号
+  const isUser =
+    loginData.user &&
+    loginData.user.some(
+      (cred) =>
+        cred.username === username.value && cred.password === password.value
+    );
+
+  if (isAdmin) {
+    // 管理员账号登录成功
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        username: username.value,
+        role: "admin",
+      })
+    );
+
+    // 跳转到管理员界面
+    router.push("/admin");
+    console.log("管理员登录成功");
+  } else if (isUser) {
+    // 普通用户登录成功
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        username: username.value,
+        role: "user",
+      })
+    );
+
+    // 跳转到首页
     router.push({ name: "Home" });
-    console.log("登录成功");
+    console.log("用户登录成功");
   } else {
-    // 显示错误消息提示用户名或密码错误
+    // 登录失败
     alert("用户名或密码错误");
-    // 并清空输入框
-    username.value = "";
+    // 清空密码输入框
+    password.value = "";
   }
 };
 
