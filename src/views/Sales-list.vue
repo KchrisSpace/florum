@@ -28,52 +28,39 @@ const updateCount = (count) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  color: #0a0a0a;
-
-  :deep(.el-tabs__item) {
-    font-weight: 700;
-    font-size: 18px;
-    color: #333;
-  }
-
-  :deep(.el-tabs__item:hover) {
-    color: #f26371;
-  }
-
-  :deep(.el-tabs__item.is-active) {
-    color: #f26371;
-    font-weight: 800;
-  }
-
-  :deep(.el-tabs__active-bar) {
-    background-color: #f26371 !important;
-    height: 3px;
-  }
-
-  :deep(.el-tabs__nav-wrap::after) {
-    background-color: #f26371;
-  }
-
-  .el-tabs__content {
-    padding: 32px;
-    color: #95a2b8;
-    font-size: 32px;
-    font-weight: 600;
-  }
+  color: #ab4545;
 }
+
+.demo-tabs :deep(.el-tabs__item) {
+  font-weight: 500;
+  font-size: 18px;
+  font-family: "微软雅黑";
+}
+
+.demo-tabs :deep(.el-tabs__item:hover) {
+  color: rgba(242, 99, 113, 1);
+}
+
+.demo-tabs :deep(.el-tabs__item.is-active) {
+  color: rgb(237, 120, 132);
+}
+/* 下划线样式 */
+.demo-tabs :deep(.el-tabs__active-bar) {
+  background-color: rgba(242, 99, 113, 1);
+}
+
 
 .list-show {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0;
+  /* padding: 20px 0; */
 }
 
 .product-count {
   text-align: center;
   /* padding: 20px 0; */
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #666;
   font-size: 16px;
   width: 100%;

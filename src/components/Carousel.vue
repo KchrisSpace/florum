@@ -4,7 +4,7 @@
     <el-carousel
       indicator-position=""
       height="300px"
-      width="1400px"
+      width="1200px"
       :autoplay="true"
       :interval="2000"
     >
@@ -30,7 +30,7 @@ axios.get("http://localhost:3001/carousel").then((res) => {
 .carousel {
   margin: 20px auto;
   width: 1200px;
-  
+  margin-top: 50px;
 }
 
 .carousel-item {
@@ -41,13 +41,11 @@ axios.get("http://localhost:3001/carousel").then((res) => {
   align-items: center;
   height: 100%;
 }
-
 .carousel-item img {
-  /* max-width: 100%; */
-  /* max-height: 100%; */
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
+  object-position: center;
 }
 
 .el-carousel__item {

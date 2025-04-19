@@ -86,7 +86,7 @@ hr{
   width: 100%;
   height: 100%;
   background-color: #f5f5f5;
-  padding: 80px;
+  padding: 30px 80px 30px 80px;
   display: flex;
   flex-wrap: wrap;
   gap: 22px;

@@ -2,10 +2,8 @@
   <nav class="navbar">
     <div class="navbar-left">
       <h2>「FLORUM」</h2>
-       
-   
-      <!-- 左侧内容 -->
     </div>
+   
     <div class="navbar-center">
       <router-link to="/">首页</router-link>
       <router-link to="/store">商店</router-link>

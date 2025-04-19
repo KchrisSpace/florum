@@ -35,7 +35,7 @@ axios.get("http://localhost:3001/carousel").then((res) => {
 
 .activity img {
   width: 80%;
-  height: 12vh;
+  height: 15vh;
   object-fit: cover;
 }
 </style>

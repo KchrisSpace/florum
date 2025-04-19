@@ -1,7 +1,7 @@
 <template>
-   <Header />
+  <Header />
   <div class="home">
-    <!-- <img src="../assets/home-flower.png" alt="" /> -->
+    <hr style="width: 100%; height: 1px; background-color: #000000" />
     <Carousel />
     <Activity />
     <SalesList />
