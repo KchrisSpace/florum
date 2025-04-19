@@ -1,112 +1,182 @@
-<!--  -->
 <template>
   <div class="login-container">
-    <div class="login-box">
-      <div class="login-title">
-        <p>注册账号</p>
+    <h1>登录你的账户</h1>
+    <p>登录账户之后，将带您走进鲜花的浪漫世界</p>
+    <form @submit.prevent="login">
+      <div class="input-group">
+        <input
+          type="text"
+          placeholder="用户名"
+          id="username"
+          v-model="username"
+        />
       </div>
-      <div class="login-form">
-        <input type="text" placeholder="请输入用户名" v-model="username" />
-        <!-- 可无邮箱 -->
-        <input type="text" placeholder="请输入邮箱" />
-        <input type="password" placeholder="请输入密码" v-model="password" />
-        <input type="password" placeholder="请确认密码" />
+      <div class="input-group">
+        <input
+          type="password"
+          placeholder="密码"
+          id="password"
+          v-model="password"
+        />
       </div>
-      <button @click="handleLogin">login</button>
-    </div>
+      <button type="submit" class="login-button" @click="handleLogin">
+        登录
+      </button>
+    </form>
+    <p class="forgot-password">忘记密码?</p>
+    <p class="register-link">
+      没有账户? <a href="#" @click.prevent="goToRegister">去创建</a>
+    </p>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
 import axios from "axios";
-
 const router = useRouter();
 const username = ref("");
+const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const validCredentials = ref([]);
 
-
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:3001/users");
-    validCredentials.value = response.data; // 直接提取数据
-    console.log("获取的用户数据:", validCredentials.value); // 打
+    // 获取登录数据
+    const response = await axios.get("http://localhost:3001/login");
+    validCredentials.value = response.data;
+    console.log("获取的登录数据:", validCredentials.value);
   } catch (err) {
-    console.error(err);
+    console.error("获取登录数据失败:", err);
+    // 使用本地硬编码的测试数据作为后备
+    validCredentials.value = [
+      {
+        admin: [
+          {
+            username: "admin",
+            password: "000000",
+          },
+        ],
+        user: [
+          {
+            username: "user",
+            password: "000000",
+          },
+        ],
+      },
+    ];
   }
 });
+
 const handleLogin = () => {
-  // 使用some方法遍历有效凭证数组，检查是否存在匹配的用户名和密码
-  const isValid = validCredentials.value.some((cred) => {
-    console.log(cred.username, cred.password); // 移动到回调函数内部
-    return cred.username === username.value && cred.password === password.value;
-  });
-
-  // 根据凭证验证结果，执行相应的操作
-  if (isValid) {
-    // 清空错误消息并导航到RouteA
-
-    router.push({ name: "Home" });
-    console.log("登录成功");
-
-  } else {
-    // 显示错误消息提示用户名或密码错误
- alert("用户名或密码错误");
-    // 并清空输入框
-    username.value = "";
-
+  // 检查是否为有效数据
+  if (!validCredentials.value || !validCredentials.value[0]) {
+    alert("登录数据无效，请重试");
+    return;
   }
+
+  const loginData = validCredentials.value[0];
+
+  // 检查是否是管理员账号
+  const isAdmin =
+    loginData.admin &&
+    loginData.admin.some(
+      (cred) =>
+        cred.username === username.value && cred.password === password.value
+    );
+
+  // 检查是否是普通用户账号
+  const isUser =
+    loginData.user &&
+    loginData.user.some(
+      (cred) =>
+        cred.username === username.value && cred.password === password.value
+    );
+
+  if (isAdmin) {
+    // 管理员账号登录成功
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        username: username.value,
+        role: "admin",
+      })
+    );
+
+    // 跳转到管理员界面
+    router.push("/admin");
+    console.log("管理员登录成功");
+  } else if (isUser) {
+    // 普通用户登录成功
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        username: username.value,
+        role: "user",
+      })
+    );
+
+    // 跳转到首页
+    router.push({ name: "Home" });
+    console.log("用户登录成功");
+  } else {
+    // 登录失败
+    alert("用户名或密码错误");
+    // 清空密码输入框
+    password.value = "";
+  }
+};
+
+const goToRegister = () => {
+  router.push("/register");
 };
 </script>
 
 <style scoped>
 .login-container {
-  margin-top: 100px;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f0f0;
-}
-.login-box {
-  width: 400px;
-  height: 500px;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-}
-.login-title {
-  font-size: 32px;
-  font-weight: bold;
+  width: 100vw;
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 150px;
 }
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  input {
-    width: 100%;
-    height: 50px;
-    font-weight: 400;
-    border: none;
-    background-color: #f0f0f0;
-    opacity: 0.6;
-    padding: 0 10px;
-    color: #a6a6a6;
-    transition: all 0.3s ease;
-    outline: 2px solid transparent;
-    &:focus {
-      outline: 2px solid #f26371;
-      /* background-color: #fff; */
-      color: #333;
-    }
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-weight: 1200;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 14px;
+  color: #4d4a4a;
+}
+
+.input-group {
+  margin: 10px 0;
+  width: 30%;
+  margin: 20px auto;
+}
+
+input {
+  width: 100%;
+  height: 50px;
+  font-weight: 400;
+  border: none;
+  background-color: #f0f0f0;
+  opacity: 0.6;
+  padding: 0 10px;
+  color: #a6a6a6;
+  transition: all 0.3s ease;
+  outline: 2px solid transparent;
+  &:focus {
+    outline: 2px solid #f26371;
+    color: #333;
   }
 }
-button {
-  margin-top: 20px;
-  width: 100%;
+
+.login-button {
+  width: 30%;
   height: 50px;
   border: none;
   outline: none;
@@ -118,5 +188,22 @@ button {
   &:hover {
     background-color: #9c7c80;
   }
+}
+
+.forgot-password {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.register-link {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+}
+
+.register-link a {
+  color: #f76c6c;
+  text-decoration: none;
 }
 </style>

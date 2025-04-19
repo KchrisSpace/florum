@@ -1,12 +1,10 @@
 <template>
+  <Header />
   <div class="home">
-    <Header />
-    <img src="../assets/home-flower.png" alt="" />
+    <hr style="width: 100%; height: 1px; background-color: #000000" />
+    <Carousel />
     <Activity />
     <SalesList />
-    
-
-
   </div>
 </template>
 
@@ -14,12 +12,13 @@
 import Header from "../components/Header.vue";
 import SalesList from "../views/Sales-list.vue";
 import Activity from "../components/Activity.vue";
+import Carousel from "../components/Carousel.vue";
 </script>
 
 <style scoped>
 * {
   margin: 0;
- 
+
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -29,9 +28,7 @@ img {
 }
 
 .home {
-  padding: 15px;
-  width: 100vw;
-  height: 100vh;
+  padding: 0 20px;
   background-color: #fefdfd;
 }
 </style>

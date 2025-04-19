@@ -1,30 +1,26 @@
 <!--  -->
 <template>
-  <div class="wishlist">
-    <Header2></Header2>
-    <br>
-    <h1>心愿单</h1>
-    <h2>wishlist</h2>
-    <br>
+  <div>
+    <Header2 title="心愿单" subtext="wish list " />
     <div class="wishlist-container">
-      <hr>
-    <Wishcar></Wishcar>
-    <hr>
-    <Wishcar></Wishcar>
+      <hr />
+      <Wishcar />
+      <Wishcar />
+      <Wishcar />
     </div>
   </div>
 </template>
 
 <script setup>
-import Header2 from "../components/Header2.vue";
-import Wishcar from "../components/Wishcar.vue";
+import Header2 from '../components/Header2.vue';
+import Wishcar from '../components/Wishcar.vue';
 </script>
 
 <style scoped>
-.wishlist {
-  background-color: #ffffff;
-  height: 100vh;
+* {
+  box-sizing: border-box; /* 确保padding和border包含在宽度内 */
 }
+
 .wishlist-container {
   /* margin-top: 50px; */
   /* margin-bottom: 50px; */
