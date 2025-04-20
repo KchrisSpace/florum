@@ -4,10 +4,15 @@
       <!-- 内容 -->
       <div class="flex justify-start items-center">
         <!-- left -->
-        <div class="mx-4 w-40 h-46 bg-bg-thirth"></div>
+        <div class="mx-4 w-40 h-46 bg-bg-thirth">
+          <img
+            :src="image"
+            alt="{{ title }}"
+            class="w-full h-full object-cover" />
+        </div>
         <!-- right -->
         <div class="">
-          <h4>粉红花束</h4>
+          <h4>{{ title }}</h4>
           <div class="flex justify-start items-center">
             <span
               ><svg
@@ -51,6 +56,16 @@
 <script>
 export default {
   name: 'JoinCart',
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+  },
   methods: {
     goToCart() {
       this.$router.push('/cart'); // 假设购物车的路由是 '/cart'
@@ -77,5 +92,9 @@ export default {
   padding: 20px;
   width: 500px;
   height: 250px;
+}
+.mx-4.w-40.h-46 {
+  position: sticky;
+  top: 20px;
 }
 </style>
