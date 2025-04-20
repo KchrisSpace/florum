@@ -13,7 +13,13 @@
           item.promotion.is_hot == false
         "
         class="absolute top-2 w-10 h-5 bg-[#97B959] text-white font-medium text-center leading-5">
-        {{ parseInt(((item.price_info.original_price - item.price_info.current_price) / item.price_info.original_price) * 100) }}%
+        {{
+          parseInt(
+            ((item.price_info.original_price - item.price_info.current_price) /
+              item.price_info.original_price) *
+              100
+          )
+        }}%
       </div>
       <div
         v-else-if="item.promotion.is_hot"
@@ -32,7 +38,7 @@
         </button>
         <div
           class="absolute right-4 flex items-center cursor-pointer"
-          @click="showDetails = true">
+          @click="handleShowDetails(item)">
           <el-icon :size="36"><ArrowRight /></el-icon>
         </div>
       </div>
@@ -48,14 +54,21 @@
       <span class="font-medium text-base text-font-primary"
         >￥{{ item.price_info.current_price }}</span
       ><span
-        v-if="item.price_info.discount_rate != 0"
+        v-if="item.price_info.current_price != item.price_info.original_price"
         class="text-xs text-font-fourth line-through"
         >￥{{ item.price_info.original_price }}</span
       >
     </span>
-
-    <DetailsEject v-if="showDetails" @close="showDetails = false" />
   </div>
+  <DetailsEject
+    v-if="showDetails"
+    :title="selectedProduct?.title"
+    :image="selectedProduct?.images[0]"
+    :current_price="selectedProduct?.price_info.current_price"
+    :original_price="selectedProduct?.price_info.original_price"
+    :main_description="selectedProduct?.promotion.main_description"
+    :flower_language="selectedProduct?.promotion.flower_language"
+    @close="showDetails = false" />
   <JoinCart
     v-if="showJoinCart"
     :title="selectedProduct?.title"
@@ -85,5 +98,9 @@ const selectedProduct = ref(null);
 const handleAddToCart = (item) => {
   selectedProduct.value = item;
   showJoinCart.value = true;
+};
+const handleShowDetails = (item) => {
+  selectedProduct.value = item;
+  showDetails.value = true;
 };
 </script>

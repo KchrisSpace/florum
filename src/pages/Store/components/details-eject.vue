@@ -21,16 +21,16 @@
       <!-- 内容 -->
       <div class="p-3 flex justify-between items-center">
         <!-- 左侧商品图片 -->
-        <div class="w-1/3 bg-bg-thirth h-60 mb-4 shrink-0"></div>
+        <img :src="image" alt="{{ title }}" class="w-1/3 bg-bg-thirth h-60 mb-4 shrink-0"></img>
         <div class="h-72 w-full pr-4 ml-4 font-Alibaba">
           <!-- 这里添加商品详情内容 -->
-          <h4>粉红花束 红色</h4>
+          <h4>{{ title }}</h4>
           <!-- 商品价格 -->
           <div class="flex items-center justify-between">
             <span class="text-font-primary text-base"
-              >￥49.00
-              <span class="text- line-through text-font-primary/40 text-sm"
-                >￥65.00
+              >￥{{ current_price }}
+              <span v-if="current_price!=original_price" class="text- line-through text-font-primary/40 text-sm"
+                >￥{{original_price}}
               </span></span
             >
             <!-- 星级+评论 -->
@@ -115,16 +115,14 @@
           </div>
           <!-- 商品描述 -->
           <p
-            class="text-sm font-Harmony tracking-wide leading-6 text-font-secondary font-light">
-            鲜花是大自然赋予我们的美丽礼物，它们以其千姿百态、绚丽
-            多彩的形态出现在我们的生活中，给我们的生活带来了无穷的
-            美好。玫瑰被誉为"花中之王"，它的美丽与芬芳让人难以忘 怀。。
+            class="text-base font-Harmony tracking-wide leading-6 text-font-secondary font-light">
+            {{ main_description }}
           </p>
           <!-- 花语 -->
-          <div>
+          <div class="font-Harmony">
             <span>花语：</span>
-            <span class="text-font-secondary font-Harmony"
-              >红玫瑰代表热情与爱情，粉玫瑰则象征着温馨与浪漫。</span
+            <span
+              >{{ flower_language }}</span
             >
           </div>
           <!-- 加入购物车按钮 -->
@@ -161,7 +159,32 @@
 <script>
 export default {
   name: 'DetailsEject',
-  emits: ['close'],
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    current_price: {
+      type: Number,
+      required: true,
+    },
+    original_price: {
+      type: Number,
+      required: true,
+    },
+    main_description: {
+      type: String,
+      required: true,
+    },
+    flower_language: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 <script setup>
