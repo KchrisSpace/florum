@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>鲜花礼品网</title>
+    <meta name="description" content="鲜花,礼品,生日蛋糕-领先中国鲜花速递服务,鲜花礼品网" />
+    <meta name="keywords" content="鲜花 礼品 生日蛋糕" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit|ie-comp">
+    
+    
+
+        <script type="text/javascript" src="/home/CheckAgent"></script>
+    <link rel="icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">
+    
+    
+
+        <link type="text/css" rel="stylesheet" href="//img02.hua.com/pc/assets/css/common.css?v4">
+            <link type="text/css" rel="stylesheet" href="https://img02.hua.com/pc/assets/css/public_2020.css">
+            <link type="text/css" rel="stylesheet" href="//img02.hua.com/pc/assets/css/mbar.css?v1" />
+        
+
+    
+	<style>
+	.common{margin-bottom: 0;}
+	.container{text-align: center;position: relative;font-size: 12px;}
+	.hua{text-align: left;position: absolute;top: 345px;left: 190px;}
+	.hua a{color: #f60;text-decoration: underline;}
+	.error_msg{text-align: left;position: absolute;top: 400px;left: 190px;max-width: 400px;}
+	</style>
+
+
+
+    <style>
+        body #header .logo-nav {
+            background: url(https://img02.hua.com/m/home/home_logoV1.png) no-repeat;
+            background-size: 100%;
+        }
+
+        header .logo {
+            background: url(https://img02.hua.com/m/home/home_logoV1.png) left center no-repeat !important;
+            background-size: 238px !important;
+        }
+
+        #header div[name=i_search],
+        header .search form[name=i_search] {
+            position: relative;
+        }
+
+        #query-word {
+            position: absolute;
+            top: 49px;
+            width: 100%;
+            font-size: 14px;
+            z-index: 99;
+            background: #f7f9fa;
+            border: 1px solid #ccc;
+            line-height: 30px;
+        }
+
+        header .search form[name=i_search] #query-word {
+            top: 36px;
+        }
+
+        #query-word .query-item {
+            display: block;
+            padding: 0 10px;
+        }
+
+            #query-word .query-item:hover {
+                background: #eaeaea
+            }
+    </style>
+    <!--[if lt IE 9]>
+        <script src="//img02.hua.com/pc/assets/js/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+<body class="home">
+    
+        <!-- 顶部导航 -->
+        <div class="site-nav">
+            <div class="container">
+
+                <ul class="site-nav-l">
+                    <li class="menu">
+                        <a href="/" onClick="addfavorite();return false;"><span class="ico ico-star"></span>收藏花礼网(hua.com)</a>
+                    </li>
+                    <li class="menu dropdown">
+                        <a href="javascript:void(0)" data-hover="dropdown" data-delay="0"><span class="ico ico-weixin"></span>关注微信</a>
+                        <div class="dropdown-menu dropdown-weixin">
+                            <img src="//img02.hua.com/pc/pimg/home/wxguanjia_qrcode.png" height="124" width="124">
+                            <p>扫码关注<br>回复"礼物" 更多惊喜！</p>
+                        </div>
+                    </li>
+                    <li class="menu dropdown">
+                        <a href="/mobile/" data-hover="dropdown" data-delay="0" target="_blank"><span class="ico ico-mobile"></span>花礼网app</a>
+                        <div class="dropdown-menu dropdown-weixin">
+                            <img src="//img02.hua.com/pc/pimg/home/app_download_qrcode.png" height="124" width="124">
+                            <p>新人专享100元APP礼包</p>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="site-nav-r">
+                    <!--登陆状态信息显示start-->
+                    <li class="menu login" id="LoginInfo">
+                        <a href="/Passport/Login/" rel="nofollow" id="btn-login">你好，请登录</a><a href="/Passport/Register/" rel="nofollow" id="btn-reg">注册</a>
+                    </li>
+                    <!--登陆状态信息显示end-->
+                    <li class="site-nav-pipe">|</li>
+                    <li class="menu">
+                        <a href="/help/ordercx/" rel="nofollow" target="_blank">订单查询</a>
+                    </li>
+                    <li class="site-nav-pipe">|</li>
+                    <!--我的花礼信息显示start-->
+                    <li class="menu dropdown">
+                        <a href="/member/" rel="nofollow" data-hover="dropdown" data-delay="0" target="_blank">我的花礼</a>
+                    </li><!--我的花礼信息显示end-->
+                    <li class="site-nav-pipe">|</li>
+                    <li class="menu dropdown">
+                        <a href="/help/" data-hover="dropdown" data-delay="0" target="_blank">客户服务<span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                        <div class="dropdown-menu dropdown-service">
+                            <a href="/member/payment/balancefill" target="_blank">在线付款</a>
+                            <a href="/help/" target="_blank">帮助中心</a>
+                            <a href="/help/afterservice.htm" target="_blank">售后服务</a>
+                            <a href="/help/sendRange.htm" target="_blank">配送范围</a>
+                            <a href="/chat/" target="_blank">留言反馈</a>
+                        </div>
+                    </li>
+                    <li class="site-nav-pipe">|</li>
+                    <!--购物车信息显示start-->
+                    <li class="menu dropdown">
+                        <a href="/shopping/showcart/" data-hover="dropdown" data-delay="0" rel="nofollow" target="_blank"><span class="ico ico-cart"></span>购物车<span class="text-primary" id="gwcCount"></span><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                        <div class="dropdown-menu dropdown-cart" id="CartInfo"></div>
+                    </li><!--购物车信息显示end-->
+                    <li class="site-nav-pipe">|</li>
+                    <li class="menu slogan">
+                        中国领先鲜花速递服务
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 顶部导航 End -->
+        <!-- 头部 -->
+        <header>
+            <div class="logo">
+                <h1><a href="/" class="logo-bd">鲜花礼品网(花礼网)</a></h1>
+                <!--
+        <h2>鲜花礼品网 始于2005，简称花礼网</h2>
+    
+-->
+            </div>
+            <div class="search">
+                <form name="i_search" method="get" action="/search/">
+                    <div class="input-group">
+                        <input name="keyword" type="text" class="form-control" placeholder="商品关键词">
+                        <span class="input-group-btn">
+                            <button id="test" class="btn btn-primary" type="button" onClick="this.form.submit()">搜索</button>
+                        </span>
+                    </div>
+                </form>
+                
+    
+
+            </div>
+            <div class="service serviceDefault">
+                <span class="phone-400" style="display:none"><span class="ico ico-phone"></span>400-889-8188</span>
+                <a style="border:none" id="header-chat" href="javascript:void(0);"><span class="ico ico-headset"></span>在线客服</a>
+            </div>
+            <div class="service serviceVip">
+                <span class="phone-400" style="display:none"><span class="ico ico-phone"></span>400-830-3920</span>
+                <a style="border:none" id="header-chat" href="javascript:void(0);"><span class="ico ico-headset"></span>在线客服</a>
+            </div>
+        </header>
+        <!-- 头部 End -->
+            
+<!-- 导航 -->
+    <nav class="common">
+        <div class="container">
+            <div class="categorys dropdown">
+                <h3 class="categorys-title" data-hover="dropdown" data-delay="0">
+                    <a href="/all.html"><span class="pull-right glyphicon glyphicon-menu-down"></span>全部商品导购</a>
+                </h3>
+
+                <div class="dropdown-menu dropdown-cate">
+                    <h4><a href="/flower/">鲜花</a></h4>
+                    <ul class="cate-list list-inline">
+                        <li><a target="_blank" href="/aiqingxianhua/">爱情鲜花</a></li>
+                        <li><a target="_blank" href="/shengriliwu/">生日鲜花</a></li>
+                        <li><a target="_blank" href="/youqingxianhua/">友情鲜花</a></li>
+                        <li><a target="_blank" href="/songzhangbeixianhua/">问候长辈</a></li>
+                        <li><a target="_blank" href="/zhufuqinghexianhua/">祝贺鲜花</a></li>
+                        <li><a target="_blank" href="/hunqingxianhua/">婚庆鲜花</a></li>
+                        <li><a target="_blank" href="/tanbingweiwenxianhua/">探病慰问</a></li>
+                        <li><a target="_blank" href="/daoqianxianhua/">道歉鲜花</a></li>
+                        <li><a target="_blank" href="/businessFlower/kaiyehualan/">开业花篮</a></li>
+                    </ul>
+                    <h4><a href="/yongshenghua/">永生花</a></h4>
+                    <ul class="cate-list list-inline">
+                        <li><a target="_blank" href="/yongshenghua/yongshenghua_box.html">经典花盒</a></li>
+                        <li><a target="_blank" href="/yongshenghua/yongshenghua_large.html">巨型玫瑰</a></li>
+                        <li><a target="_blank" href="/yongshenghua/yongshenghua_lavender.html">薰衣草</a></li>
+                        <li><a target="_blank" href="/yongshenghua/yongshenghua_vase.html">永生瓶花</a></li>
+                        <li><a target="_blank" href="/yongshenghua/yongshenghua_characteristic.html">特色永生花</a></li>
+                    </ul>
+                    
+                    <h4><a href="/gifts/">礼品</a></h4>
+                    <ul class="cate-list list-inline">
+                        <li><a target="_blank" href="/livingflower/">泰国保鲜花</a></li>
+                        <li><a target="_blank" href="/gifts/musicbox/">音乐盒</a></li>
+                        <li><a target="_blank" href="/gifts/crystallaser/">水晶内雕</a></li>
+                        <li><a target="_blank" href="/gifts/goldenflower/">金箔花</a></li>
+                        <li><a target="_blank" href="/gifts/cosmeticmirror/">化妆镜</a></li>
+                        <li><a target="_blank" href="/gifts/kingking/">香薰系列</a></li>
+                        <li><a target="_blank" href="/gifts/bestlife/">音乐睡枕</a></li>
+                        <li><a target="_blank" href="/gifts/vase/">花瓶/相框</a></li>
+                        <li><a target="_blank" href="/katonghuashu/">卡通花束</a></li>
+                        <li><a target="_blank" href="/toys/">品牌公仔</a></li>
+                        <li><a target="_blank" href="/gifts/shoushi/">首饰</a></li>
+                        
+                        <li><a target="_blank" href="/gifts/giftstalk/">Giftstalk精选</a></li>
+                        <li><a target="_blank" href="/gifts/dengshi/">创意礼品</a></li>
+                        <li><a target="_blank" href="/qiyetuangou/gift_card.html">礼品卡</a></li>
+                        <li><a target="_blank" href="/gifts/duorouzhiwupenzai/">多肉植物盆栽</a></li>
+                    </ul>
+                    <h4><a href="/Plant/">绿植</a></h4>
+                    <ul class="cate-list list-inline">
+                        <li><a target="_blank" href="/Plant/greenplant/">绿色植物</a></li>
+                        <li><a target="_blank" href="/Plant/potflower/">盆栽花卉</a></li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="nav">
+                <li><a href="/">首页</a></li>
+                <li><a href="/flower/">鲜花</a></li>
+                <li><a href="/yongshenghua/">永生花</a></li>
+                <li><a href="/cake/">蛋糕</a></li>
+                <li><a href="/gifts/">礼品</a></li>
+                <li><a href="/gifts/chocolates/">巧克力</a></li>
+                <li><a href="/huayu/">花语大全</a></li>
+                <li><a href="/you/">设计师臻选鲜花</a></li>
+                
+            </ul>
+        </div>
+    </nav>
+<!-- 导航 End -->
+
+
+
+<!-- 内容 -->
+<div class="container">
+    <p class="error_msg">2025/4/19 22:39:26</p>
+    <p class="hua">您可以逛逛&nbsp;&nbsp;&nbsp;<a href="/">花礼网首页</a></p>
+    <img src="/Images/404.jpg?2" />
+</div>
+<!-- 内容 End -->
+
+
+        <!-- 尾部导航 -->
+        <div class="footer-nav">
+            <a href="/">首页</a> <b>|</b> <a href="/profile/about.htm" target="_blank">关于我们</a> <b>|</b> <a href="/profile/media.html" target="_blank">媒体报道</a> <b>|</b> <a class="phone-400" style="display:none" href="/profile/contact.htm" target="_blank">联系方式</a> <b class="phone-400" style="display:none">|</b> <a href="/qiyetuangou/" target="_blank">企业团购</a> <b>|</b>  <a href="/profile/links.htm" target="_blank">友情链接</a> <b>|</b> <a href="/member/payment/balancefill" target="_blank">在线补款</a> <b>|</b> <a class="last-child" href="/profile/why_choose_us.htm" target="_blank">为什么选择花礼网</a>
+        </div>
+        <!-- 尾部导航 End -->
+        <!-- 通用尾部 -->
+        <footer>
+            <div class="auth">
+                <!-- <span style="margin-right:8px;">
+                    <script src="http://kxlogo.knet.cn/seallogo.dll?sn=e15041744030058395oqbo000000&amp;size=4"></script>
+                </span> -->
+                
+                
+                
+<img src="//img02.hua.com/pc/assets/img/slogan.png" height="50" width="212" />                <a href="/profile/about.htm" target="_blank"><img src="//img02.hua.com/pc/assets/img/100.jpg" height="49" width="150"></a>
+                <a href="/profile/ICP.htm" rel="nofollow" target="_blank"><img src="//img02.hua.com/pc/assets/img/bico1.jpg" alt="ICP" height="46" width="35"></a>
+                <!--             <a href="http://www.sznet110.gov.cn/webrecord/innernet/Welcome.jsp?bano=4403301920636" rel="nofollow" target="_blank"><img alt="网警" src="//img02.hua.com/pc/assets/img/bico2.jpg" height="46" width="35"></a> -->
+                
+                
+                <a href="https://szcert.ebs.org.cn/fab6de6a-ff80-4e63-89e4-cd531170c256" target="_blank"><img src="https://szcert.ebs.org.cn/Images/govIcon.gif" title="深圳市市场监督管理局企业主体身份公示" alt="深圳市市场监督管理局企业主体身份公示" width="35" height="46" border="0" style="border-width:0px;border:hidden; border:none;"></a>
+            </div>
+            <p><a href="/profile/ChinaFlowerAssociation.htm" rel="nofollow" target="_blank" title="中国花卉协会会员">中国花卉协会会员</a> <a href="/profile/chinaECA.htm" rel="nofollow" target="_blank">中国电子商务协会会员</a> ICP经营许可证：<a>粤B2-20050744</a> <b>|</b> <a href="http://beian.miit.gov.cn" rel="nofollow" target="_blank">粤ICP备09171662号</a> <span class="ico beian"></span>粤公网安备44030502000373号 Copyright © 2005-2025</p>
+            <p>花礼网（鲜花礼品网） <a href="/">www.hua.com</a><span> 深圳市百易信息技术有限公司</span> 中国领先鲜花网品牌,专业鲜花速递服务！</p>
+        </footer>
+        <!-- 通用尾部 End -->
+        <!-- 弹出窗口-->
+    
+    
+
+    <!-- 弹出窗口end-->
+        <div class="mui-mbar-tabs">
+            <div class="quick_link_mian">
+                <div class="quick_links_panel">
+                    <div id="quick_links" class="quick_links">
+                        <li>
+                            <a href="#none" class="my_qlinks"><i class="ico_user"></i></a>
+                            <!-- ***** 未登录 ***** -->
+                            <div class="ibar_login_box">
+                                <div class="avatar_box" id="loginStats"></div>
+                                <div class="login_btnbox">
+                                    <a href="/Member/Order/"><i class="ico_order"></i>我的订单</a>
+                                </div>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                        <li id="shopCart">
+                            <a href="javascript:void(0)" class="message_list"><i class="ico_cart"></i><div class="span">购物车</div><span class="cart_num" id="cart_num">0</span></a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="history_list"><i class="ico_collect"></i></a>
+                            <div class="mp_tooltip">
+                                <a href="javascript:void(0)" class="history_list" style="color: #595656;font-size: 14px;width: 100%;background: #fff;border-radius: 3px 0 0 3px;">我的收藏</a>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="mpbtn_histroy"><i class="ico_histroy"></i></a>
+                            <div class="mp_tooltip">
+                                <a href="javascript:void(0)" class="mpbtn_histroy" style="color: #595656;font-size: 14px;width: 100%;background: #fff;border-radius: 3px 0 0 3px;">最近查看</a>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                        <li class="phone-400" style="display:none">
+                            <a href="javascript:void(0)" class="leave_message"><i class="ico_phone"></i></a>
+                            <div class="mp_tooltip"><span id="rightbartel">400-889-8188</span><i class="icon_arrow_right_white"></i></div>
+                        </li>
+                        <li>
+                            <a id="kefu" href="javascript:;" target="_blank" class="mpbtn_recharge"><i class="ico_headset"></i></a>
+                            <div class="mp_tooltip">
+                                <a id="kefu1" href="javascript:;" target="_blank" class="mpbtn_recharge1" style="color: #595656;font-size: 14px;width: 100%;background: #fff;border-radius: 3px 0 0 3px;" title="在线客服">
+                                    在线客服
+                                </a>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="quick_toggle">
+                        <li>
+                            <a href="javascript:void(0)"><i class="ico_qrcode"></i></a>
+                            <div class="mp_qrcode">
+                                <p>
+                                    <img src="//img02.hua.com/pc/pimg/home/wxguanjia_qrcode.png" width="110" height="110">
+                                    关注微信公众号
+                                </p>
+                                <p>
+                                    <img src="//img02.hua.com/pc/pimg/home/app_download_qrcode.png" width="110" height="110">
+                                    下载花礼APP
+                                </p>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/Chat/FeedBack" class="mpbtn_recharge" target="_blank"><i class="ico_surveys"></i></a>
+                            <div class="mp_tooltip"><a href="/Chat/FeedBack" class="mpbtn_recharge" style="color: #595656;font-size: 14px;width: 100%;background: #fff;border-radius: 3px 0 0 3px;" target="_blank">功能反馈</a><i class="icon_arrow_right_white"></i></div>
+                        </li>
+                        <li style="height:36px;margin-top:0px;">
+                            <a href="#top" class="return_top"><i class="ico_gotop"></i></a>
+                            <div class="mp_tooltip">
+                                <a href="#top" class="return_top" style="color: #595656;font-size: 14px;width: 100%;background: #fff;border-radius: 3px 0 0 3px;">返回顶部</a>
+                                <i class="icon_arrow_right_white"></i>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+                <div id="quick_links_pop" class="quick_links_pop hide"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="https://img02.hua.com/pc/assets/js/commonV1.js?z1"></script>
+            <script type="text/javascript" src="//img02.hua.com/pc/js/statesandright.js"></script>
+    
+    
+
+        <script src="//img02.hua.com/pc/js/layerpc/layer.js"></script>
+            <script type="text/javascript">
+            var userId = 0;
+            function reqUrlParam(paras) {
+                var url = location.href;
+                var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+                var paraObj = {}
+                for (i = 0; j = paraString[i]; i++) {
+                    paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+                }
+                var returnValue = paraObj[paras.toLowerCase()];
+                if (typeof (returnValue) == "undefined") {
+                    return "";
+                } else {
+                    return returnValue;
+                }
+            }
+            function setLocalStoreHua(k, v) {
+                try {
+                    if (localStorage != null) {
+                        localStorage.setItem(k, v);
+                    }
+                } catch (ex) { }
+            }
+            function getLocalStoreHua(k) {
+                try {
+                    if (localStorage != null) {
+                        var v1 = localStorage.getItem(k);
+                        localStorage.removeItem(k);
+                        return v1;
+                    }
+                } catch (ex) { }
+                return "";
+            }
+            var lsPerfKey = "home/GetProductListPrice";
+            function getProductPrice() {
+                var dataPps = "";
+                $("span[data-pp]").each(function (index, data) {
+                    dataPps = dataPps + $(this).attr("data-pp") + ",";
+                })
+                if (dataPps.length > 0) {
+                    var perf1 = getLocalStoreHua(lsPerfKey);
+                    var dts = new Date();
+                    $.ajax({
+                        type: "POST", url: "/home/GetProductListPrice",
+                        data: { itemcodes: dataPps, perf: perf1 },
+                        timeout: 60000, dataType: 'json',
+                        success: function (res) {
+                            if (res.DataStatus == 200 && res.Status == '0') {
+                                if (res.Datas.ProductPrices.length == 0) {
+                                    return false;
+                                }
+                                for (var i = 0, len = res.Datas.ProductPrices.length; i < len; i++) {
+                                    var temp = res.Datas.ProductPrices[i];
+                                    $("span[data-pp='" + temp.ItemCode + "']").text(temp.Price);
+                                }
+                            }
+                            else { }
+                        },
+                        complete: function (res) {
+                            var dte = new Date();
+                            var useMs = dte.getTime() - dts.getTime();
+                            //var resTxt = "v0,"+res.readyState + "," + res.status + "," + res.statusText;
+                            var resTxt = "v0," + res.status + "," + dts.getTime() + "," + useMs;
+                            setLocalStoreHua(lsPerfKey, resTxt);
+                            //console.log("AjaxReq性能", resTxt);
+                        }
+                    });
+                }
+            }
+            function setCurUrlClass() {
+                // css : class = "color_tj"
+                var pathname1 = window.location.pathname;
+                $("a[href='" + pathname1 + "'").addClass("color_tj");
+            }
+            getProductPrice();
+
+            function addHuaPid() {
+                try {
+                    var path = encodeURIComponent(window.location.pathname);
+                    $("a[data-link]").each(function (index, data) {
+                        if ($(this).attr("href").indexOf("huaPid=") == -1) {
+                            var href = $(this).attr("href") + "?huaPid=" + path + "-" + $(this).attr("data-link");
+                            $(this).attr("href", href);
+                        }
+                    })
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            addHuaPid();
+
+            $(function () {
+                $(".menu-dropdown").hover(function () {
+                    $(this).addClass("open");
+                }, function () {
+                    $(this).removeClass("open")
+                })
+                $.get("/Home/GetLoginUserId", null, function (data) {
+                    userId = data;
+                }, "json");
+
+                $("#header-chat,#kefu,#kefu1").click(function (e) {
+                    e.preventDefault();
+                    //$("#MEIQIA-BTN").click();
+                    //_MEIQIA('showPanel');
+                    openChatWindow();
+                });
+
+                if ($("#pjCount").length > 0) {
+                    $.get("/productpj/GetPJCount", function (data) {
+                        $("#pjCount").text(data);
+                    });
+                }
+            });
+        </script>
+            <script>
+            $(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/HuaCtrler/Tel400Config",
+                    async: false,
+                    success: function (data) {
+                        if (data.Datas.OpenTel400) {
+                            $(".phone-400").show();
+                            $("header .service a").css("border-left", "1px solid #d9d9d9")
+                        } else {
+                            $(".phone-400").remove();
+                        }
+                    }
+                });
+            });
+        </script>
+    <!--Hua.com统计-->
+    <script type="text/javascript">
+        function goSearch() {
+            var placeholder = $(".search-box-input").attr("placeholder");
+            var value = $(".search-box-input").val().trim();
+            if (value) {
+                window.location.href = "/search/?keyword=" + value
+            } else {
+                if (placeholder != "商品搜索") {
+                    window.location.href = "/search/?keyword=" + placeholder
+                } else {
+                    window.location.href = "/search/?keyword="
+                }
+            }
+        }
+        $(".search-box-input").on("keypress", function (e) {
+            if (e.keyCode === 13) {
+                goSearch()
+            }
+        })
+        var queryInputTimer;
+        $('.search-box-input').on('input propertychange', function () {
+            var value = $(this).val().trim();
+            if (queryInputTimer) {
+                clearTimeout(queryInputTimer);
+            }
+            if (value) {
+                queryInputTimer = setTimeout(() => {
+                    requestQueryFn(value, $(".search-box div[name=i_search]"))
+                }, 500)
+            } else if (!value) {
+                clearTimeout(queryInputTimer);
+                $(".search-box div[name=i_search] #query-word").remove();
+            }
+        })
+        $('header .search input[name=keyword]').on('input propertychange', function () {
+            var value = $(this).val().trim();
+            if (queryInputTimer) {
+                clearTimeout(queryInputTimer);
+            }
+            if (value) {
+                queryInputTimer = setTimeout(() => {
+                    requestQueryFn(value, $("header .search form"))
+                }, 500)
+            } else if (!value) {
+                clearTimeout(queryInputTimer);
+                $("header .search input[name=keyword] #query-word").remove();
+            }
+        })
+
+        function requestQueryFn(value, dom) {
+            var data = value.trim();
+            if (!data) return;
+            $.ajax({
+                type: "POST",
+                url: "/home/GetWordsAssociate",
+                async: false,
+                data: {
+                    q: value
+                },
+                success: function (data) {
+                    var html = "";
+                    if (data.DataStatus == 200) {
+                        dom.find("#query-word").remove();
+                        if (data.Datas.Test.length) {
+                            html += '<div id="query-word">';
+                            for (var i = 0; i < data.Datas.AssWords.length; i++) {
+                                html += '<a href="/search/?st=1&keyword=' + data.Datas.AssWords[i] + '" class="query-item flex ai-center"><span>' + data.Datas.AssWords[i] + '</span></a >'
+                            }
+                            html += '</div>';
+                            dom.append(html);
+                        }
+                    }
+                }
+            });
+        }
+
+        function getParameters(paramName) {
+            var returnValue = "";
+            var kv = location.search.slice(1).split("&");
+            for (var i = 0; i < kv.length; i++) {
+                var index = kv[i].indexOf("=");
+                if (index == -1) {
+                    continue;
+                }
+                var groupParam = kv[i].split("=")
+                if (groupParam[0] == paramName) {
+                    if (returnValue.length > 0) {
+                        returnValue = returnValue + "|" + groupParam[1];
+                    } else {
+                        returnValue = groupParam[1];
+                    }
+                }
+            }
+            return returnValue;
+        }
+        (function () {
+            var locationUrl = location.href;
+            var refererUrl = document.referrer;
+            if (locationUrl.length > 1500) {
+                locationUrl = locationUrl.substring(0, 1500);
+            }
+            if (refererUrl.length > 100) {
+                refererUrl = refererUrl.substring(0, 100);
+            }
+            var apiurl = "/huactrler/hm?lt=" + (+new Date()) + "&sid=" + getParameters('sid') + "&u_id=" + getParameters('u_id') + "&huaPid=" + getParameters('huaPid');
+            apiurl = apiurl + "&url=" + encodeURIComponent(locationUrl) + "&urlreferer=" + encodeURIComponent(refererUrl);
+            var img = new Image;
+            img.onload = img.onerror = img.onabort = function () { }
+            img.src = apiurl;
+        })();
+    </script>
+    <!--百度统计-->
+    
+    <script type="text/javascript">
+        function IEVersion() {
+            try {
+                var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器
+                var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+                if (isIE) {
+                    var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+                    reIE.test(userAgent);
+                    var fIEVersion = parseFloat(RegExp["$1"]);
+                    if (fIEVersion == 7) {
+                        return 7;
+                    } else if (fIEVersion == 8) {
+                        return 8;
+                    } else if (fIEVersion == 9) {
+                        return 9;
+                    } else if (fIEVersion == 10) {
+                        return 10;
+                    } else {
+                        return 6;//IE版本<=7
+                    }
+                } else if (isEdge) {
+                    return 'edge';//edge
+                } else if (isIE11) {
+                    return 11; //IE11
+                } else {
+                    return -1;//不是ie浏览器
+                }
+            }
+            catch (e) {
+                return -1;
+            }
+        }
+        var bVersion = IEVersion();
+    </script>
+    <!-- Google Tag Manager -->
+    <script type="text/javascript">
+        try {
+            if (bVersion != 8) {
+                (function (w, d, s, l, i) {
+                    w[l] = w[l] || []; w[l].push({
+                        'gtm.start':
+                            new Date().getTime(), event: 'gtm.js'
+                    }); var f = d.getElementsByTagName(s)[0],
+                        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                            'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+                })(window, document, 'script', 'dataLayer', 'GTM-KS4PTHC');
+            }
+        }
+        catch (e) { }
+    </script>
+    <!-- End Google Tag Manager -->
+        <script type='text/javascript'>
+            $(function () {
+                try {
+                    if (bVersion != 8 && bVersion != 9) {
+                        (function (m, ei, q, i, a, j, s) {
+                            m[i] = m[i] || function () {
+                                (m[i].a = m[i].a || []).push(arguments)
+                            };
+                            j = ei.createElement(q),
+                                s = ei.getElementsByTagName(q)[0];
+                            j.async = true;
+                            j.charset = 'UTF-8';
+                            j.src = 'https://static.meiqia.com/dist/meiqia.js?_=t';
+                            s.parentNode.insertBefore(j, s);
+                        })(window, document, 'script', '_MEIQIA');
+                        _MEIQIA('entId', 111117);//1212
+                        $.post("/Home/MeiQiaVisitLog", null, function (data) {
+                            _MEIQIA('clientId', data);
+                        });
+                    }
+                }
+                catch (e) { }
+            })
+
+            function dynamicLoadJs(url, callback) {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = url;
+                if (typeof (callback) == 'function') {
+                    script.onload = script.onreadystatechange = function () {
+                        if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+                            callback();
+                            script.onload = script.onreadystatechange = null;
+                        }
+                    };
+                }
+                head.appendChild(script);
+            }
+
+            function LayerOpen(title, url, wdith, height) {
+                if (!window.layer) {
+                    dynamicLoadJs("https://img02.hua.com/pc/2021_js/layer.js", function () {
+                        layer.open({
+                            type: 2,
+                            title: title,
+                            shadeClose: true,
+                            shade: 0,
+                            offset: 'rb', //右下角弹出
+                            area: [wdith + 'px', height + 'px'],
+                            content: url //iframe的url
+                        });
+                    })
+                } else {
+                    layer.open({
+                        type: 2,
+                        title: title,
+                        shadeClose: true,
+                        shade: 0,
+                        offset: 'rb', //右下角弹出
+                        area: [wdith + 'px', height + 'px'],
+                        content: url //iframe的url
+                    });
+                }
+            }
+
+            function openChatWindow() {
+                if (bVersion == 9 || bVersion == 8) {
+                    LayerOpen("在线客服", "/home/weixinkefu", 240, 300);
+                }
+                else {
+                    _MEIQIA('showPanel');
+                }
+            }
+        </script>
+            <script type="text/javascript">
+
+        $('#bindModal').on('hidden.bs.modal', function () {
+            $("#attBindPage").attr("src", "");
+        });
+        //绑定窗口操作结束
+        var appAuthorizedType = -1;
+        if (appAuthorizedType && appAuthorizedType>0) {
+            DoBind();
+        }
+        function DoBind() {
+            try {
+                $('#consigneeModal').modal('hide');
+                $('#loginModal').modal('hide');
+                $('#bindModal').modal('show');
+                $("#attBindPage").attr('src', '/Passport/Login/WinLoginBind?appAuthorizedType=' + appAuthorizedType)
+            }
+            catch (err) {
+            }
+        }
+
+        </script>
+</body>
+</html>

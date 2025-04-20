@@ -25,82 +25,42 @@
   ],
   "product_list": [
     {
-      "id": 1001,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://threebouquets.com/cdn/shop/products/sunny_product_midi_3000x.jpg?v=1634870373",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "春日油画郁金香",
+      "id": "P01",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p01/01.jpg",
+        "public/images/products_list/p01/02.jpg",
+        "public/images/products_list/p01/03.jpg",
+        "public/images/products_list/p01/04.jpg"
+      ],
+      "title": "Love you",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 350,
+        "current_price": 350,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
+        "sales_count": 90,
         "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "rating": 4.8
       },
       "promotion": {
-        "label": "新品尝鲜",
-        "end_time": "2023-04-30",
-        "tags": ["情人节", "高端定制"]
-      },
-      "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
-      },
-      "timestamps": {
-        "created_at": "2023-03-25",
-        "updated_at": "2023-03-25"
-      }
-    },
-    {
-      "id": 1002,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://media.istockphoto.com/id/182180897/photo/many-coloured-fowers-on-white-background.jpg?s=1024x1024&w=is&k=20&c=qrMTs6jxHO0G4EjmnOxy2u0kYvH67eOEGEKGqwJ_crg=",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "厄瓜多尔冰川玫瑰",
-      "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
-      },
-      "sales_data": {
-        "sales_count": 85,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
-      },
-      "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[红玫瑰和香槟玫瑰的搭配 ] 红玫瑰14枝 香槟玫瑰5枝",
+        "keywords": ["红玫瑰", "情人节", "香槟玫瑰", "玫瑰"],
+        "flower_language": "爱你不止三千遍。",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "生日鲜花"],
+        "materials": [
+          "红玫瑰14枝",
+          "香槟玫瑰5枝",
+          "橙色多头泡泡3枝(6头以上/枝)",
+          "喷泉草2枝",
+          "尤加利叶若干"
+        ],
+        "packaging": "守护爱情防水牛皮纸红色（浪漫唯爱2张，热恋1张，白色棉纸3张，红金色欧雅纸4张，圆心网酒红2张）红色烫金丝带，缎纱丝带酒红色蝴蝶结"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -108,40 +68,38 @@
       }
     },
     {
-      "id": 1003,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1572454591674-2739f30d8c40?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "樱花粉芍药花束",
+      "id": "P02",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p02/01.jpg",
+        "public/images/products_list/p02/02.jpg",
+        "public/images/products_list/p02/03.jpg",
+        "public/images/products_list/p02/04.jpg"
+      ],
+      "title": "星辰大海",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 380,
+        "current_price": 380,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "sales_count": 95,
+        "stock_status": "有限",
+        "rating": 4.7
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[密西根碎冰蓝，清新而高雅] 碎冰蓝玫瑰52枝",
+        "keywords": ["蓝玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": "送给你的希望是星辰和大海",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "生日鲜花"],
+        "materials": [
+          " 52枝碎冰蓝玫瑰（坦尼克白玫瑰，使用密西根碎冰蓝边缘喷淡蓝色工艺处理）"
+        ],
+        "packaging": " 茵蓝/白 欧雅纸10张，密西根碎冰蓝37#喷漆（注意：只喷边缘淡蓝色），英文纸Pretty flowers studio，4张，牛奶棉白色3张，烫金罗纹缎带浅蓝色2米，鱼尾丝带白色1米"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -149,40 +107,38 @@
       }
     },
     {
-      "id": 1004,
+      "id": "P03",
       "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1585538021714-6e27e9fa1165?q=80&w=1885&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "梵高向日葵艺术花盒",
+      "images": [
+        "public/images/products_list/p03/01.jpg",
+        "public/images/products_list/p03/02.jpg",
+        "public/images/products_list/p03/03.jpg",
+        "public/images/products_list/p03/04.jpg"
+      ],
+      "title": "灿烂阳光/鲜花抱抱桶",
       "price_info": {
-        "original_price": 368,
+        "original_price": 298,
         "current_price": 298,
-        "discount_rate": 19
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
+        "sales_count": 100,
         "stock_status": "充足",
         "rating": 4.9
       },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
-      },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[热烈灿烂氛围抱抱桶] 向日葵2枝、橙色玫瑰国王日5枝、香槟玫瑰7枝",
+        "keywords": ["香槟玫瑰", "向日葵", "橙色玫瑰", "生日", "情人节"],
+        "flower_language": "坚强、阳光、希望和爱",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "生日鲜花"],
+        "materials": [
+          "  向日葵2枝，橙色玫瑰国王日5枝（或辉煌玫瑰），香槟玫瑰7枝，橙色多头玫瑰橙芭比5枝（6-8头/枝），香槟桔梗9枝（3头以上/枝），尤加利叶20枝"
+        ],
+        "packaging": " 贝斯特银色抱抱桶小号（直径16cm），白色细丝带，白色罗纹烫金丝带1.5米、橙色欧雅纸1张"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -190,40 +146,38 @@
       }
     },
     {
-      "id": 1005,
+      "id": "P04",
       "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1586973699006-2a096c90f847?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "星空蓝永生玫瑰花房",
+      "images": [
+        "public/images/products_list/p04/01.jpg",
+        "public/images/products_list/p04/02.jpg",
+        "public/images/products_list/p04/03.jpg",
+        "public/images/products_list/p04/04.jpg"
+      ],
+      "title": "幸福时光/鲜花抱抱桶",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 460,
+        "current_price": 460,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "sales_count": 105,
+        "stock_status": "有限",
+        "rating": 4.6
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[温柔又热烈配色] 红玫瑰11枝，粉色及红色康乃馨多枝",
+        "keywords": ["红玫瑰", "玫瑰", "生日", "母亲节", "康乃馨"],
+        "flower_language": "幸福美好时光、珍惜眼前人",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "生日鲜花"],
+        "materials": [
+          "红玫瑰11枝，蓝星花3枝，浅粉色桔梗6枝（3头以上/枝），粉色多头康乃馨3枝（4头以上/枝），粉色康乃馨11枝，红色康乃馨3枝，大叶尤加利叶15枝"
+        ],
+        "packaging": "贝斯特银色抱抱桶小号（直径16cm）蕾丝带白色蝴蝶结，红色罗纹烫金丝带1.5米、嫣粉/玫粉色欧雅纸1张，粉色牛奶棉"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -231,40 +185,38 @@
       }
     },
     {
-      "id": 1006,
+      "id": "P05",
       "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?q=80&w=2127&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "生态自循环苔藓盆景",
+      "images": [
+        "public/images/products_list/p05/01.jpg",
+        "public/images/products_list/p05/02.jpg",
+        "public/images/products_list/p05/03.jpg",
+        "public/images/products_list/p05/04.jpg"
+      ],
+      "title": "星河谜底/鲜花抱抱桶",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 420,
+        "current_price": 420,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
+        "sales_count": 110,
         "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "rating": 4.5
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[梦幻搭配蓝白色系] 骄傲白玫瑰15枝",
+        "keywords": ["白玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": " 你是银河万顷之中最温柔的谜底。",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "友情鲜花"],
+        "materials": [
+          " 骄傲白玫瑰15枝（花边缘喷碎冰蓝），白色蝴蝶兰1朵（边缘喷蓝色），白色剑兰4枝，喷色乒乓菊3枝（喷碎冰蓝）蓝星花4枝，蓝色绣球1枝，绿毛球3枝，高山羊5枝（喷蓝色),喷泉草2枝，白色桔梗9枝（3头以上/枝）边缘喷蓝色"
+        ],
+        "packaging": " 贝斯特银色抱抱桶小号（直径16cm）鱼尾丝带白色蝴蝶结，蓝色罗纹烫金丝带1.5米、蓝色 茵蓝/白 欧雅纸1张"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -272,40 +224,38 @@
       }
     },
     {
-      "id": 1007,
+      "id": "P06",
       "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "雨林生态玻璃缸",
+      "images": [
+        "public/images/products_list/p06/01.jpg",
+        "public/images/products_list/p06/02.jpg",
+        "public/images/products_list/p06/03.jpg",
+        "public/images/products_list/p06/04.jpg"
+      ],
+      "title": "花漾甜蜜/鲜花抱抱桶",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 430,
+        "current_price": 430,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "sales_count": 115,
+        "stock_status": "有限",
+        "rating": 4.4
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[粉色系花束融合] 粉玫瑰荔枝11枝、粉康乃馨5枝",
+        "keywords": ["粉红玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": " 甜蜜的爱恋、铭记于心",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "情人节鲜花"],
+        "materials": [
+          " 粉玫瑰荔枝11枝，蓝星花3枝，浅紫色紫罗兰5枝，阳光粉桔梗8枝（3头以上/枝），粉色松虫草4枝，多头粉康乃馨5枝（3头以上/枝），粉色乒乓菊3枝，高山羊齿3枝"
+        ],
+        "packaging": "贝斯特银色抱抱桶小号（直径16cm）鱼尾丝带粉色蝴蝶结，粉色罗纹烫金丝带1.5米、嫣粉/玫粉色欧雅纸1张"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -313,40 +263,36 @@
       }
     },
     {
-      "id": 1008,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "白兰地香氛花烛礼盒",
+      "id": "P07",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p07/01.jpg",
+        "public/images/products_list/p07/02.jpg",
+        "public/images/products_list/p07/03.jpg",
+        "public/images/products_list/p07/04.jpg"
+      ],
+      "title": "有幸相郁/粉白郁金香",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 160,
+        "current_price": 160,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
+        "sales_count": 120,
         "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "rating": 4.3
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[清新搭配 颜值担当] 郁金香白色9枝，浅粉色郁金香10枝",
+        "keywords": ["郁金香", "生日"],
+        "flower_language": " 有幸相遇，感恩有你",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "友情鲜花"],
+        "materials": ["郁金香白色9枝，浅粉色郁金香10枝"],
+        "packaging": "英文纸Pretty flowers studio2张，波浪珍珠网纱2层,白色人造纸5张\\，粉色烫金丝带蝴蝶结"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -354,40 +300,38 @@
       }
     },
     {
-      "id": 1009,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "拇指姑娘迷你花束",
+      "id": "P08",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p08/01.jpg",
+        "public/images/products_list/p08/02.jpg",
+        "public/images/products_list/p08/03.jpg",
+        "public/images/products_list/p08/04.jpg"
+      ],
+      "title": "心湖微蓝",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 99,
+        "current_price": 99,
+        "discount_rate": 0
       },
       "sales_data": {
-        "sales_count": 85,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "sales_count": 125,
+        "stock_status": "有限",
+        "rating": 4.2
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "[静谧、纯净、温柔] 白色骄傲11枝，康乃馨4枝，搭配桔梗、蝴蝶兰等",
+        "keywords": ["桔梗", "生日", "康乃馨"],
+        "flower_language": " 献给静谧而温柔的你",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "友情鲜花"],
+        "materials": [
+          " 白色骄傲11枝（边缘喷一半淡蓝色＋一半紫色），白色康乃馨4枝（喷淡蓝色），白色桔梗5枝（3头/枝喷蓝色紫色），白色蝴蝶兰1朵，加珍珠2（喷蓝色紫色），白色紫罗兰3枝（喷蓝色），白色洋牡丹3枝（喷淡蓝色），蓝色蓬莱松7枝，小盼草1枝（喷蓝色）"
+        ],
+        "packaging": "韵色烫金包装纸c款1张，蓝白包装纸4张，白色纸2张，白色牛奶棉3张，2张opp透明膜，蓝色烫金丝带，蕾丝丝带"
       },
       "timestamps": {
         "created_at": "2023-03-25",
@@ -395,832 +339,255 @@
       }
     },
     {
-      "id": 1010,
-      "main_category": "上新",
-      "tags": ["季节限定"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "青花瓷瓶中式插花",
+      "id": "P09",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p09/01.jpg",
+        "public/images/products_list/p09/02.jpg",
+        "public/images/products_list/p09/03.jpg",
+        "public/images/products_list/p09/04.jpg"
+      ],
+      "title": "韩式系列/绽放",
       "price_info": {
-        "original_price": 368,
-        "current_price": 298,
-        "discount_rate": 19
+        "original_price": 510,
+        "current_price": 460,
+        "discount_rate": 10
       },
       "sales_data": {
-        "sales_count": 85,
+        "sales_count": 130,
         "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "3小时内",
-        "express_service": true
+        "rating": 4.1
       },
       "promotion": {
-        "label": "新品尝鲜",
+        "is_hot": true,
+        "main_description": "向日葵+香槟玫瑰+多头玫瑰",
+        "keywords": ["向日葵", "玫瑰", "生日", "母亲节", "香槟玫瑰"],
+        "flower_language": " 元气满满，永远向着太阳",
         "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "艺术花束",
-        "materials": ["荷兰郁金香", "尤加利叶"],
-        "scenes": ["家居装饰", "艺术展览"]
-      },
-      "interaction": {
-        "is_favorited": false,
-        "view_count": 1200
+        "category": ["推荐", "友情鲜花"],
+        "materials": [
+          " 香槟玫瑰3枝、向日葵3枝、橙色多头玫瑰2枝（6-8头/支）、尤加利叶5枝"
+        ],
+        "packaging": " 蜜瓜/奶茶色欧雅纸4张、香槟色雪梨纸2张、浅粉色罗纹玫瑰金丝带2米"
       },
       "timestamps": {
         "created_at": "2023-03-25",
         "updated_at": "2023-03-25"
       }
     },
-
     {
-      "id": 2001,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1608027790251-5e0c80d043d9?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "99朵红玫瑰巨型花束",
+      "id": "P10",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p10/01.jpg",
+        "public/images/products_list/p10/02.jpg",
+        "public/images/products_list/p10/03.jpg",
+        "public/images/products_list/p10/04.jpg"
+      ],
+      "title": "香妃",
       "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
+        "original_price": 520,
+        "current_price": 470,
+        "discount_rate": 10
       },
       "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2002,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://plus.unsplash.com/premium_photo-1668611400851-766fe4f6ac1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGZsb3dlciUyMGJvdXF1ZXR8ZW58MHx8MHx8fDA%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "绿萝水培盆栽套装",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2003,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1583228858294-6745cb25969e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGZsb3dlciUyMGJvdXF1ZXR8ZW58MHx8MHx8fDA%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "母亲节康乃馨礼盒",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2004,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1622658641561-fe2ca339b039?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGZsb3dlciUyMGJvdXF1ZXR8ZW58MHx8MHx8fDA%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "发财树+金钱榕组合",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2005,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://unsplash.com/photos/pink-petaled-flower-centerpiece-in-clear-glass-vase-NFj6pEUdmpY",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "ins风龟背竹盆栽",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2006,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1561181226-e8a7edd504c6?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "蝴蝶兰年宵花组合",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2007,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "虎皮兰三件套组合",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2008,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "多肉植物新手礼包",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 2009,
-      "main_category": "热销",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "多肉植物新手礼包",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-
-    {
-      "id": 2010,
-      "main_category": "特价",
-      "tags": ["经典款"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "豆瓣绿小清新盆栽",
-      "price_info": {
-        "original_price": 999,
-        "current_price": 888,
-        "discount_rate": 11
-      },
-      "sales_data": {
-        "sales_count": 2560,
-        "stock_status": "充足",
-        "rating": 4.9
-      },
-      "logistics": {
-        "delivery_time": "次日达",
-        "express_service": true
-      },
-      "specification": {
-        "category": "节日花束",
-        "materials": ["红玫瑰", "情人草"],
-        "scenes": ["求婚", "纪念日"]
-      },
-      "interaction": {
-        "is_favorited": true,
-        "view_count": 15800
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-
-    {
-      "id": 3001,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://plus.unsplash.com/premium_photo-1713823800827-4c10d4d37585?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "节日余量花材包",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
+        "sales_count": 135,
+        "stock_status": "有限",
+        "rating": 4.0
       },
       "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
+        "is_hot": true,
+        "main_description": "[清新脱俗] 香槟玫瑰9枝",
+        "keywords": ["香槟玫瑰", "玫瑰", "生日"],
+        "flower_language": " 你的香气，是我思念的味道，那是最独特的。9朵香槟玫瑰，是天长地久的爱情，专属你我之间的真爱，无期限，永不凋零！",
+        "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
+        "category": ["推荐", "情人节鲜花"],
+        "materials": ["香槟玫瑰9枝，白色石竹梅10枝，栀子叶8枝"],
+        "packaging": " 白色雾面纸，青灰色双面牛皮纸，白绿罗纹带"
       },
       "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
+        "created_at": "2023-03-25",
+        "updated_at": "2023-03-25"
       }
     },
     {
-      "id": 3002,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1557925923-6885735abfb1?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "微瑕多肉组合",
+      "id": "P11",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p11/01.jpg",
+        "public/images/products_list/p11/02.jpg",
+        "public/images/products_list/p11/03.jpg",
+        "public/images/products_list/p11/04.jpg"
+      ],
+      "title": "真挚祝福",
       "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
+        "original_price": 530,
+        "current_price": 480,
+        "discount_rate": 10
       },
       "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
+        "sales_count": 140,
+        "stock_status": "充足",
+        "rating": 3.9
       },
       "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
+        "is_hot": true,
+        "main_description": "[暖阳系列] 红康乃馨33枝、香槟玫瑰9枝、向日葵3枝",
+        "keywords": ["香槟玫瑰", "玫瑰", "生日", "母亲节", "康乃馨", "向日葵"],
+        "flower_language": " 一生中有很多祝福，最真挚的祝福送给你",
+        "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
+        "category": ["推荐", "情人节鲜花"],
+        "materials": ["红色康乃馨33枝、香槟玫瑰9枝、向日葵3枝、尤加利叶5枝"],
+        "packaging": " 红/金色鎏金纸6张、香槟色雪梨纸2张、酒红色罗纹烫金丝带2米"
       },
       "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
+        "created_at": "2023-03-25",
+        "updated_at": "2023-03-25"
       }
     },
     {
-      "id": 3003,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1571990306521-cf96e6858f2a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "绿植+花盆套餐",
+      "id": "P12",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p12/01.jpg",
+        "public/images/products_list/p12/02.jpg",
+        "public/images/products_list/p12/03.jpg",
+        "public/images/products_list/p12/04.jpg"
+      ],
+      "title": "向日葵之歌",
       "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
+        "original_price": 540,
+        "current_price": 490,
+        "discount_rate": 10
       },
       "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
+        "sales_count": 145,
+        "stock_status": "有限",
+        "rating": 3.8
       },
       "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3004,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1561128290-005859246e58?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "小型桌面盆栽",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
+        "is_hot": true,
+        "main_description": "[心向暖阳，快乐相伴] 向日葵6枝",
+        "keywords": ["向日葵", "生日"],
+        "flower_language": "采一束阳光，制成书签，每一天都有温暖入怀。",
+        "end_time": "2023-04-30"
       },
       "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
+        "category": ["推荐", "友谊鲜花"],
+        "materials": [
+          "向日葵6枝，黄色勿忘我2枝、（如黄色勿忘我缺货可用粉色勿忘我代替）、黄英10枝"
+        ],
+        "packaging": "咖啡色英文报纸,拉菲草花结"
       },
       "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3005,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://images.unsplash.com/photo-1587317996237-eddd7e834d84?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "圣诞红精品盆栽",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3006,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "家庭绿植三件套",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3007,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "19.9元体验花束",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3008,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "办公室绿植批量装",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3009,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "植物回收置换套餐",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
-      }
-    },
-    {
-      "id": 3010,
-      "main_category": "特价",
-      "tags": ["限时抢购"],
-      "images": {
-        "thumbnail": "https://img.flower.com/spring_rose.jpg",
-        "detail": ["https://img.flower.com/detail/spring1.jpg"]
-      },
-      "title": "情人节余量玫瑰",
-      "price_info": {
-        "original_price": 158,
-        "current_price": 59,
-        "discount_rate": 63
-      },
-      "sales_data": {
-        "sales_count": 320,
-        "stock_status": "紧张",
-        "rating": 4.5
-      },
-      "promotion": {
-        "label": "最后10件",
-        "end_time": "2023-03-31"
-      },
-      "logistics": {
-        "delivery_time": "48小时内",
-        "express_service": false
-      },
-      "specification": {
-        "category": "组合花材",
-        "materials": ["混合玫瑰", "配叶"],
-        "scenes": ["DIY插花"]
-      },
-      "timestamps": {
-        "created_at": "2023-02-14",
-        "updated_at": "2023-03-20"
+        "created_at": "2023-03-25",
+        "updated_at": "2023-03-25"
       }
     }
   ],
-  "comments": [
-    {
-      "id": "C202504131001",
-      "user_id": "U1001",
-      "product_id": "P5002",
-      "content": "花束设计非常精致！",
-      "parent_id": null,
-      "rating": 5,
-      "images": ["/uploads/comment/1.jpg"],
-      "like_count": 12,
-      "is_audited": true,
-      "metadata": {
-        "device": "iPhone14",
-        "location": "上海市"
-      },
-      "created_at": "2025-04-13T10:30:00Z"
-    }
-  ],
+  "comments": {
+    "product_comments": [
+      {
+        "id": "PC202501",
+        "user_id": "U01",
+        "product_id": "p01",
+        "content": "花束设计非常精致！",
+        "parent_id": null,
+        "is_audited": true,
+        "metadata": {
+          "device": "iPhone14",
+          "location": "上海市"
+        },
+        "created_at": "2025-04-13T10:30:00Z"
+      }
+    ],
+    "article_comments": [
+      {
+        "id": "AC202501",
+        "user_id": "U01",
+        "article_id": "A202501",
+        "content": "好有道理",
+        "parent_id": null,
+        "is_audited": true,
+        "metadata": {
+          "device": "iPhone14",
+          "location": "上海市"
+        },
+        "created_at": "2025-04-13T10:30:00Z"
+      }
+    ]
+  },
   "articles": [
     {
-      "id": "A2025041301",
-      "type": "养护指南",
-      "title": "玫瑰保鲜技巧",
-      "content": "...HTML富文本...",
-      "author_id": "U1001",
-      "related_products": ["P5002", "P5003"],
+      "id": "A202501",
+      "title": "给爷爷送花有哪些选择？给老人送花推荐！",
+      "cover": "",
+      "content": "<p>爷爷今年70岁生日，如果要给他老人家送花，一般是怎么选择？有哪些寓意比较吉利的花适合送给老人，给爷爷送花有哪些选择？给老人送花推荐！</p><p>送长辈，当然是希望长辈身体健康，所以可以送盆长寿花。长寿花花期能持续好几个月，又比较耐旱，不怎么管就能开花多！</p><p>龟背竹叶片宽大，叶形像是乌龟的背部，而在中国，乌龟又寓意着长寿，所以也很适合给老人送一盆。龟背竹要勤浇水，春秋大概3-5天浇1次，保证湿度就能长得旺！</p><p>万年青常用来形容老人，所以适合送给长辈，希望他们寿比南山。一般放在室内客厅等散射光好的地方养护即可，平常看到土干了后再浇，别让盆里积水烂根。</p><p>如果不想送上边那些花，也可以选择送一些盆景类，像是松柏、银杏、红枫等，从而表达对长辈的崇敬之情。</p><p>蝴蝶兰看上去像是一只只小蝴蝶在飞，而且颜色又是紫红色的，非常适合送老人家。蝴蝶兰平常有散射光就能长，但是想要开花，还是得多晒太阳。</p><p>既然是新装修的房子，那肯定还是要送盆吊兰来净化空气啦！吊兰可以吸收空气中的苯、甲醛等有害物质，而且还是特别好养的花，非常适合送给老人~</p>",
+      "related_products": ["P02", "P5003"],
       "view_count": 256,
-      "tags": ["玫瑰", "养护"],
+      "tags": ["爷爷", "送花"],
+      "status": "published",
+      "publish_time": "2025-04-13T09:00:00Z"
+    },
+    {
+      "id": "A202502",
+      "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
+      "cover": "",
+      "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫“除”，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
+      "related_products": ["P02", "P5003"],
+      "view_count": 256,
+      "tags": ["送花", "鲜花生活"],
+      "status": "published",
+      "publish_time": "2025-04-13T09:00:00Z"
+    },
+    {
+      "id": "A202503",
+      "title": "绣球脱水如何急救？绣球保水措施揭秘！",
+      "cover": "",
+      "content": "<p>绣球很需要水，这是对绣球的最基本的认知，但是也别担心承受不了损耗风险而不敢选购，万事都是相对的，绣球脱水了我们可以挽救，或者提前预防，绣球脱水如何急救？绣球保水措施揭秘！</p><p>保水管。网上有均码带杆的和不带杆的保水管，带杆比较适合运用在手捧花或花束里，不带杆的适合运用在架构花艺或花束以及平时的花艺布置及花盒中。</p><p>大家可以根据作品情况来选择合适的保水管，没用过的朋友可能还不知道保水管的开口处是有弹性的，虽然看着洞口小，但是比较粗的枝条也可以放进去，这样会更稳固。</p><p>可利鲜或者花之寿品牌都有喷剂，是液体的，这些材料在某宝都有，价格美丽，无需亲自跑当地资材店买，这个方法适用场景很多，平时做婚礼宴会或者打花束及手捧，在客人看到之前都可以先喷喷，尤其手捧花，如果枝条底部没有保水管，在送出之前最好喷几下。</p><p>保鲜膜就类似市面上包在半个西瓜表面的，棉布就类似街边卖水果的喜欢盖在上面的那种，只要能保湿就行，包括用卫生纸都可以。</p><p>同样的办法，在把这些介质盖在绣球作品表面前，可以先在绣球表面喷点营养液。所以除了在花瓶内装满水，还要时不时在花头上喷水。</p>",
+      "related_products": ["P02", "P5003"],
+      "view_count": 256,
+      "tags": ["鲜花生活"],
+      "status": "published",
+      "publish_time": "2025-04-13T09:00:00Z"
+    },
+    {
+      "id": "A202504",
+      "title": "奶油春天在花艺中的运用！",
+      "cover": "",
+      "content": "<p>奶油春天的这种「粉」是偏低饱和度的粉色，和其他大黄、大橙、大红的高饱和色彩比，天然自带性冷淡属性，因此但看就已比一般的非洲菊高大上太多。</p><p>其次是花瓣造型的不同，传统非洲菊花瓣整齐，一瓣一瓣非常捋顺，奶油春天的花瓣就像爆炸头，乱蓬蓬的，花瓣细窄而尖，乍一看还以为是纸剪成的呢。</p><p>奶油春天适合与粉色、浅色系花材搭配，选用沉色包装纸，可以突出它的粉色，若用浅色包装纸，配材上选择黄白色系，更有春天的感觉。</p><p>不过如果只是单插，没有配花，也略微单调。</p><p>几乎所有的花艺师都不会多用，1-3朵足矣，数量不多，足够吸睛。除了甜美，若使用大量自然系花材搭配，它也颇能胜任乡村风。</p><p>如果包装纸是透明色，会增强轻盈感一些，比较空灵哦。</p>",
+      "related_products": ["P02", "P5003"],
+      "view_count": 256,
+      "tags": ["鲜花生活"],
+      "status": "published",
+      "publish_time": "2025-04-13T09:00:00Z"
+    },
+    {
+      "id": "A202505",
+      "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
+      "cover": "",
+      "content": "<p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p>",
+      "related_products": ["P02", "P5003"],
+      "view_count": 256,
+      "tags": ["送花", "鲜花生活"],
       "status": "published",
       "publish_time": "2025-04-13T09:00:00Z"
     }
   ],
   "orders": [
     {
-      "id": "O20250413123456",
-      "user_id": "U1001",
+      "id": "1",
+      "user_id": "U01",
       "items": [
         {
-          "product_id": "P5002",
+          "product_id": "P02",
           "customization": {
-            "flower_type": "红玫瑰",
-            "packaging": "礼盒装",
             "message_card": "生日快乐！"
           },
           "quantity": 1,
@@ -1229,49 +596,19 @@
       ],
       "total": 438.0,
       "status": "待发货",
-      "payment": {
-        "method": "支付宝",
-        "transaction_id": "TR202504131234"
-      },
-      "shipping_address": "A1001",
-      "logistics": {
-        "tracking_number": "SF123456789",
-        "delivery_time": "2025-04-14 15:00前"
-      },
+      "shipping_address": "ADD01",
       "created_at": "2025-04-13T10:15:00Z"
     }
   ],
   "addresses": [
     {
-      "id": "A1001",
-      "user_id": "U1001",
+      "id": "ADD01",
+      "user_id": "U01",
       "consignee": "李女士",
       "phone": "13800138000",
       "region": ["上海市", "浦东新区", "陆家嘴街道"],
       "detail": "世纪大道100号",
-      "is_default": true,
-      "geo": {
-        "lat": 31.2356,
-        "lng": 121.4963
-      }
-    }
-  ],
-  "carousel": [
-    {
-      "id": 1,
-      "img": "/carousel-img/carousel-1.png"
-    },
-    {
-      "id": 2,
-      "img": "/carousel-img/carousel-2.png"
-    },
-    {
-      "id": 3,
-      "img": "/carousel-img/carousel-3.png"
-    },
-    {
-      "id": 4,
-      "img": "/carousel-img/carousel-4.png"
+      "is_default": true
     }
   ]
 }
