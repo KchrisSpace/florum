@@ -36,8 +36,7 @@
       "title": "Love you",
       "price_info": {
         "original_price": 350,
-        "current_price": 350,
-        "discount_rate": 0
+        "current_price": 350
       },
       "sales_data": {
         "sales_count": 90,
@@ -79,8 +78,7 @@
       "title": "星辰大海",
       "price_info": {
         "original_price": 380,
-        "current_price": 380,
-        "discount_rate": 0
+        "current_price": 380
       },
       "sales_data": {
         "sales_count": 95,
@@ -118,8 +116,7 @@
       "title": "灿烂阳光/鲜花抱抱桶",
       "price_info": {
         "original_price": 298,
-        "current_price": 298,
-        "discount_rate": 0
+        "current_price": 298
       },
       "sales_data": {
         "sales_count": 100,
@@ -127,7 +124,7 @@
         "rating": 4.9
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[热烈灿烂氛围抱抱桶] 向日葵2枝、橙色玫瑰国王日5枝、香槟玫瑰7枝",
         "keywords": ["香槟玫瑰", "向日葵", "橙色玫瑰", "生日", "情人节"],
         "flower_language": "坚强、阳光、希望和爱",
@@ -157,8 +154,7 @@
       "title": "幸福时光/鲜花抱抱桶",
       "price_info": {
         "original_price": 460,
-        "current_price": 460,
-        "discount_rate": 0
+        "current_price": 460
       },
       "sales_data": {
         "sales_count": 105,
@@ -166,7 +162,7 @@
         "rating": 4.6
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[温柔又热烈配色] 红玫瑰11枝，粉色及红色康乃馨多枝",
         "keywords": ["红玫瑰", "玫瑰", "生日", "母亲节", "康乃馨"],
         "flower_language": "幸福美好时光、珍惜眼前人",
@@ -196,8 +192,7 @@
       "title": "星河谜底/鲜花抱抱桶",
       "price_info": {
         "original_price": 420,
-        "current_price": 420,
-        "discount_rate": 0
+        "current_price": 420
       },
       "sales_data": {
         "sales_count": 110,
@@ -205,7 +200,7 @@
         "rating": 4.5
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[梦幻搭配蓝白色系] 骄傲白玫瑰15枝",
         "keywords": ["白玫瑰", "玫瑰", "生日", "情人节"],
         "flower_language": " 你是银河万顷之中最温柔的谜底。",
@@ -235,8 +230,7 @@
       "title": "花漾甜蜜/鲜花抱抱桶",
       "price_info": {
         "original_price": 430,
-        "current_price": 430,
-        "discount_rate": 0
+        "current_price": 430
       },
       "sales_data": {
         "sales_count": 115,
@@ -244,7 +238,7 @@
         "rating": 4.4
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[粉色系花束融合] 粉玫瑰荔枝11枝、粉康乃馨5枝",
         "keywords": ["粉红玫瑰", "玫瑰", "生日", "情人节"],
         "flower_language": " 甜蜜的爱恋、铭记于心",
@@ -274,8 +268,7 @@
       "title": "有幸相郁/粉白郁金香",
       "price_info": {
         "original_price": 160,
-        "current_price": 160,
-        "discount_rate": 0
+        "current_price": 160
       },
       "sales_data": {
         "sales_count": 120,
@@ -311,8 +304,7 @@
       "title": "心湖微蓝",
       "price_info": {
         "original_price": 99,
-        "current_price": 99,
-        "discount_rate": 0
+        "current_price": 99
       },
       "sales_data": {
         "sales_count": 125,
@@ -350,8 +342,7 @@
       "title": "韩式系列/绽放",
       "price_info": {
         "original_price": 510,
-        "current_price": 460,
-        "discount_rate": 10
+        "current_price": 460
       },
       "sales_data": {
         "sales_count": 130,
@@ -359,7 +350,7 @@
         "rating": 4.1
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "向日葵+香槟玫瑰+多头玫瑰",
         "keywords": ["向日葵", "玫瑰", "生日", "母亲节", "香槟玫瑰"],
         "flower_language": " 元气满满，永远向着太阳",
@@ -389,8 +380,7 @@
       "title": "香妃",
       "price_info": {
         "original_price": 520,
-        "current_price": 470,
-        "discount_rate": 10
+        "current_price": 400
       },
       "sales_data": {
         "sales_count": 135,
@@ -398,7 +388,7 @@
         "rating": 4.0
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[清新脱俗] 香槟玫瑰9枝",
         "keywords": ["香槟玫瑰", "玫瑰", "生日"],
         "flower_language": " 你的香气，是我思念的味道，那是最独特的。9朵香槟玫瑰，是天长地久的爱情，专属你我之间的真爱，无期限，永不凋零！",
@@ -426,8 +416,7 @@
       "title": "真挚祝福",
       "price_info": {
         "original_price": 530,
-        "current_price": 480,
-        "discount_rate": 10
+        "current_price": 420
       },
       "sales_data": {
         "sales_count": 140,
@@ -435,7 +424,7 @@
         "rating": 3.9
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[暖阳系列] 红康乃馨33枝、香槟玫瑰9枝、向日葵3枝",
         "keywords": ["香槟玫瑰", "玫瑰", "生日", "母亲节", "康乃馨", "向日葵"],
         "flower_language": " 一生中有很多祝福，最真挚的祝福送给你",
@@ -463,8 +452,7 @@
       "title": "向日葵之歌",
       "price_info": {
         "original_price": 540,
-        "current_price": 490,
-        "discount_rate": 10
+        "current_price": 430
       },
       "sales_data": {
         "sales_count": 145,
@@ -472,7 +460,7 @@
         "rating": 3.8
       },
       "promotion": {
-        "is_hot": true,
+        "is_hot": false,
         "main_description": "[心向暖阳，快乐相伴] 向日葵6枝",
         "keywords": ["向日葵", "生日"],
         "flower_language": "采一束阳光，制成书签，每一天都有温暖入怀。",

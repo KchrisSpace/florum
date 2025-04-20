@@ -8,12 +8,15 @@
       @mouseenter="item.showCart = true"
       @mouseleave="item.showCart = false">
       <div
-        v-if="item.price_info.discount_rate != 0"
+        v-if="
+          item.price_info.current_price != item.price_info.original_price &&
+          item.promotion.is_hot == false
+        "
         class="absolute top-2 w-10 h-5 bg-[#97B959] text-white font-medium text-center leading-5">
-        {{ item.price_info.discount_rate }}%
+        {{ parseInt(((item.price_info.original_price - item.price_info.current_price) / item.price_info.original_price) * 100) }}%
       </div>
       <div
-        v-else
+        v-else-if="item.promotion.is_hot"
         class="absolute top-2 w-10 h-5 bg-font-primary text-white font-medium text-center leading-5">
         Hot
       </div>
