@@ -598,5 +598,35 @@
       "detail": "世纪大道100号",
       "is_default": true
     }
+  ],
+  "carousel": [
+    {
+      "id": 1,
+      "img": "/carousel-img/carousel-1.png"
+    },
+    {
+      "id": 2,
+      "img": "/carousel-img/carousel-2.png"
+    },
+    {
+      "id": 3,
+      "img": "/carousel-img/carousel-3.png"
+    },
+    {
+      "id": 4,
+      "img": "/carousel-img/carousel-4.png"
+    }
+  ],
+  "cart": [
+    {
+    
+      "product_id": "P02"
+     
+    },
+    {
+     
+      "product_id": "P03"
+       
+    }
   ]
 }

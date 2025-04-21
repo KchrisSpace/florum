@@ -21,7 +21,7 @@ import axios from "axios";
 import { ref } from "vue";
 const activeIndex = ref(0);
 const carouselList = ref([]);
-axios.get("http://localhost:3001/carousel").then((res) => {
+axios.get("http://localhost:3000/carousel").then((res) => {
   carouselList.value = res.data;
   console.log(carouselList.value);
 });

@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 const activityList = ref([]);
 
-axios.get("http://localhost:3001/carousel").then((res) => {
+axios.get("http://localhost:3000/carousel").then((res) => {
   activityList.value = res.data;
   console.log(activityList.value);
 });

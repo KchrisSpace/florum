@@ -1,11 +1,15 @@
 <!--  -->
 <template>
-  <Header2 title="购物车" subtext="cart"/>
+  <Header2 title="购物车" subtext="cart" />
   <div class="cart">
     <div class="cart-container">
       <hr />
-      <Cart></Cart>
-      <Cart></Cart>
+      <CartItem
+        v-for="item in cartItems"
+        :key="item.id"
+        :item="item"
+        @update-total="handleTotalUpdate"
+      />
     </div>
     <!-- 合计付款 -->
     <div class="checkout-area">
@@ -18,17 +22,57 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import Header2 from "../components/header2.vue";
-import Cart from "../components/Cart.vue";
+import CartItem from "../components/CartItem.vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
-const total = ref(100);
 const router = useRouter();
-const handlePay = () => {
-  router.push("/payment");
-  console.log("处理支付...");
+const cartItems = ref([]);
+const itemTotals = ref({}); // 存储每个商品的总价
+
+// 计算总价
+const total = computed(() => {
+  // 确保所有商品的总价都被计算
+  const sum = cartItems.value.reduce((acc, item) => {
+    const itemTotal = itemTotals.value[item.id] || 0;
+    return acc + itemTotal;
+  }, 0);
+  return sum.toFixed(2);
+});
+
+const handleTotalUpdate = ({ id, total }) => {
+  itemTotals.value[id] = total;
+  console.log("当前商品总价:", { id, total });
+  console.log("所有商品总价:", itemTotals.value);
 };
+
+const handlePay = () => {
+  if (cartItems.value.length === 0) {
+    alert("购物车为空，请先添加商品");
+    return;
+  }
+  router.push("/payment");
+};
+
+onMounted(() => {
+  console.log("Cart view mounted");
+  axios.get("http://localhost:3000/cart").then((res) => {
+    cartItems.value = res.data;
+    // 初始化每个商品的总价为0
+    res.data.forEach((item) => {
+      itemTotals.value[item.id] = 0;
+    });
+    console.log("购物车数据:", cartItems.value);
+  });
+});
+
+onUnmounted(() => {
+  console.log("Cart view unmounted");
+  cartItems.value = [];
+  itemTotals.value = {};
+});
 </script>
 
 <style scoped>
