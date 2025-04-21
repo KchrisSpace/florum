@@ -68,6 +68,7 @@
     :original_price="selectedProduct?.price_info.original_price"
     :main_description="selectedProduct?.promotion.main_description"
     :flower_language="selectedProduct?.promotion.flower_language"
+    :rating="selectedProduct?.sales_data.rating"
     @close="showDetails = false" />
   <JoinCart
     v-if="showJoinCart"

@@ -83,7 +83,7 @@
       "sales_data": {
         "sales_count": 95,
         "stock_status": "有限",
-        "rating": 4.7
+        "rating": 4.6
       },
       "promotion": {
         "is_hot": true,
@@ -121,7 +121,7 @@
       "sales_data": {
         "sales_count": 100,
         "stock_status": "充足",
-        "rating": 4.9
+        "rating": 3
       },
       "promotion": {
         "is_hot": false,
@@ -159,7 +159,7 @@
       "sales_data": {
         "sales_count": 105,
         "stock_status": "有限",
-        "rating": 4.6
+        "rating": 3.5
       },
       "promotion": {
         "is_hot": false,
@@ -273,7 +273,7 @@
       "sales_data": {
         "sales_count": 120,
         "stock_status": "充足",
-        "rating": 4.3
+        "rating": 2.3
       },
       "promotion": {
         "is_hot": true,
@@ -309,7 +309,7 @@
       "sales_data": {
         "sales_count": 125,
         "stock_status": "有限",
-        "rating": 4.2
+        "rating": 3.2
       },
       "promotion": {
         "is_hot": true,
