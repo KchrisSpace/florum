@@ -46,16 +46,32 @@ const totalPrice = computed(() => {
   return (product.value.price_info.current_price * count.value).toFixed(2);
 });
 
+<<<<<<< HEAD
+=======
+// 监听数量变化和总价变化
+watch([count, totalPrice], ([newCount, newTotal]) => {
+  emit("update-total", {
+    id: props.item.id,
+    total: parseFloat(newTotal),
+  });
+  // 更新购物车中的商品数量
+  cartStore.updateCartItem({
+    id: props.item.id,
+    quantity: newCount,
+  });
+});
+
+>>>>>>> dev-lyy
 onMounted(() => {
-  if (props.item.product_id) {
+  if (props.item.id) {
     axios
-      .get(`http://localhost:3000/product_list/${props.item.product_id}`)
+      .get(`http://localhost:3000/product_list/${props.item.id}`)
       .then((res) => {
         product.value = res.data;
         count.value = props.item.quantity;
         // 初始化时发送总价
         emit("update-total", {
-          id: props.item.product_id,
+          id: props.item.id,
           total: parseFloat(totalPrice.value),
         });
       })
@@ -104,8 +120,8 @@ watch(count, (newValue) => {
 
 const removeItem = async () => {
   try {
-    await cartStore.removeItem(props.item.product_id);
-    emit("item-removed", props.item.product_id);
+    await cartStore.removeItem(props.item.id);
+    emit("item-removed", props.item.id);
   } catch (error) {
     console.error("删除商品失败:", error);
   }
