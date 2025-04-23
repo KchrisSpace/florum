@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import "./index.css";
 import App from "./App.vue";
-
+import { createPinia } from "pinia";
 // 导入 Element Plus
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
@@ -32,9 +32,10 @@ import { faUser, faHeart } from "@fortawesome/free-regular-svg-icons"; // Regula
 library.add(faMagnifyingGlass, faUser, faHeart, faCartShopping);
 
 const app = createApp(App);
-
+const pinia = createPinia();
 // 注册 Element Plus
 app.use(ElementPlus);
+app.use(pinia);
 // 注册路由
 app.use(router);
 

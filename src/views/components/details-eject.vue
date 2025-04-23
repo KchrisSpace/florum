@@ -84,20 +84,7 @@
             <span class="content">{{ product.specification.packaging }}</span>
           </div>
         </div>
-        <!-- 尺寸选择 取消-->
-        <!-- <div class="size-selector">
-          <div class="label">大小:</div>
-          <div class="size-options">
-            <el-radio-group v-model="selectedSize">
-              <el-radio-button label="S">S</el-radio-button>
-              <el-radio-button label="M">M</el-radio-button>
-              <el-radio-button label="L">L</el-radio-button>
-              <el-radio-button label="XL">XL</el-radio-button>
-              <el-radio-button label="XXL">XXL</el-radio-button>
-            </el-radio-group>
-          </div>
-        </div> -->
-
+         
         <!-- 数量和购物车 -->
         <div class="action-buttons">
           <div class="quantity-selector">

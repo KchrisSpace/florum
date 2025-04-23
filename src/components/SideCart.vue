@@ -3,86 +3,30 @@
   <div class="sidebar" :class="{ 'sidebar-open': isOpen }">
     <div class="sidebar-content">
       <h3>CART</h3>
-      <div class="cart-items">
+      <div class="cart-items" v-for="item in cartItems" :key="item.id">
         <div class="cart-item">
           <img
-            src="../assets/flower-product.png"
-            alt="郁金香"
+            :src="item.product?.images[0] || '../assets/flower-product.png'"
+            :alt="item.product?.title"
             class="item-image"
           />
           <div class="item-details">
-            <div class="item-name">郁金香</div>
+            <div class="item-name">{{ item.product?.title }}</div>
             <div class="item-row">
               <div class="controls-group">
-                <button class="quantity-btn" @click="decreaseQuantity">
+                <button class="quantity-btn" @click="decreaseQuantity(item)">
                   -
                 </button>
-                <span class="quantity">{{ quantity }}</span>
-                <button class="quantity-btn" @click="increaseQuantity">
+                <span class="quantity">{{ item.quantity }}</span>
+                <button class="quantity-btn" @click="increaseQuantity(item)">
                   +
                 </button>
               </div>
-              <span class="price">¥85.00</span>
+              <span class="price"
+                >¥{{ item.product?.price_info?.current_price }}</span
+              >
               <div class="delete-container">
-                <button class="delete-btn">
-                  <i class="delete-icon">×</i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cart-items">
-        <div class="cart-item">
-          <img
-            src="../assets/flower-product.png"
-            alt="郁金香"
-            class="item-image"
-          />
-          <div class="item-details">
-            <div class="item-name">郁金香</div>
-            <div class="item-row">
-              <div class="controls-group">
-                <button class="quantity-btn" @click="decreaseQuantity">
-                  -
-                </button>
-                <span class="quantity">{{ quantity }}</span>
-                <button class="quantity-btn" @click="increaseQuantity">
-                  +
-                </button>
-              </div>
-              <span class="price">¥85.00</span>
-              <div class="delete-container">
-                <button class="delete-btn">
-                  <i class="delete-icon">×</i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cart-items">
-        <div class="cart-item">
-          <img
-            src="../assets/flower-product.png"
-            alt="郁金香"
-            class="item-image"
-          />
-          <div class="item-details">
-            <div class="item-name">郁金香</div>
-            <div class="item-row">
-              <div class="controls-group">
-                <button class="quantity-btn" @click="decreaseQuantity">
-                  -
-                </button>
-                <span class="quantity">{{ quantity }}</span>
-                <button class="quantity-btn" @click="increaseQuantity">
-                  +
-                </button>
-              </div>
-              <span class="price">¥85.00</span>
-              <div class="delete-container">
-                <button class="delete-btn">
+                <button class="delete-btn" @click="removeItem(item)">
                   <i class="delete-icon">×</i>
                 </button>
               </div>
@@ -112,18 +56,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useCartStore } from "../stores/cart";
 
 const router = useRouter();
-// 路由跳转
-const goToPayment = () => {
-  router.push("/payment");
-};
+const cartStore = useCartStore();
 
-const goToCart = () => {
-  router.push("/cart");
-};
 // 组件通信
 defineProps({
   isOpen: {
@@ -134,19 +73,51 @@ defineProps({
 
 defineEmits(["close"]);
 
-const quantity = ref(2);
-const totalPrice = ref(999.0); // 总价
+// 计算属性
+const cartItems = computed(() => cartStore.cartItems);
+const totalPrice = computed(() => cartStore.total);
 
 // 控件
-const increaseQuantity = () => {
-  quantity.value++;
+const increaseQuantity = (item) => {
+  item.quantity++;
+  cartStore.updateCartItem(item);
+  // 更新单个商品的总价
+  const itemTotal = item.quantity * item.product.price_info.current_price;
+  cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
 };
 
-const decreaseQuantity = () => {
-  if (quantity.value > 1) {
-    quantity.value--;
+const decreaseQuantity = (item) => {
+  if (item.quantity > 1) {
+    item.quantity--;
+    cartStore.updateCartItem(item);
+    // 更新单个商品的总价
+    const itemTotal = item.quantity * item.product.price_info.current_price;
+    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
   }
 };
+
+const removeItem = (item) => {
+  cartStore.removeItem(item.product_id);
+};
+
+// 路由跳转
+const goToPayment = () => {
+  router.push("/payment");
+};
+
+const goToCart = () => {
+  router.push("/cart");
+};
+
+// 生命周期钩子
+onMounted(async () => {
+  await cartStore.fetchCartData();
+  // 初始化每个商品的总价
+  cartItems.value.forEach((item) => {
+    const itemTotal = item.quantity * item.product.price_info.current_price;
+    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+  });
+});
 </script>
 
 <style scoped>

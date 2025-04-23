@@ -26,6 +26,7 @@
 <script setup>
 import { ref, defineProps, onMounted, computed, watch, defineEmits } from "vue";
 import axios from "axios";
+import { useCartStore } from "../stores/cart";
 
 const props = defineProps({
   item: {
@@ -34,8 +35,8 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update-total"]);
-
+const emit = defineEmits(["update-total", "item-removed"]);
+const cartStore = useCartStore();
 const product = ref(null);
 const count = ref(1);
 
@@ -48,8 +49,13 @@ const totalPrice = computed(() => {
 // 监听数量变化和总价变化
 watch([count, totalPrice], ([newCount, newTotal]) => {
   emit("update-total", {
-    id: props.item.id,
+    id: props.item.product_id,
     total: parseFloat(newTotal),
+  });
+  // 更新购物车中的商品数量
+  cartStore.updateCartItem({
+    product_id: props.item.product_id,
+    quantity: newCount,
   });
 });
 
@@ -59,9 +65,10 @@ onMounted(() => {
       .get(`http://localhost:3000/product_list/${props.item.product_id}`)
       .then((res) => {
         product.value = res.data;
+        count.value = props.item.quantity;
         // 初始化时发送总价
         emit("update-total", {
-          id: props.item.id,
+          id: props.item.product_id,
           total: parseFloat(totalPrice.value),
         });
       })
@@ -81,8 +88,20 @@ const decrement = () => {
   }
 };
 
-const removeItem = () => {
-  // Remove item from cart
+// 监听count值，确保不会小于0
+watch(count, (newValue) => {
+  if (newValue < 1) {
+    count.value = 1;
+  }
+});
+
+const removeItem = async () => {
+  try {
+    await cartStore.removeItem(props.item.product_id);
+    emit("item-removed", props.item.product_id);
+  } catch (error) {
+    console.error("删除商品失败:", error);
+  }
 };
 </script>
 
@@ -106,6 +125,7 @@ const removeItem = () => {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
+ 
 }
 
 .item-image {
@@ -113,6 +133,7 @@ const removeItem = () => {
   height: 80px;
   object-fit: cover;
   margin-right: 20px;
+  margin-left: 20px;
 }
 
 .item-info {
@@ -147,6 +168,7 @@ const removeItem = () => {
 .counter button {
   width: 30px;
   height: 30px;
+  /* margin-right: 30px; */
   border: 1px solid #e0e0e0;
   background: #fff;
   cursor: pointer;
@@ -166,6 +188,13 @@ const removeItem = () => {
   text-align: center;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
+  -moz-appearance: textfield;
+}
+
+.counter input::-webkit-outer-spin-button,
+.counter input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .total-price {

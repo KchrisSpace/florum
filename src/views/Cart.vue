@@ -5,16 +5,17 @@
     <div class="cart-container">
       <hr />
       <CartItem
-        v-for="item in cartItems"
-        :key="item.id"
+        v-for="item in cartStore.cartItems"
+        :key="item.product_id"
         :item="item"
-        @update-total="handleTotalUpdate"
+        @update-total="cartStore.updateItemTotal"
+        @item-removed="cartStore.removeItem"
       />
     </div>
     <!-- 合计付款 -->
     <div class="checkout-area">
       <p class="total">
-        订单总计：<i>￥{{ total }}</i>
+        订单总计：<i>￥{{ cartStore.total }}</i>
       </p>
       <button class="pay-button" @click="handlePay">立即支付</button>
     </div>
@@ -22,56 +23,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import Header2 from "../components/header2.vue";
 import CartItem from "../components/CartItem.vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import { useCartStore } from "../stores/cart";
 
 const router = useRouter();
-const cartItems = ref([]);
-const itemTotals = ref({}); // 存储每个商品的总价
-
-// 计算总价
-const total = computed(() => {
-  // 确保所有商品的总价都被计算
-  const sum = cartItems.value.reduce((acc, item) => {
-    const itemTotal = itemTotals.value[item.id] || 0;
-    return acc + itemTotal;
-  }, 0);
-  return sum.toFixed(2);
-});
-
-const handleTotalUpdate = ({ id, total }) => {
-  itemTotals.value[id] = total;
-  console.log("当前商品总价:", { id, total });
-  console.log("所有商品总价:", itemTotals.value);
-};
+const cartStore = useCartStore();
 
 const handlePay = () => {
-  if (cartItems.value.length === 0) {
+  if (cartStore.cartItems.length === 0) {
     alert("购物车为空，请先添加商品");
     return;
   }
   router.push("/payment");
 };
 
-onMounted(() => {
+onMounted(async () => {
   console.log("Cart view mounted");
-  axios.get("http://localhost:3000/cart").then((res) => {
-    cartItems.value = res.data;
-    // 初始化每个商品的总价为0
-    res.data.forEach((item) => {
-      itemTotals.value[item.id] = 0;
-    });
-    console.log("购物车数据:", cartItems.value);
+  await cartStore.fetchCartData();
+  // 初始化每个商品的总价
+  cartStore.cartItems.forEach((item) => {
+    const itemTotal = item.quantity * item.product.price_info.current_price;
+    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
   });
 });
 
 onUnmounted(() => {
   console.log("Cart view unmounted");
-  cartItems.value = [];
-  itemTotals.value = {};
+  cartStore.clearCart();
 });
 </script>
 
@@ -86,18 +67,41 @@ onUnmounted(() => {
 }
 .cart-container {
   width: 80%;
+  height: 45vh;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
   border-radius: 10px;
+  max-height: calc(100vh-60vh); /* 设置最大高度，减去头部和其他元素的高度 */
+  overflow-y: auto; /* 添加垂直滚动条 */
 }
+
+/* 自定义滚动条样式 */
+.cart-container::-webkit-scrollbar {
+  width: 8px; /* 滚动条宽度 */
+}
+
+.cart-container::-webkit-scrollbar-track {
+  background: #fdfdfd; /* 滚动条轨道颜色 */
+  border: 1px solid #e9bfbf;
+  border-radius: 4px;
+}
+
+.cart-container::-webkit-scrollbar-thumb {
+  background: #ff6b6b3a; /* 滚动条滑块颜色 */
+  border-radius: 4px;
+}
+
+.cart-container::-webkit-scrollbar-thumb:hover {
+  background: #ff6b6b; /* 滚动条滑块悬停颜色 */
+}
+
 .checkout-area {
   position: fixed;
-
   right: 150px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap: 10px; */
 }
 .total {
   font-size: 20px;
