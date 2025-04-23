@@ -4,7 +4,7 @@ import Custom from "../pages/Custom/Custom.vue";
 import Community from "../pages/Community/Community.vue";
 import Store from "../pages/Store/Store.vue";
 import Contact from "../pages/Contact/Contact.vue";
-import article from "../pages/Community/components/article.vue";
+import Article from "../pages/Community/components/article.vue";
 import User from "../pages/User/User.vue";
 import ProductDetails from "../views/ProductDetails.vue";
 import Admin from "../admin/admin.vue";
@@ -64,14 +64,13 @@ const routes = [
     path: "/community",
     name: "Community",
     component: Community,
-    children: [
-      {
-        path: "article",
-        name: "Article",
-        component: article,
-      },
-    ],
   },
+    {
+      path: "/article/:id",
+      name: "Article",
+      component: Article,
+      props: true,
+    },
   {
     path: "/store",
     name: "Store",
