@@ -84,7 +84,7 @@
             <span class="content">{{ product.specification.packaging }}</span>
           </div>
         </div>
-         
+
         <!-- 数量和购物车 -->
         <div class="action-buttons">
           <div class="quantity-selector">
@@ -96,7 +96,12 @@
               ><el-icon><Plus /></el-icon
             ></el-button>
           </div>
-          <el-button type="primary" class="add-to-cart">加入购物车</el-button>
+          <el-button
+            type="primary"
+            class="add-to-cart"
+            @click="addItem(productId, quantity)"
+            >加入购物车</el-button
+          >
           <el-button class="wishlist-btn">
             <el-icon><Star /></el-icon>
           </el-button>
@@ -117,9 +122,14 @@ export default {
 import { ref, onMounted, computed } from "vue";
 import { Plus, Minus, Star } from "@element-plus/icons-vue";
 import { useRoute } from "vue-router";
+import { useCartStore } from "../../stores/cart.js";
+import { ElMessage } from "element-plus";
+
+const cartStore = useCartStore();
 
 const route = useRoute();
 const productId = route.params.id;
+// console.log(productId)
 const quantity = ref(1);
 const rating = ref(5);
 const product = ref(null);
@@ -195,6 +205,24 @@ const increaseQuantity = () => {
 const decreaseQuantity = () => {
   if (quantity.value > 1) {
     quantity.value--;
+  }
+};
+
+// 添加商品到购物车
+const addItem = async (productId, quantity) => {
+  try {
+    await cartStore.addItem(productId, quantity);
+    ElMessage({
+      message: "商品已成功添加到购物车",
+      type: "success",
+    });
+    emit("close");
+  } catch (error) {
+    console.error("添加商品到购物车失败:", error);
+    ElMessage({
+      message: "添加商品失败，请重试",
+      type: "error",
+    });
   }
 };
 </script>

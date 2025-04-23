@@ -16,17 +16,17 @@ export const useCartStore = defineStore("cart", () => {
       for (const item of cartItems.value) {
         try {
           const productResponse = await axios.get(
-            `http://localhost:3000/product_list/${item.product_id}`
+            `http://localhost:3000/product_list/${item.id}`
           );
           item.product = productResponse.data;
         } catch (error) {
-          console.error(`获取商品 ${item.product_id} 信息失败:`, error);
+          console.error(`获取商品 ${item.id} 信息失败:`, error);
         }
       }
 
       // 初始化每个商品的总价为0
       cartItems.value.forEach((item) => {
-        itemTotals.value[item.product_id] = 0;
+        itemTotals.value[item.id] = 0;
       });
     } catch (error) {
       console.error("获取购物车数据失败:", error);
@@ -37,7 +37,7 @@ export const useCartStore = defineStore("cart", () => {
   const total = computed(() => {
     return cartItems.value
       .reduce((acc, item) => {
-        const itemTotal = itemTotals.value[item.product_id] || 0;
+        const itemTotal = itemTotals.value[item.id] || 0;
         return acc + itemTotal;
       }, 0)
       .toFixed(2);
@@ -53,9 +53,7 @@ export const useCartStore = defineStore("cart", () => {
     try {
       await axios.delete(`http://localhost:3000/cart/${productId}`);
       // 从本地列表中移除商品
-      cartItems.value = cartItems.value.filter(
-        (item) => item.product_id !== productId
-      );
+      cartItems.value = cartItems.value.filter((item) => item.id !== productId);
       // 删除对应的总价记录
       delete itemTotals.value[productId];
       // 重新获取购物车数据以确保同步
@@ -68,11 +66,42 @@ export const useCartStore = defineStore("cart", () => {
   // 更新商品数量
   const updateCartItem = async (item) => {
     try {
-      await axios.put(`http://localhost:3000/cart/${item.product_id}`, {
+      await axios.put(`http://localhost:3000/cart/${item.id}`, {
         quantity: item.quantity,
       });
     } catch (error) {
       console.error("更新购物车商品失败:", error);
+    }
+  };
+
+  // 添加商品到购物车
+  const addItem = async (productId, quantity = 1) => {
+    try {
+      // 检查商品是否已经在购物车中
+      console.log("cartItems.value", cartItems.value);
+      const existingItem = cartItems.value.find(
+        (item) => item.id === productId
+      );
+
+      if (existingItem) {
+        // 如果商品已存在，更新数量
+        await axios.put(`http://localhost:3000/cart/${productId}`, {
+          quantity: existingItem.quantity + quantity,
+        });
+      } else {
+        // 如果商品不存在，添加新商品
+        await axios.post("http://localhost:3000/cart", {
+          id: productId,
+          quantity: quantity,
+        });
+      }
+
+      // 重新获取购物车数据以确保同步
+      await fetchCartData();
+      console.log("添加商品到购物车成功");
+    } catch (error) {
+      console.error("添加商品到购物车失败:", error);
+      throw error; // 抛出错误以便组件可以处理
     }
   };
 
@@ -91,5 +120,6 @@ export const useCartStore = defineStore("cart", () => {
     removeItem,
     updateCartItem,
     clearCart,
+    addItem,
   };
 });

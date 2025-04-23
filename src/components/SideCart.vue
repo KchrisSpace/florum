@@ -83,7 +83,7 @@ const increaseQuantity = (item) => {
   cartStore.updateCartItem(item);
   // 更新单个商品的总价
   const itemTotal = item.quantity * item.product.price_info.current_price;
-  cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+  cartStore.updateItemTotal({ id: item.id, total: itemTotal });
 };
 
 const decreaseQuantity = (item) => {
@@ -92,12 +92,12 @@ const decreaseQuantity = (item) => {
     cartStore.updateCartItem(item);
     // 更新单个商品的总价
     const itemTotal = item.quantity * item.product.price_info.current_price;
-    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+    cartStore.updateItemTotal({ id: item.id, total: itemTotal });
   }
 };
 
 const removeItem = (item) => {
-  cartStore.removeItem(item.product_id);
+  cartStore.removeItem(item.id);
 };
 
 // 路由跳转
@@ -115,7 +115,7 @@ onMounted(async () => {
   // 初始化每个商品的总价
   cartItems.value.forEach((item) => {
     const itemTotal = item.quantity * item.product.price_info.current_price;
-    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+    cartStore.updateItemTotal({ id: item.id, total: itemTotal });
   });
 });
 </script>
