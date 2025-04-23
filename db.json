@@ -20,7 +20,8 @@
           "username": "user2",
           "password": "000000"
         }
-      ]
+      ],
+      "id": "e41b"
     }
   ],
   "product_list": [
@@ -385,7 +386,7 @@
       "sales_data": {
         "sales_count": 135,
         "stock_status": "有限",
-        "rating": 4.0
+        "rating": 4
       },
       "promotion": {
         "is_hot": false,
@@ -584,10 +585,10 @@
             "message_card": "生日快乐！"
           },
           "quantity": 1,
-          "unit_price": 399.0
+          "unit_price": 399
         }
       ],
-      "total": 438.0,
+      "total": 438,
       "status": "待发货",
       "shipping_address": "D01",
       "created_at": "2025-04-13T10:15:00Z"
@@ -602,6 +603,38 @@
       "region": ["上海市", "浦东新区", "陆家嘴街道"],
       "detail": "世纪大道100号",
       "is_default": true
+    }
+  ],
+  "carousel": [
+    {
+      "id": "1",
+      "img": "/carousel-img/carousel-1.png"
+    },
+    {
+      "id": "2",
+      "img": "/carousel-img/carousel-2.png"
+    },
+    {
+      "id": "3",
+      "img": "/carousel-img/carousel-3.png"
+    },
+    {
+      "id": "4",
+      "img": "/carousel-img/carousel-4.png"
+    }
+  ],
+  "cart": [
+    {
+      "product_id": "P02",
+      "quantity": 1
+    },
+    {
+      "product_id": "P03",
+      "quantity": 1
+    },
+    {
+      "product_id": "P04",
+      "quantity": 1
     }
   ]
 }

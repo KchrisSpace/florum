@@ -1,16 +1,21 @@
 <!--  -->
 <template>
-  <Header2 title="购物车" subtext="cart"/>
+  <Header2 title="购物车" subtext="cart" />
   <div class="cart">
     <div class="cart-container">
       <hr />
-      <Cart></Cart>
-      <Cart></Cart>
+      <CartItem
+        v-for="item in cartStore.cartItems"
+        :key="item.product_id"
+        :item="item"
+        @update-total="cartStore.updateItemTotal"
+        @item-removed="cartStore.removeItem"
+      />
     </div>
     <!-- 合计付款 -->
     <div class="checkout-area">
       <p class="total">
-        订单总计：<i>￥{{ total }}</i>
+        订单总计：<i>￥{{ cartStore.total }}</i>
       </p>
       <button class="pay-button" @click="handlePay">立即支付</button>
     </div>
@@ -18,17 +23,37 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import Header2 from "../components/header2.vue";
-import Cart from "../components/Cart.vue";
+import CartItem from "../components/CartItem.vue";
 import { useRouter } from "vue-router";
+import { useCartStore } from "../stores/cart";
 
-const total = ref(100);
 const router = useRouter();
+const cartStore = useCartStore();
+
 const handlePay = () => {
+  if (cartStore.cartItems.length === 0) {
+    alert("购物车为空，请先添加商品");
+    return;
+  }
   router.push("/payment");
-  console.log("处理支付...");
 };
+
+onMounted(async () => {
+  console.log("Cart view mounted");
+  await cartStore.fetchCartData();
+  // 初始化每个商品的总价
+  cartStore.cartItems.forEach((item) => {
+    const itemTotal = item.quantity * item.product.price_info.current_price;
+    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+  });
+});
+
+onUnmounted(() => {
+  console.log("Cart view unmounted");
+  cartStore.clearCart();
+});
 </script>
 
 <style scoped>
@@ -42,18 +67,41 @@ const handlePay = () => {
 }
 .cart-container {
   width: 80%;
+  height: 45vh;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
   border-radius: 10px;
+  max-height: calc(100vh-60vh); /* 设置最大高度，减去头部和其他元素的高度 */
+  overflow-y: auto; /* 添加垂直滚动条 */
 }
+
+/* 自定义滚动条样式 */
+.cart-container::-webkit-scrollbar {
+  width: 8px; /* 滚动条宽度 */
+}
+
+.cart-container::-webkit-scrollbar-track {
+  background: #fdfdfd; /* 滚动条轨道颜色 */
+  border: 1px solid #e9bfbf;
+  border-radius: 4px;
+}
+
+.cart-container::-webkit-scrollbar-thumb {
+  background: #ff6b6b3a; /* 滚动条滑块颜色 */
+  border-radius: 4px;
+}
+
+.cart-container::-webkit-scrollbar-thumb:hover {
+  background: #ff6b6b; /* 滚动条滑块悬停颜色 */
+}
+
 .checkout-area {
   position: fixed;
-
   right: 150px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap: 10px; */
 }
 .total {
   font-size: 20px;

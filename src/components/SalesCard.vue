@@ -7,7 +7,7 @@
       @click="goToProductDetails(product.id)"
     >
       <div class="image-container">
-        <img :src="product.images.thumbnail" :alt="product.title" />
+        <img :src="product.images[0]" :alt="product.title" />
       </div>
 
       <div class="product-info">
@@ -34,7 +34,7 @@ const router = useRouter();
 const props = defineProps(['activeName'])
 const emit = defineEmits(['update-count'])
 
-const API_URL = "http://localhost:3001/product_list";
+const API_URL = "http://localhost:3000/product_list";
 const ProductList = ref([]);
 
 // 计算属性，根据 activeName 过滤商品
@@ -44,7 +44,7 @@ const filteredProducts = computed(() => {
   } else if (props.activeName === '热销') {
     return ProductList.value.filter(product => product.main_category === '热销');
   } else if (props.activeName === '特价') {
-    return ProductList.value.filter(product => product.main_category === '特价');
+    return ProductList.value.filter(product => product.main_category === '特价出售');
   }
   return ProductList.value; // 默认返回所有商品
 });

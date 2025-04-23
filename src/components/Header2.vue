@@ -14,7 +14,8 @@
             <font-awesome-icon
               :icon="['fas', 'cart-shopping']"
               size="xl"
-              style="color: #F26371" />
+              style="color: #f26371"
+            />
           </div>
           你的购物车</router-link
         >
@@ -70,7 +71,8 @@
         line-height: normal;
         color: #424443;
         font-weight: 500;
-      ">
+      "
+    >
       {{ subtext }}
     </div>
   </div>
@@ -78,7 +80,7 @@
 
 <script>
 export default {
-  name: 'Header2',
+  name: "Header2",
   props: {
     title: {
       type: String,
@@ -86,7 +88,7 @@ export default {
     },
     subtext: {
       type: String,
-      default: '',
+      default: "",
     },
   },
   data() {
@@ -98,7 +100,7 @@ export default {
     this.activeLink = this.$route.path;
   },
   watch: {
-    '$route.path'(newPath) {
+    "$route.path"(newPath) {
       this.activeLink = newPath;
     },
   },
@@ -109,9 +111,7 @@ export default {
   },
 };
 </script>
-<script setup>
-
-</script>
+<script setup></script>
 <style scoped>
 .header2 {
   padding: 0 60px;
@@ -121,9 +121,9 @@ export default {
   /* top: 0;
   left: 0;
   right: 0; */
-  font-family: 'Hanazono Mincho';
+  font-family: "Hanazono Mincho";
 }
-input{
+input {
   outline: none;
 }
 .title {
@@ -133,7 +133,7 @@ input{
   color: #000000;
   padding: 10px 0;
 }
-.logo-text{
+.logo-text {
   font-family: "logo";
 }
 .headermenu {
@@ -156,7 +156,7 @@ input{
 
 .logo {
   flex: 2;
-  font-family: 'Hanazono';
+  font-family: "Hanazono";
 }
 
 .search input {
@@ -176,7 +176,7 @@ input{
 .cart {
   flex: 2;
   font-size: 16px;
-  font-family: 'Alibaba';
+  font-family: "Alibaba";
   transform: translateX(-50px);
 }
 
