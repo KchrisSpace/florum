@@ -201,7 +201,7 @@ const decreaseQuantity = () => {
 
 <style scoped>
 .product-container {
-  max-width: 100vw;
+  padding:0 220px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -209,7 +209,6 @@ const decreaseQuantity = () => {
 }
 
 .product-content {
-  width: 1000px;
   display: flex;
   gap: 40px;
 }

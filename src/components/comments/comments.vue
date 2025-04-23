@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col justify-start">
+  <div class="flex flex-col justify-center px-60">
+   
     <div class="font-Alibaba text-base w-52 flex justify-between items-end">
       <span class="text-3xl text-black"
         >评论<span class="text-font-thirth text-lg ml-1">10</span></span
@@ -19,11 +20,14 @@
           class="outline-none bg-bg-fifth rounded-sm h-10 py-2 px-2 w-2/3" />
       </div>
     </div>
-    <!-- 用户评论 -->
+   
+   
+     <!-- 用户评论 -->
+     <usersComments />
     <usersComments />
     <usersComments />
     <usersComments />
-    <usersComments />
+  
   </div>
 </template>
 <script>

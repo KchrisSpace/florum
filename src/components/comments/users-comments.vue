@@ -1,5 +1,5 @@
 <template>
-<div class="text-left flex w-4/5 pt-10 font-Harmony">
+<div class="text-left flex pt-10 font-Harmony">
         <!-- 用户头像 -->
         <div class="w-16 h-16 bg-font-primary rounded-full shrink-0"></div>
         <div class="mx-2">

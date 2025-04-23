@@ -1,15 +1,15 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import axios from "axios";
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import axios from 'axios';
 
-export const useCartStore = defineStore("cart", () => {
+export const useCartStore = defineStore('cart', () => {
   const cartItems = ref([]);
   const itemTotals = ref({});
 
   // 获取购物车数据
   const fetchCartData = async () => {
     try {
-      const cartResponse = await axios.get("http://localhost:3000/cart");
+      const cartResponse = await axios.get('http://localhost:3000/cart');
       cartItems.value = cartResponse.data;
 
       // 获取每个商品的详细信息
@@ -29,7 +29,7 @@ export const useCartStore = defineStore("cart", () => {
         itemTotals.value[item.product_id] = 0;
       });
     } catch (error) {
-      console.error("获取购物车数据失败:", error);
+      console.error('获取购物车数据失败:', error);
     }
   };
 
@@ -61,7 +61,7 @@ export const useCartStore = defineStore("cart", () => {
       // 重新获取购物车数据以确保同步
       await fetchCartData();
     } catch (error) {
-      console.error("删除商品失败:", error);
+      console.error('删除商品失败:', error);
     }
   };
 
@@ -72,7 +72,7 @@ export const useCartStore = defineStore("cart", () => {
         quantity: item.quantity,
       });
     } catch (error) {
-      console.error("更新购物车商品失败:", error);
+      console.error('更新购物车商品失败:', error);
     }
   };
 
