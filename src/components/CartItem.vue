@@ -46,8 +46,6 @@ const totalPrice = computed(() => {
   return (product.value.price_info.current_price * count.value).toFixed(2);
 });
 
-<<<<<<< HEAD
-=======
 // 监听数量变化和总价变化
 watch([count, totalPrice], ([newCount, newTotal]) => {
   emit("update-total", {
@@ -61,7 +59,6 @@ watch([count, totalPrice], ([newCount, newTotal]) => {
   });
 });
 
->>>>>>> dev-lyy
 onMounted(() => {
   if (props.item.id) {
     axios

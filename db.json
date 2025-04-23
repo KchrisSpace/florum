@@ -581,28 +581,7 @@
       }
     }
   ],
-  "carts": [
-    {
-      "id": "C01",
-      "user_id": "1",
-      "created_at": "2023-04-13T10:30:00Z",
-      "items": [
-        {
-          "item_id": "item_01",
-          "product_id": "prod_658",
-          "sku_id": "sku_658_black_xl",
-          "quantity": 2,
-          "selected": true
-        }
-      ],
-      "total": 299,
-      "summary": {
-        "total_items": 3,
-        "total_quantity": 5,
-        "total_amount": 896
-      }
-    }
-  ],
+ 
   "comments": {
     "product_comments": [
       {
@@ -756,15 +735,7 @@
       "id": "P04"
     },
     {
-      "id": "P04",
-      "quantity": 1
-    },
-    {
-      "id": "P04",
-      "quantity": 1
-    },
-    {
-      "quantity": 1,
+      "quantity": 2,
       "id": "P05"
     },
     {
@@ -772,8 +743,16 @@
       "id": "P06"
     },
     {
-      "id": "P06",
-      "quantity": 1
+      "quantity": 6,
+      "id": "P09"
+    }
+  ],
+  "wishlist": [ 
+    {
+      "id": "P02"
+    },
+    {
+      "id": "P03"
     }
   ]
 }
