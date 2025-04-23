@@ -81,6 +81,7 @@ const totalPrice = computed(() => cartStore.total);
 const increaseQuantity = (item) => {
   item.quantity++;
   cartStore.updateCartItem(item);
+  console.log(item);
   // 更新单个商品的总价
   const itemTotal = item.quantity * item.product.price_info.current_price;
   cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });

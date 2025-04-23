@@ -46,19 +46,6 @@ const totalPrice = computed(() => {
   return (product.value.price_info.current_price * count.value).toFixed(2);
 });
 
-// 监听数量变化和总价变化
-watch([count, totalPrice], ([newCount, newTotal]) => {
-  emit("update-total", {
-    id: props.item.product_id,
-    total: parseFloat(newTotal),
-  });
-  // 更新购物车中的商品数量
-  cartStore.updateCartItem({
-    product_id: props.item.product_id,
-    quantity: newCount,
-  });
-});
-
 onMounted(() => {
   if (props.item.product_id) {
     axios
@@ -80,11 +67,31 @@ onMounted(() => {
 
 const increment = () => {
   count.value++;
+  // 更新购物车中的商品数量
+  cartStore.updateCartItem({
+    product_id: props.item.product_id,
+    quantity: count.value,
+  });
+  // 更新总价
+  emit("update-total", {
+    id: props.item.product_id,
+    total: parseFloat(totalPrice.value),
+  });
 };
 
 const decrement = () => {
   if (count.value > 1) {
     count.value--;
+    // 更新购物车中的商品数量
+    cartStore.updateCartItem({
+      product_id: props.item.product_id,
+      quantity: count.value,
+    });
+    // 更新总价
+    emit("update-total", {
+      id: props.item.product_id,
+      total: parseFloat(totalPrice.value),
+    });
   }
 };
 
@@ -125,7 +132,6 @@ const removeItem = async () => {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
- 
 }
 
 .item-image {

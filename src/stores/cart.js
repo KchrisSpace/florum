@@ -71,6 +71,7 @@ export const useCartStore = defineStore("cart", () => {
       await axios.put(`http://localhost:3000/cart/${item.product_id}`, {
         quantity: item.quantity,
       });
+     
     } catch (error) {
       console.error("更新购物车商品失败:", error);
     }
