@@ -26,32 +26,32 @@
       </div>
     </div>
     <!-- 切换 -->
-    <div class="flex justify-between my-10 mb-20">
+    <div class="relative my-10 mb-20">
       <!-- 上一篇 -->
-      <div class="flex text-left" v-if="previousArticleId !== null">
+      <div class="absolute left-0 flex text-left" v-if="previousArticleId !== null">
         <img
           @click="navigateToArticle(previousArticleId)"
           :src="previousArticleCoverImg"
-          class="w-36 h-36 object-cover cursor-pointer hover:scale-105 transition-all duration-300" />
+          class="w-36 h-36 mr-3 object-cover cursor-pointer hover:scale-105 transition-all duration-300" />
         <div
           @click="navigateToArticle(previousArticleId)"
           class="mx-2 flex flex-col justify-center">
           <p class="text-xl text-[#545656] hover:text-[#545656]/40 cursor-pointer">上一篇</p>
-          <h4 class="text-black cursor-pointer">{{ previousArticleTitle }}</h4>
+          <h4 class="text-black truncate w-80 cursor-pointer">{{ previousArticleTitle }}</h4>
         </div>
       </div>
       <!-- 下一篇 -->
-      <div class="flex text-right" v-if="nextArticleId !== null">
+      <div class="absolute right-0 text-right flex " v-if="nextArticleId !== null">
         <div
           @click="navigateToArticle(nextArticleId)"
           class="mx-2 flex flex-col justify-center">
           <p class="text-xl text-[#545656] hover:text-[#545656]/40 cursor-pointer">下一篇</p>
-          <h4 class="text-black cursor-pointer">{{ nextArticleTitle }}</h4>
+          <h4 class="text-black w-80 truncate cursor-pointer">{{ nextArticleTitle }}</h4>
         </div>
         <img
           @click="navigateToArticle(nextArticleId)"
           :src="nextArticleCoverImg"
-          class="w-36 h-36 object-cover cursor-pointer hover:scale-105 transition-all duration-300" />
+          class="w-36 h-36 object-cover ml-3 cursor-pointer hover:scale-105 transition-all duration-300" />
       </div>
     </div>
     <!-- 评论区 -->
