@@ -113,7 +113,7 @@ export default {
 </script>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { API_URL } from '/src/pages/const/index';
 import axios from 'axios';
 
@@ -127,7 +127,50 @@ const formData = ref({
   currentPassword: '',
   newPassword: '',
   confirmPassword: '',
-  avatar: null,
+  avatar: '',
+});
+
+// 存储原始数据用于比较
+const originalData = ref({
+  nickname: '',
+  gender: '',
+  avatar: '',
+});
+
+// 获取用户信息
+const fetchUserInfo = async () => {
+  try {
+    isLoading.value = true;
+    const response = await axios.get(
+      `${API_URL}/user_update/${formData.value.user_id}`
+    );
+    const userData = response.data;
+
+    // 设置默认值
+    formData.value.nickname = userData.user_name || '';
+    formData.value.gender = userData.user_gender === '男' ? 'male' : 'female';
+    if (userData.user_avatar) {
+      avatarUrl.value = userData.user_avatar;
+      formData.value.avatar = userData.user_avatar;
+    }
+
+    // 保存原始数据
+    originalData.value = {
+      nickname: formData.value.nickname,
+      gender: formData.value.gender,
+      avatar: formData.value.avatar,
+    };
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    alert('获取用户信息失败，请稍后重试');
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 组件挂载时获取用户信息
+onMounted(() => {
+  fetchUserInfo();
 });
 
 // 表单验证
@@ -192,15 +235,28 @@ const handleSubmit = async () => {
 
   isLoading.value = true;
   try {
-    // 创建请求数据对象
+    // 创建请求数据对象，只包含需要更新的字段
     const requestData = {
-      user_id: formData.value.user_id,
-      user_name: formData.value.nickname,
-      user_password:
-        formData.value.newPassword || formData.value.currentPassword,
-      user_gender: formData.value.gender === 'male' ? '男' : '女',
-      updated_at: new Date().toISOString(),
+      id: formData.value.user_id,
     };
+
+    // 只添加非空的字段
+    if (
+      formData.value.nickname &&
+      formData.value.nickname !== originalData.nickname
+    ) {
+      requestData.user_name = formData.value.nickname;
+    }
+    if (formData.value.newPassword) {
+      requestData.user_password = formData.value.newPassword;
+    }
+    if (
+      formData.value.gender &&
+      formData.value.gender !== originalData.gender
+    ) {
+      requestData.user_gender = formData.value.gender === 'male' ? '男' : '女';
+    }
+    requestData.updated_at = new Date().toISOString();
 
     let response;
     // 如果有头像，使用FormData
@@ -212,7 +268,7 @@ const handleSubmit = async () => {
       formDataToSend.append('user_avatar', formData.value.avatar);
 
       response = await axios.put(
-        `${API_URL}/user_update?user_id=${formData.value.user_id}`,
+        `${API_URL}/user_update/${formData.value.user_id}`,
         formDataToSend,
         {
           headers: {
@@ -223,7 +279,7 @@ const handleSubmit = async () => {
     } else {
       // 如果没有头像，直接发送JSON数据
       response = await axios.put(
-        `${API_URL}/user_update?user_id=${formData.value.user_id}`,
+        `${API_URL}/user_update/${formData.value.user_id}`,
         requestData,
         {
           headers: {
@@ -236,17 +292,26 @@ const handleSubmit = async () => {
     if (response.status === 200) {
       alert('更新成功！');
 
-      // 重置表单
-      formData.value = {
-        user_id: '02',
-        nickname: '',
-        gender: '',
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-        avatar: null,
-      };
-      avatarUrl.value = '';
+      // 更新原始数据
+      if (response.data.user_name) {
+        originalData.nickname = response.data.user_name;
+        formData.value.nickname = response.data.user_name;
+      }
+      if (response.data.user_gender) {
+        originalData.gender =
+          response.data.user_gender === '男' ? 'male' : 'female';
+        formData.value.gender = originalData.gender;
+      }
+      if (response.data.user_avatar) {
+        originalData.avatar = response.data.user_avatar;
+        formData.value.avatar = response.data.user_avatar;
+        avatarUrl.value = response.data.user_avatar;
+      }
+
+      // 重置密码相关字段
+      formData.value.currentPassword = '';
+      formData.value.newPassword = '';
+      formData.value.confirmPassword = '';
     }
   } catch (error) {
     console.error('更新失败:', error);
