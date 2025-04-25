@@ -5,12 +5,12 @@
       <!-- 头像 -->
       <div class="flex flex-col w-20 mr-6">
         <div
-          class="w-20 h-20 bg-font-primary rounded-full overflow-hidden relative">
+          class="w-20 h-20 bg-font-primary rounded-full overflow-hidden relative group">
           <img
             v-if="avatarUrl"
             :src="avatarUrl"
             alt="用户头像"
-            class="w-full h-full object-cover" />
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
           <div
             v-if="isLoading"
             class="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -27,79 +27,111 @@
         <button
           type="button"
           @click="triggerFileInput"
-          class="text-center mb-0 mt-2 hover:text-font-primary transition-colors"
+          class="text-center mb-0 mt-2 hover:text-font-primary transition-colors text-sm"
           :disabled="isLoading">
           更换头像
         </button>
       </div>
       <!-- 昵称 -->
       <div class="flex flex-col ml-2 text-left w-full text-lg">
-        <div class="">
-          <label for="">昵称：</label>
+        <div class="relative">
+          <label for="nickname" class="block mb-1">昵称：</label>
           <input
+            id="nickname"
             type="text"
             v-model="formData.nickname"
             :disabled="isLoading"
-            class="bg-bg-fifth/60 h-8 w-3/5"
+            class="bg-bg-fifth/60 h-10 w-3/5 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
+            :class="{ 'border-red-500': errors.nickname }"
             placeholder="请输入昵称" />
+          <p v-if="errors.nickname" class="text-red-500 text-sm mt-1">
+            {{ errors.nickname }}
+          </p>
         </div>
-        <div class="mt-3">
+        <div class="mt-3 flex">
           <label for="sex" class="mr-4">性别：</label>
-          <input
-            type="radio"
-            name="sex"
-            v-model="formData.gender"
-            value="male"
-            :disabled="isLoading"
-            class="mx-2" />男
-          <input
-            type="radio"
-            name="sex"
-            v-model="formData.gender"
-            value="female"
-            :disabled="isLoading"
-            class="mx-2" />女
+          <div class="flex items-center">
+            <label class="inline-flex items-center mr-4">
+              <input
+                type="radio"
+                name="sex"
+                v-model="formData.gender"
+                value="male"
+                :disabled="isLoading"
+                class="form-radio text-font-primary focus:ring-font-primary" />男
+            </label>
+            <label class="inline-flex items-center">
+              <input
+                type="radio"
+                name="sex"
+                v-model="formData.gender"
+                value="female"
+                :disabled="isLoading"
+                class="form-radio text-font-primary focus:ring-font-primary" />女
+            </label>
+          </div>
+          <p v-if="errors.gender" class="text-red-500 text-sm mt-1">
+            {{ errors.gender }}
+          </p>
         </div>
       </div>
     </div>
     <!-- 修改密码 -->
     <div class="border-t-1 border-b-1 border-bg-primary text-left py-4 mt-14">
-      <h4 class="mb-4">修改密码</h4>
-      <div class="my-2">
-        <label for="">当前密码：</label><br />
+      <h4 class="mb-4 text-xl font-medium">修改密码</h4>
+      <div class="my-2 flex flex-col">
+        <label for="currentPassword" class="mb-1">当前密码：</label>
         <input
+          id="currentPassword"
           type="password"
           v-model="formData.currentPassword"
           :disabled="isLoading"
-          class="bg-bg-fifth/60 h-8 w-2/3"
+          class="bg-bg-fifth/60 h-10 w-2/3 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
+          :class="{ 'border-red-500': errors.currentPassword }"
           placeholder="请输入当前密码" />
+        <p v-if="errors.currentPassword" class="text-red-500 text-sm mt-1">
+          {{ errors.currentPassword }}
+        </p>
       </div>
-      <div class="my-2">
-        <label for="">新密码：</label><br />
+      <div class="my-2 flex flex-col">
+        <label for="newPassword" class="mb-1">新密码：</label>
         <input
+          id="newPassword"
           type="password"
           v-model="formData.newPassword"
           :disabled="isLoading"
-          class="bg-bg-fifth/60 h-8 w-2/3"
+          class="bg-bg-fifth/60 h-10 w-2/3 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
+          :class="{ 'border-red-500': errors.newPassword }"
           placeholder="请输入新密码" />
+        <p v-if="errors.newPassword" class="text-red-500 text-sm mt-1">
+          {{ errors.newPassword }}
+        </p>
       </div>
-      <div class="my-2">
-        <label for="">确认新密码：</label><br />
+      <div class="my-2 flex flex-col">
+        <label for="confirmPassword" class="mb-1">确认新密码：</label>
         <input
+          id="confirmPassword"
           type="password"
           v-model="formData.confirmPassword"
           :disabled="isLoading"
-          class="bg-bg-fifth/60 h-8 w-2/3"
+          class="bg-bg-fifth/60 h-10 w-2/3 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
+          :class="{ 'border-red-500': errors.confirmPassword }"
           placeholder="请再次输入新密码" />
+        <p v-if="errors.confirmPassword" class="text-red-500 text-sm mt-1">
+          {{ errors.confirmPassword }}
+        </p>
       </div>
     </div>
 
     <!-- 保存更改 -->
-    <div class="w-[120px]">
+    <div class="w-[120px] mt-8">
       <button
         type="submit"
         :disabled="isLoading"
-        class="bg-font-primary text-white text-lg mt-4 w-full hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        class="bg-font-primary text-white text-lg py-2 w-full rounded-md hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+        <span v-if="isLoading" class="animate-spin mr-2">
+          <font-awesome-icon :icon="['fas', 'spinner']" />
+        </span>
         {{ isLoading ? '保存中...' : '保存更改' }}
       </button>
     </div>
@@ -107,19 +139,36 @@
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faSpinner);
+
 export default {
   name: 'UserDetails',
+  components: {
+    FontAwesomeIcon,
+  },
 };
 </script>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { API_URL } from '/src/pages/const/index';
 import axios from 'axios';
 
 const fileInput = ref(null);
 const avatarUrl = ref('');
 const isLoading = ref(false);
+const errors = reactive({
+  nickname: '',
+  gender: '',
+  currentPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+});
+
 const formData = ref({
   user_id: '02',
   nickname: '',
@@ -136,6 +185,11 @@ const originalData = ref({
   gender: '',
   avatar: '',
 });
+
+// 定义常量
+const DEFAULT_EMAIL = '123456@qq.com';
+const DEFAULT_PHONE = '12345678901';
+const CREATED_AT = '2025-04-25T21:56:28.881Z';
 
 // 获取用户信息
 const fetchUserInfo = async () => {
@@ -175,23 +229,41 @@ onMounted(() => {
 
 // 表单验证
 const validateForm = () => {
-  if (!formData.value.nickname) {
-    alert('请输入昵称');
-    return false;
+  let isValid = true;
+  errors.nickname = '';
+  errors.gender = '';
+  errors.currentPassword = '';
+  errors.newPassword = '';
+  errors.confirmPassword = '';
+
+  if (!formData.value.nickname.trim()) {
+    errors.nickname = '请输入昵称';
+    isValid = false;
   }
+
   if (!formData.value.gender) {
-    alert('请选择性别');
-    return false;
+    errors.gender = '请选择性别';
+    isValid = false;
   }
-  if (formData.value.newPassword && !formData.value.currentPassword) {
-    alert('请输入当前密码');
-    return false;
+
+  if (formData.value.newPassword) {
+    if (!formData.value.currentPassword) {
+      errors.currentPassword = '请输入当前密码';
+      isValid = false;
+    }
+
+    if (formData.value.newPassword.length < 6) {
+      errors.newPassword = '密码长度不能少于6位';
+      isValid = false;
+    }
+
+    if (formData.value.newPassword !== formData.value.confirmPassword) {
+      errors.confirmPassword = '两次输入的密码不一致';
+      isValid = false;
+    }
   }
-  if (formData.value.newPassword !== formData.value.confirmPassword) {
-    alert('两次输入的密码不一致');
-    return false;
-  }
-  return true;
+
+  return isValid;
 };
 
 // 触发文件选择
@@ -207,13 +279,13 @@ const handleFileChange = (event) => {
   if (file) {
     // 验证文件类型
     if (!file.type.startsWith('image/')) {
-      alert('请选择图片文件');
+      showError('请选择图片文件');
       return;
     }
 
     // 验证文件大小（限制为2MB）
     if (file.size > 2 * 1024 * 1024) {
-      alert('图片大小不能超过2MB');
+      showError('图片大小不能超过2MB');
       return;
     }
 
@@ -227,6 +299,12 @@ const handleFileChange = (event) => {
   }
 };
 
+// 显示错误提示
+const showError = (message) => {
+  // 这里可以使用更优雅的提示方式，比如 Element Plus 的 Message
+  alert(message);
+};
+
 // 处理表单提交
 const handleSubmit = async () => {
   if (!validateForm()) {
@@ -235,90 +313,90 @@ const handleSubmit = async () => {
 
   isLoading.value = true;
   try {
-    // 创建请求数据对象，只包含需要更新的字段
     const requestData = {
       id: formData.value.user_id,
+      user_name: formData.value.nickname || originalData.value.nickname,
+      user_gender: formData.value.gender === 'male' ? '男' : '女',
+      user_email: DEFAULT_EMAIL,
+      user_phone: DEFAULT_PHONE,
+      user_avatar: formData.value.avatar || originalData.value.avatar,
+      created_at: CREATED_AT,
+      updated_at: new Date().toISOString(),
     };
 
-    // 只添加非空的字段
-    if (
-      formData.value.nickname &&
-      formData.value.nickname !== originalData.nickname
-    ) {
-      requestData.user_name = formData.value.nickname;
-    }
+    // 如果有新密码，添加密码字段
     if (formData.value.newPassword) {
       requestData.user_password = formData.value.newPassword;
     }
-    if (
-      formData.value.gender &&
-      formData.value.gender !== originalData.gender
-    ) {
-      requestData.user_gender = formData.value.gender === 'male' ? '男' : '女';
-    }
-    requestData.updated_at = new Date().toISOString();
 
-    let response;
-    // 如果有头像，使用FormData
-    if (formData.value.avatar) {
-      const formDataToSend = new FormData();
-      Object.keys(requestData).forEach((key) => {
-        formDataToSend.append(key, requestData[key]);
-      });
-      formDataToSend.append('user_avatar', formData.value.avatar);
-
-      response = await axios.put(
-        `${API_URL}/user_update/${formData.value.user_id}`,
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-    } else {
-      // 如果没有头像，直接发送JSON数据
-      response = await axios.put(
-        `${API_URL}/user_update/${formData.value.user_id}`,
-        requestData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
-
+    // 发送请求
+    const response = await sendUpdateRequest(requestData);
     if (response.status === 200) {
-      alert('更新成功！');
-
-      // 更新原始数据
-      if (response.data.user_name) {
-        originalData.nickname = response.data.user_name;
-        formData.value.nickname = response.data.user_name;
-      }
-      if (response.data.user_gender) {
-        originalData.gender =
-          response.data.user_gender === '男' ? 'male' : 'female';
-        formData.value.gender = originalData.gender;
-      }
-      if (response.data.user_avatar) {
-        originalData.avatar = response.data.user_avatar;
-        formData.value.avatar = response.data.user_avatar;
-        avatarUrl.value = response.data.user_avatar;
-      }
-
-      // 重置密码相关字段
-      formData.value.currentPassword = '';
-      formData.value.newPassword = '';
-      formData.value.confirmPassword = '';
+      handleSuccess(response.data);
     }
   } catch (error) {
     console.error('更新失败:', error);
-    alert(error.response?.data?.message || '更新失败，请稍后重试');
+    showError(error.response?.data?.message || '更新失败，请稍后重试');
   } finally {
     isLoading.value = false;
   }
+};
+
+// 提取发送请求的逻辑
+const sendUpdateRequest = async (requestData) => {
+  if (formData.value.avatar instanceof File) {
+    const formDataToSend = new FormData();
+    Object.keys(requestData).forEach((key) => {
+      formDataToSend.append(key, requestData[key]);
+    });
+    formDataToSend.append('user_avatar', formData.value.avatar);
+
+    return await axios.put(
+      `${API_URL}/user_update/${formData.value.user_id}`,
+      formDataToSend,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+  } else {
+    return await axios.put(
+      `${API_URL}/user_update/${formData.value.user_id}`,
+      requestData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+};
+
+// 处理更新成功
+const handleSuccess = (responseData) => {
+  alert('更新成功！');
+
+  // 更新原始数据
+  if (responseData.user_name) {
+    originalData.value.nickname = responseData.user_name;
+    formData.value.nickname = responseData.user_name;
+  }
+  if (responseData.user_gender) {
+    originalData.value.gender =
+      responseData.user_gender === '男' ? 'male' : 'female';
+    formData.value.gender = originalData.value.gender;
+  }
+  if (responseData.user_avatar) {
+    originalData.value.avatar = responseData.user_avatar;
+    formData.value.avatar = responseData.user_avatar;
+    avatarUrl.value = responseData.user_avatar;
+  }
+
+  // 重置密码相关字段
+  formData.value.currentPassword = '';
+  formData.value.newPassword = '';
+  formData.value.confirmPassword = '';
 };
 </script>
 
@@ -336,5 +414,24 @@ input:disabled {
 
 button:disabled {
   cursor: not-allowed;
+}
+
+input::placeholder {
+  font-size: 14px;
+  line-height: 40px;
+}
+
+.form-radio {
+  margin-right: 0.5rem;
+}
+
+.form-radio:checked {
+  background-color: #f26371;
+  border-color: #f26371;
+  border-width: 0.2px;
+}
+
+.form-radio:focus {
+  box-shadow: 0 0 0 2px rgba(242, 99, 113, 0.2);
 }
 </style>
