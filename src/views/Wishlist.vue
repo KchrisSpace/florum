@@ -4,16 +4,32 @@
     <Header2 title="心愿单" subtext="wish list " />
     <div class="wishlist-container">
       <hr />
-      <Wishcar />
-      <Wishcar />
-      <Wishcar />
+      <Wishcar
+        v-for="product in wishlist"
+        :key="product.id"
+        :product="product"
+        @remove-item="removeItem"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import Header2 from '../components/Header2.vue';
-import Wishcar from '../components/Wishcar.vue';
+import Header2 from "../components/Header2.vue";
+import Wishcar from "../components/Wishcar.vue";
+import { useWishlistStore } from "../stores/wishlist.js";
+import { onMounted } from "vue";
+
+const wishlistStore = useWishlistStore();
+const wishlist = wishlistStore.wishlist;
+
+onMounted(() => {
+  wishlistStore.fetchWishlistData();
+});
+
+const removeItem = async (productId) => {
+  await wishlistStore.removeItem(productId);
+};
 </script>
 
 <style scoped>

@@ -82,12 +82,12 @@ const increment = () => {
   count.value++;
   // 更新购物车中的商品数量
   cartStore.updateCartItem({
-    product_id: props.item.product_id,
+    id: props.item.id,
     quantity: count.value,
   });
   // 更新总价
   emit("update-total", {
-    id: props.item.product_id,
+    id: props.item.id,
     total: parseFloat(totalPrice.value),
   });
 };
@@ -97,14 +97,11 @@ const decrement = () => {
     count.value--;
     // 更新购物车中的商品数量
     cartStore.updateCartItem({
-      product_id: props.item.product_id,
+      id: props.item.id,
       quantity: count.value,
     });
-    // 更新总价
-    emit("update-total", {
-      id: props.item.product_id,
-      total: parseFloat(totalPrice.value),
-    });
+   
+ 
   }
 };
 

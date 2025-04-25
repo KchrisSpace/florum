@@ -730,10 +730,6 @@
   ],
   "cart": [
     {
-      "quantity": 3,
-      "id": "P05"
-    },
-    {
       "quantity": 2,
       "id": "P06"
     },
@@ -746,8 +742,12 @@
       "id": "P03"
     },
     {
-      "quantity": 1,
+      "quantity": 2,
       "id": "P10"
+    },
+    {
+      "quantity": 1,
+      "id": "P01"
     }
   ],
   "wishlist": [

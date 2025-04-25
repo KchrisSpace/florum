@@ -27,6 +27,10 @@
           <el-icon><Files /></el-icon>
           <span>分类管理</span>
         </router-link>
+        <router-link to="/admin/suggestion" class="nav-item">
+          <el-icon><Files /></el-icon>
+          <span>建议和反馈	</span>
+        </router-link>
       </nav>
     </div>
 

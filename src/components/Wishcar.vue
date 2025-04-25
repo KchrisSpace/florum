@@ -1,23 +1,43 @@
 <template>
-  
   <div class="cart-item">
-    <hr>
+    <hr />
     <button class="remove-btn" @click="removeItem">X</button>
     <img
       class="item-image"
-      src="https://via.placeholder.com/150"
-      alt="Item Image"
+      :src="product.image || 'https://via.placeholder.com/150'"
+      :alt="product.name"
     />
     <div class="item-info">
-      <span class="item-name">玫瑰玫瑰玫瑰</span>
-      <span class="item-price">¥149</span>
-      <span class="item-status">现售</span>
+      <span class="item-name">{{ product.name }}</span>
+      <span class="item-price">¥{{ product.price }}</span>
+      <span class="item-status">{{ product.status }}</span>
     </div>
-    <button class="add-to-cart-btn">加入购物车</button>
+    <button class="add-to-cart-btn" @click="addToCart">加入购物车</button>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { defineProps, defineEmits } from "vue";
+import { useWishlistStore } from "../stores/wishlist.js";
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["remove-item"]);
+const wishlistStore = useWishlistStore();
+
+const removeItem = () => {
+  emit("remove-item", props.product.id);
+};
+
+const addToCart = async () => {
+  await wishlistStore.addToCart(props.product.id);
+};
+</script>
 
 <style scoped>
 .cart-item {
@@ -45,11 +65,9 @@
 
 .item-info {
   display: flex;
-justify-content: space-evenly;
+  justify-content: space-evenly;
   flex-grow: 1;
   /* border: 1px solid #000; */
- 
- 
 }
 
 .item-name {
@@ -75,6 +93,5 @@ justify-content: space-evenly;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-
 }
 </style>
