@@ -123,7 +123,7 @@ hr{
         }
 
 .product {
-  width: 200px;
+  width: 235px;
   height: 400px;
   display: flex;
   flex-direction: column;
