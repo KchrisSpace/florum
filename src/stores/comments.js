@@ -4,7 +4,7 @@ import { API_URL } from '/src/pages/const/index';
 
 export const useCommentsStore = () => {
   const comments = ref([]);
-  const articleComments = ref([]);
+  const allComments = ref([]);
   const isLoading = ref(false);
   const error = ref(null);
 
@@ -19,34 +19,34 @@ export const useCommentsStore = () => {
   // };
 
   // 添加评论
-  const addComment = async (newComment) => {
-    try {
-      const response = await axios.post(`${API_URL}/comments`, newComment);
-      comments.value.push(response.data);
-    } catch (error) {
-      console.error('添加评论失败:', error);
-    }
-  };
+  // const addComment = async (newComment) => {
+  //   try {
+  //     const response = await axios.post(`${API_URL}/comments`, newComment);
+  //     comments.value.push(response.data);
+  //   } catch (error) {
+  //     console.error('添加评论失败:', error);
+  //   }
+  // };
 
-  // 更新评论
-  const updateComment = async (commentId, updatedContent) => {
-    try {
-      await axios.put(`${API_URL}/comments/${commentId}`, {
-        content: updatedContent,
-      });
-      const comment = comments.value.find((c) => c.id === commentId);
-      if (comment) {
-        comment.content = updatedContent;
-      }
-    } catch (error) {
-      console.error('更新评论失败:', error);
-    }
-  };
+  // // 更新评论
+  // const updateComment = async (commentId, updatedContent,type) => {
+  //   try {
+  //     await axios.put(`${API_URL}/${type}/${commentId}`, {
+  //       content: updatedContent,
+  //     });
+  //     const comment = comments.value.find((c) => c.id === commentId);
+  //     if (comment) {
+  //       comment.content = updatedContent;
+  //     }
+  //   } catch (error) {
+  //     console.error('更新评论失败:', error);
+  //   }
+  // };
 
   // 删除评论
-  const deleteComment = async (commentId) => {
+  const deleteComment = async (commentId, commentType) => {
     try {
-      await axios.delete(`${API_URL}/comments/${commentId}`);
+      await axios.delete(`${API_URL}/${type}/${commentId}`);
       comments.value = comments.value.filter((c) => c.id !== commentId);
     } catch (error) {
       console.error('删除评论失败:', error);
@@ -54,17 +54,17 @@ export const useCommentsStore = () => {
   };
 
   // 获取文章评论
-  const fetchArticleComments = async (articleId) => {
+  const fetchComments = async (articleId, commentType, commentQuery) => {
     try {
       isLoading.value = true;
       const response = await axios.get(
-        `${API_URL}/article_comments?article_id=${articleId}`
+        `${API_URL}/${commentType}?${commentQuery}=${articleId}`
       );
-      articleComments.value = response.data;
+      allComments.value = response.data;
       return response.data;
     } catch (err) {
       error.value = err.message;
-      console.error('获取文章评论失败:', err);
+      console.error('获取评论失败:', err);
       return [];
     } finally {
       isLoading.value = false;
@@ -72,10 +72,10 @@ export const useCommentsStore = () => {
   };
 
   // 添加文章评论
-  const addArticleComment = async (commentData) => {
+  const addComment = async (commentData, commentType) => {
     try {
       isLoading.value = true;
-      const response = await axios.post(`${API_URL}/article_comments`, {
+      const response = await axios.post(`${API_URL}/${commentType}`, {
         ...commentData,
         created_at: new Date().toISOString(),
         is_audited: true,
@@ -83,7 +83,7 @@ export const useCommentsStore = () => {
 
       // 更新 articleComments 状态
       if (response.data) {
-        articleComments.value = [response.data, ...articleComments.value];
+        allComments.value = [response.data, ...allComments.value];
       }
 
       return response.data;
@@ -98,13 +98,11 @@ export const useCommentsStore = () => {
 
   return {
     comments,
-    articleComments,
+    allComments,
     isLoading,
     error,
-    addComment,
-    updateComment,
     deleteComment,
-    fetchArticleComments,
-    addArticleComment,
+    fetchComments,
+    addComment,
   };
 };

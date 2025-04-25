@@ -79,7 +79,7 @@
       </div>
     </div>
     <!-- 评论区 -->
-    <Comments v-if="article.id" :articleId="article.id" />
+    <Comments v-if="article.id" :sortId="article.id" commentType="article_comments" commentQuery="article_id" />
   </div>
 </template>
 

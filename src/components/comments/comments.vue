@@ -6,50 +6,71 @@
           commentList.length
         }}</span></span
       >
-      <span class="text-black">最热</span>
+      <button
+        @click="handleSort('hot')"
+        :class="{
+          'text-black': sortType === 'hot',
+          'text-font-thirth': sortType !== 'hot',
+        }"
+        class="cursor-pointer hover:text-black transition-colors duration-200">
+        最热
+      </button>
       <div class="inline-block h-6 w-0.5 bg-font-primary"></div>
-      <span class="text-font-thirth">最新</span>
+      <button
+        @click="handleSort('latest')"
+        :class="{
+          'text-black': sortType === 'latest',
+          'text-font-thirth': sortType !== 'latest',
+        }"
+        class="cursor-pointer hover:text-black transition-colors duration-200">
+        最新
+      </button>
     </div>
     <!-- 发条评论吧 -->
-    <form
-      @submit.prevent="handleSubmit"
-      class="flex justify-start items-center my-6">
+    <form @submit.prevent="handleSubmit" class="flex flex-col my-6">
       <!-- 头像 -->
-      <div class="bg-font-primary w-18 h-18 rounded-full"></div>
-      <div class="grow gap-4 mx-2 flex justify-start">
-        <textarea
-          v-if="isFocused"
-          v-model="commentText"
-          @blur="handleBlur"
-          @input="handleInput"
-          placeholder="评论千万条，等你发一条"
-          class="outline-none bg-bg-fifth rounded-sm py-2 px-2 w-2/3 resize-none overflow-hidden"
-          :style="{ height: textareaHeight + 'px' }"
-          maxlength="200"></textarea>
-        <input
-          v-else
-          type="text"
-          v-model="commentText"
-          @focus="handleFocus"
-          placeholder="评论千万条，等你发一条"
-          class="outline-none bg-bg-fifth rounded-sm h-10 py-2 px-2 w-2/3" />
-        <div v-if="isFocused" class="flex flex-col items-end">
-          <button
-            type="submit"
-            :disabled="!commentText.trim() || isLoading"
-            class="bg-font-primary text-white rounded-sm h-10 py-2 px-4 rounded-2 disabled:opacity-50 transition-opacity duration-200">
-            {{ isLoading ? '发布中...' : '发布' }}
-          </button>
+      <div class="flex justify-start items-center gap-4">
+        <img
+          :src="'/images/users/avater/user1.png'"
+          alt="avater"
+          class="bg-font-primary w-18 h-18 rounded-full object-cover" />
+        <div class="grow gap-4 flex justify-start">
+          <textarea
+            v-if="isFocused"
+            v-model="commentText"
+            @blur="handleBlur"
+            @input="handleInput"
+            placeholder=""
+            class="outline-none bg-bg-fifth rounded-sm p-2 w-full resize-none overflow-hidden"
+            :style="{ height: textareaHeight + 'px' }"
+            maxlength="200"></textarea>
+          <input
+            v-else
+            type="text"
+            v-model="commentText"
+            @focus="handleFocus"
+            placeholder="评论千万条，等你发一条"
+            class="outline-none bg-bg-fifth rounded-sm h-10 p-2 w-full" />
         </div>
+      </div>
+      <div v-if="isFocused" class="flex justify-end">
+        <button
+          type="submit"
+          :disabled="!commentText.trim() || isLoading"
+          class="bg-font-primary text-white mt-2 rounded-sm h-10 py-2 px-4 rounded-2 disabled:opacity-50 transition-opacity duration-200">
+          {{ isLoading ? '发布中...' : '发布' }}
+        </button>
       </div>
     </form>
 
     <!-- 用户评论列表 -->
-    <div v-if="commentList.length > 0" class="w-full flex justify-center flex-wrap">
+    <div
+      v-if="commentList.length > 0"
+      class="w-full flex justify-center flex-wrap">
       <div
         v-for="comment in commentList"
         :key="comment.id"
-        class="text-left flex pt-10 font-Harmony ">
+        class="text-left flex pt-10 font-Harmony">
         <!-- 用户头像 -->
         <img
           :src="comment.avatar"
@@ -65,11 +86,10 @@
           <div class="text-font-thirth">
             {{ formatDate(comment.created_at) }}
           </div>
-           <!-- 修饰 -->
-      <div class="w-[800px] border-b-1 border-bg-primary mt-10"></div>
+          <!-- 修饰 -->
+          <div class="w-[800px] border-b-1 border-bg-primary mt-10"></div>
         </div>
       </div>
-     
     </div>
     <div v-else class="text-center text-font-thirth py-10">
       暂无评论，快来发表第一条评论吧！
@@ -82,8 +102,16 @@ import { useCommentsStore } from '/src/stores/comments';
 import { defineProps, ref, watch } from 'vue';
 
 const props = defineProps({
-  articleId: {
+  sortId: {
     type: [String, Number],
+    required: true,
+  },
+  commentType: {
+    type: String,
+    required: true,
+  },
+  commentQuery: {
+    type: String,
     required: true,
   },
 });
@@ -95,25 +123,50 @@ const commentText = ref('');
 const textareaHeight = ref(40);
 const minHeight = 40;
 const isLoading = ref(false);
+const sortType = ref('latest'); // 默认按最新排序
 
-const fetchComments = async () => {
-  if (!props.articleId) {
+const fetchComment = async () => {
+  if (!props.sortId) {
     console.error('Article ID is required');
     return;
   }
 
   try {
     isLoading.value = true;
-    const comments = await commentsStore.fetchArticleComments(props.articleId);
-    // 按创建时间倒序排列
-    commentList.value = comments.sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    const comments = await commentsStore.fetchComments(
+      props.sortId,
+      props.commentType,
+      props.commentQuery
     );
+    // 根据排序类型排序评论
+    sortComments(comments);
   } catch (error) {
     console.error('获取评论失败:', error);
   } finally {
     isLoading.value = false;
   }
+};
+
+// 排序评论列表
+const sortComments = (comments) => {
+  if (sortType.value === 'latest') {
+    // 按创建时间倒序排列
+    commentList.value = comments.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+  } else {
+    // 按点赞数倒序排列（这里假设评论对象中有 likes 字段）
+    commentList.value = comments.sort(
+      (a, b) => (b.likes || 0) - (a.likes || 0)
+    );
+  }
+};
+
+// 处理排序按钮点击
+const handleSort = (type) => {
+  if (sortType.value === type) return;
+  sortType.value = type;
+  sortComments(commentList.value);
 };
 
 const handleSubmit = async (e) => {
@@ -122,11 +175,16 @@ const handleSubmit = async (e) => {
 
   try {
     isLoading.value = true;
-    const newComment = await commentsStore.addArticleComment({
-      article_id: props.articleId,
-      content: commentText.value.trim(),
-      user_name: '当前用户',
-    });
+    const newComment = await commentsStore.addComment(
+      {
+        [props.commentQuery]: props.sortId,
+        user_id: '2',
+        user_name: 'Maybe',
+        content: commentText.value.trim(),
+        avatar: '/images/users/avater/user1.png',
+      },
+      props.commentType
+    );
 
     // 确保新评论添加到列表开头
     if (newComment) {
@@ -144,26 +202,27 @@ const handleSubmit = async (e) => {
   }
 };
 
-// 监听 articleId 变化
+// 监听 sortId 变化
 watch(
-  () => props.articleId,
+  () => props.sortId,
   (newId) => {
     if (newId) {
-      fetchComments();
+      fetchComment();
     }
   },
   { immediate: true }
 );
 
-// 监听评论列表变化
+// 修改监听评论列表变化的 watch
 watch(
-  () => commentsStore.articleComments,
+  () => commentsStore.allComments,
   (newComments) => {
     if (newComments && newComments.length > 0) {
-      // 按创建时间倒序排列
-      commentList.value = newComments
-        .filter((comment) => comment.article_id === props.articleId)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const filteredComments = newComments.filter((comment) => {
+        // 使用动态的查询字段进行筛选
+        return comment[props.commentQuery] === props.sortId;
+      });
+      sortComments(filteredComments);
     }
   },
   { deep: true }

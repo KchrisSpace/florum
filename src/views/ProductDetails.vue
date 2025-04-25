@@ -6,10 +6,12 @@
       <span>返回</span>
     </div>
     <details-eject :product-id="productId" />
-    <div class="mt-20">
-      <comments :product-id="productId" class="comments" />
-    </div>
+  
   </div>
+  <div class="mt-20">
+       <!-- 评论区 -->
+    <Comments v-if="productId" :sortId="productId" commentType="product_comments" commentQuery="product_id" />
+    </div>
 </template>
 
 <script setup>
@@ -77,8 +79,5 @@ if (!productId) {
   justify-content: center;
 }
 
-.comments {
-  position: relative;
-  top: 20px;
-}
+
 </style>

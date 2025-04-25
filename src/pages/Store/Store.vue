@@ -97,7 +97,6 @@ export default {
     async getGoods() {
       const res = await axios.get(`${API_URL}/product_list`);
       this.goods = res.data.map((item) => ({ ...item, showCart: false }));
-      console.log(this.goods);
     },
   },
   mounted() {
