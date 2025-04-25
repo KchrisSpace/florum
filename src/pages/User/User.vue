@@ -48,7 +48,7 @@ const selectedButton = ref('UserDetails');
 function changeView(view) {
   currentView.value = view;
   selectedButton.value = view;
-  console.log(currentView.value);
+  // console.log(currentView.value);
 }
 </script>
 <style scoped>

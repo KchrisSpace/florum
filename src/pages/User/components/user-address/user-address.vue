@@ -30,9 +30,7 @@
         <td>{{ address.region }}</td>
         <td>{{ address.address }}</td>
         <td>
-          <button class="mx-2 h-8" @click="editAddress(address)">
-            修改
-          </button>
+          <button class="mx-2 h-8" @click="editAddress(address)">修改</button>
           <button class="mx-2 h-8" @click="deleteAddress(address.id)">
             删除
           </button>
@@ -142,82 +140,128 @@ export default {
 };
 </script>
 <script setup>
-import { ref } from 'vue';
-const addressList = ref([
-  {
-    id: 1,
-    name: '张三',
-    phone: '12345678901',
-    region: '北京市',
-    address: '朝阳区某街道',
-    isDefault: false,
-  },
-  {
-    id: 2,
-    name: '李四',
-    phone: '10987654321',
-    region: '上海市',
-    address: '浦东新区某街道',
-    isDefault: false,
-  },
-  {
-    id: 3,
-    name: '王五',
-    phone: '11223344556',
-    region: '广州市',
-    address: '天河区某街道',
-    isDefault: false,
-  },
-  {
-    id: 4,
-    name: '赵六',
-    phone: '22334455667',
-    region: '深圳市',
-    address: '南山区某街道',
-    isDefault: false,
-  },
-  {
-    id: 5,
-    name: '孙七',
-    phone: '33445566778',
-    region: '杭州市',
-    address: '西湖区某街道',
-    isDefault: false,
-  },
-]);
+import { ref, onMounted, computed } from 'vue';
+import { useAddressStore } from '/src/stores/address';
 
+const addressStore = useAddressStore();
 const showNewAddressModal = ref(false);
+const editingAddressId = ref(null);
 const newAddress = ref({
   name: '',
   phone: '',
   region: '',
   address: '',
+  isDefault: false,
 });
 
-function setDefaultAddress(address) {
-  addressList.value.forEach((o) => (o.isDefault = false)); // 重置所有为非默认
-  address.isDefault = true; // 设置当前为默认
-  console.log(`设置 ${address.name} 的地址为默认地址`);
+// 使用computed获取地址列表
+const addressList = computed(() => {
+  return addressStore.addresses.map((addr) => ({
+    id: addr.id,
+    name: addr.consignee,
+    phone: addr.phone,
+    region: Array.isArray(addr.region) ? addr.region.join(' ') : addr.region,
+    address: addr.detail,
+    isDefault: addr.is_default,
+  }));
+});
+
+// 初始化加载地址列表
+onMounted(async () => {
+  try {
+    await addressStore.fetchAddresses();
+  } catch (error) {
+    console.error('加载地址失败:', error);
+  }
+});
+
+// 设置默认地址
+async function setDefaultAddress(address) {
+  try {
+    await addressStore.setDefaultAddress(address.id);
+  } catch (error) {
+    console.error('设置默认地址失败:', error);
+  }
 }
 
-function addNewAddress() {
-  addressList.value.push({
-    ...newAddress.value,
-    // operation: '查看购物车',
-    mobileSetting: '',
-    isDefault: false,
-  });
-  showNewAddressModal.value = false;
-  newAddress.value = { name: '', phone: '', region: '', address: '' }; // 重置表单
+// 添加新地址
+async function addNewAddress() {
+  try {
+    const addressData = {
+      user_id: '02',
+      consignee: newAddress.value.name,
+      phone: newAddress.value.phone,
+      region: newAddress.value.region.split(' '),
+      detail: newAddress.value.address,
+      is_default: newAddress.value.isDefault,
+    };
+
+    if (editingAddressId.value) {
+      // 编辑现有地址
+      if (newAddress.value.isDefault) {
+        // 如果设置为默认地址，先将其他地址设置为非默认
+        for (const addr of addressList.value) {
+          if (addr.isDefault && addr.id !== editingAddressId.value) {
+            await addressStore.updateAddress(addr.id, {
+              ...addr,
+              is_default: false,
+            });
+          }
+        }
+      }
+      await addressStore.updateAddress(editingAddressId.value, addressData);
+    } else {
+      // 添加新地址
+      if (newAddress.value.isDefault) {
+        // 如果设置为默认地址，先将其他地址设置为非默认
+        for (const addr of addressList.value) {
+          if (addr.isDefault) {
+            await addressStore.updateAddress(addr.id, {
+              ...addr,
+              is_default: false,
+            });
+          }
+        }
+      }
+      await addressStore.addAddress(addressData);
+    }
+
+    showNewAddressModal.value = false;
+    editingAddressId.value = null;
+    newAddress.value = {
+      name: '',
+      phone: '',
+      region: '',
+      address: '',
+      isDefault: false,
+    };
+  } catch (error) {
+    console.error('保存地址失败:', error);
+  }
 }
 
+// 编辑地址
 function editAddress(address) {
-  newAddress.value = { ...address }; // 填充当前地址信息到表单
-  showNewAddressModal.value = true; // 显示地址编辑模态框
+  editingAddressId.value = address.id;
+  newAddress.value = {
+    name: address.name,
+    phone: address.phone,
+    region: address.region,
+    address: address.address,
+    isDefault: address.isDefault,
+  };
+  showNewAddressModal.value = true;
 }
 
-function deleteAddress(id) {
-  addressList.value = addressList.value.filter((address) => address.id !== id);
+// 删除地址
+async function deleteAddress(id) {
+  if (confirm('确定要删除这个地址吗？')) {
+    try {
+      await addressStore.deleteAddress(id);
+    } catch (error) {
+      console.error('删除地址失败:', error);
+    }
+  }
 }
 </script>
 <style scoped>
@@ -286,7 +330,7 @@ input[type='checkbox'] {
   margin: 0 10px;
   outline: none;
 }
-button:hover{
-color:#F26371;
+button:hover {
+  color: #f26371;
 }
 </style>
