@@ -581,7 +581,6 @@
       }
     }
   ],
- 
   "comments": {
     "product_comments": [
       {
@@ -731,23 +730,27 @@
   ],
   "cart": [
     {
-      "quantity": 1,
-      "id": "P04"
-    },
-    {
-      "quantity": 2,
+      "quantity": 3,
       "id": "P05"
     },
     {
-      "quantity": 1,
+      "quantity": 2,
       "id": "P06"
     },
     {
-      "quantity": 6,
+      "quantity": 5,
       "id": "P09"
+    },
+    {
+      "quantity": 1,
+      "id": "P03"
+    },
+    {
+      "quantity": 1,
+      "id": "P10"
     }
   ],
-  "wishlist": [ 
+  "wishlist": [
     {
       "id": "P02"
     },
