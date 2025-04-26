@@ -14,7 +14,7 @@
     <div class="font-Alibaba text-xl font-medium text-left">
       {{ article.title }}
     </div>
-    <div class="mt-2 h-1 w-16 bg-font-primary"></div>
+    <div class="mt-2 h-1 w-26 bg-font-primary rounded-2xl"></div>
   </div>
   <!-- <Article v-show ="showArticle" :article="article" /> -->
 </template>

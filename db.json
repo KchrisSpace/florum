@@ -666,6 +666,16 @@
       "avatar": "/images/users/avater/user1.png",
       "created_at": "2025-04-25T20:21:45.747Z",
       "is_audited": true
+    },
+    {
+      "id": "e6b5",
+      "product_id": "P02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "烦死了，讨厌代码",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-26T06:26:30.522Z",
+      "is_audited": true
     }
   ],
   "article_comments": [

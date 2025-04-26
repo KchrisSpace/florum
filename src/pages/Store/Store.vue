@@ -72,7 +72,7 @@
           </div>
         </template>
         <template v-else>
-          <Goods :goods="filteredGoods" />
+          <Goods :goods="filteredGoods"/>
         </template>
       </div>
     </div>

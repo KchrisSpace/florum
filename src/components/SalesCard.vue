@@ -16,7 +16,7 @@
         <hr></hr>
         <div class="price">
           <span class="current-price">￥{{ product.price_info.current_price }}</span>
-          <span class="original-price">￥{{ product.price_info.original_price }}</span>
+          <span v-if="product.price_info.original_price!==product.price_info.current_price" class="original-price">￥{{ product.price_info.original_price }}</span>
         </div>
       </div>
     </div>

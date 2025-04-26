@@ -31,7 +31,7 @@
             >
             <span
               class="original-price"
-              v-if="product?.price_info?.original_price"
+              v-if="product?.price_info?.current_price!==product?.price_info?.original_price"
               >￥{{ product.price_info.original_price }}</span
             >
           </div>
@@ -270,6 +270,7 @@ const decreaseQuantity = () => {
 }
 
 .product-title {
+  text-align: left;
   font-size: 24px;
   margin-bottom: 20px;
   color: #333;
