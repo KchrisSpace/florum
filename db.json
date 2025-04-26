@@ -924,39 +924,89 @@
       "is_default": false
     },
     {
-      "id": "4",
-      "user_id": "4",
-      "consignee": "王先生",
+      "user_id": "02",
+      "consignee": "555",
       "phone": "13800138003",
-      "region": [
-        "深圳市",
-        "南山区",
-        "南山区街道"
-      ],
-      "detail": "南山区1号",
-      "is_default": false
+      "region": "成都市/青羊区",
+      "detail": "55",
+      "is_default": false,
+      "id": "4"
     },
     {
-      "id": "8ff6",
       "user_id": "02",
-      "consignee": "刘盈盈",
-      "phone": "147",
-      "region": [
-        "四川省广安市武胜县天游村"
-      ],
-      "detail": "1组二号",
-      "is_default": true
-    },
-    {
-      "id": "6004",
-      "user_id": "02",
-      "consignee": "刘盈盈",
+      "consignee": "1111111",
       "phone": "147777777",
       "region": [
-        "1组二号"
+        "成都市/金牛区"
       ],
-      "detail": "1组二号",
+      "detail": "1111111",
+      "is_default": false,
+      "id": "6004"
+    },
+    {
+      "user_id": "02",
+      "consignee": "1111",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "1111",
+      "is_default": false,
+      "id": "a09b"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "14726839224",
+      "region": [
+        "成都市/青羊区"
+      ],
+      "detail": "11",
+      "is_default": false,
+      "id": "0dea"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "111",
+      "is_default": false,
+      "id": "fc3d"
+    },
+    {
+      "user_id": "02",
+      "consignee": "14",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "444",
+      "is_default": false,
+      "id": "5f12"
+    },
+    {
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "12",
+      "is_default": false,
+      "id": "ace0"
+    },
+    {
+      "id": "1af1",
+      "user_id": "02",
+      "consignee": "111",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "1111",
       "is_default": false
+    },
+    {
+      "id": "b497",
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "14726839224",
+      "region": "成都市/郫都区",
+      "detail": "成都锦城学院",
+      "is_default": true
     }
   ],
   "carousel": [

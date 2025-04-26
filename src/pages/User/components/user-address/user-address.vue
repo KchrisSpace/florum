@@ -25,10 +25,10 @@
     </thead>
     <tbody>
       <tr v-for="address in addressList" :key="address.id">
-        <td>{{ address.name }}</td>
+        <td>{{ address.consignee }}</td>
         <td>{{ address.phone }}</td>
         <td>{{ address.region }}</td>
-        <td>{{ address.address }}</td>
+        <td>{{ address.detail }}</td>
         <td>
           <button class="mx-2 h-8" @click="editAddress(address)">修改</button>
           <button class="mx-2 h-8" @click="deleteAddress(address.id)">
@@ -40,10 +40,10 @@
             class="w-[90px] h-8"
             @click="setDefaultAddress(address)"
             :style="{
-              backgroundColor: address.isDefault ? 'rgb(242, 99, 113)' : '',
-              color: address.isDefault ? 'white' : '',
+              backgroundColor: address.is_default ? 'rgb(242, 99, 113)' : '',
+              color: address.is_default ? 'white' : '',
             }">
-            {{ address.isDefault ? '默认地址' : '设为默认' }}
+            {{ address.is_default ? '默认地址' : '设为默认' }}
           </button>
         </td>
       </tr>
@@ -59,13 +59,20 @@
         <div class="flex flex-col gap-6">
           <!-- 地址信息 -->
           <div class="flex">
-            <label for="address" class="shrink-0 w-23"
+            <label for="region" class="shrink-0 w-23"
               ><span class="text-font-primary">*</span>地址信息:</label
-            ><input
-              type="text"
-              v-model="newAddress.region"
-              required
-              placeholder="请选择省/市/区/街道" />
+            >
+            <select v-model="newAddress.region" required class="mr-[20px]">
+              <option value="" disabled class="text-font-primary">
+                请选择省/市/区/街道
+              </option>
+              <option
+                v-for="option in addressOptions"
+                :key="option"
+                :value="option">
+                {{ option }}
+              </option>
+            </select>
           </div>
           <!-- 详细地址 -->
           <div class="flex">
@@ -77,6 +84,7 @@
                 class="h-24 resize-none outline-none"
                 placeholder="请输入详细地址信息，如道路，门牌号，小区，楼栋号，单元等信息"
                 v-model="newAddress.address"
+                @blur="validateAddress"
                 required />
               <p class="text-xs text-font-primary text-left">
                 详细地址长度需要在2-120个汉字或字符，不能包含表情符号
@@ -92,6 +100,7 @@
               type="text"
               placeholder="长度不超过25字符"
               v-model="newAddress.name"
+              @input="validateName"
               required />
           </div>
           <div class="flex">
@@ -100,10 +109,12 @@
             >
             <span class="w-full mr-[20px]">
               <input
-                type="text"
+                type="tel"
                 placeholder="必填"
                 v-model="newAddress.phone"
+                @input="validatePhone"
                 required />
+              <p v-if="phoneError" class="text-red-500">{{ phoneError }}</p>
               <!-- 设置为默认地址 -->
 
               <div class="py-2 flex items-center">
@@ -145,26 +156,46 @@ import { useAddressStore } from '/src/stores/address';
 
 const addressStore = useAddressStore();
 const showNewAddressModal = ref(false);
-const editingAddressId = ref(null);
+const editingAddressId = ref('');
 const newAddress = ref({
+  user_id: '02',
   name: '',
   phone: '',
-  region: '',
+  region: [''],
   address: '',
   isDefault: false,
 });
+
+const nameError = ref('');
+const addressError = ref('');
+const phoneError = ref('');
 
 // 使用computed获取地址列表
 const addressList = computed(() => {
   return addressStore.addresses.map((addr) => ({
     id: addr.id,
-    name: addr.consignee,
+    user_id: addr.user_id,
+    consignee: addr.consignee,
     phone: addr.phone,
     region: Array.isArray(addr.region) ? addr.region.join(' ') : addr.region,
-    address: addr.detail,
-    isDefault: addr.is_default,
+    detail: addr.detail,
+    is_default: addr.is_default,
   }));
 });
+
+// 示例地址选项
+const addressOptions = ref([
+  '成都市/郫都区',
+  '成都市/青羊区',
+  '成都市/金牛区',
+  '成都市/成华区',
+  '成都市/高新区',
+  '成都市/锦江区',
+  '成都市/温江区',
+  '成都市/双流区',
+  '成都市/龙泉驿区',
+  // 添加更多选项
+]);
 
 // 初始化加载地址列表
 onMounted(async () => {
@@ -177,6 +208,9 @@ onMounted(async () => {
 
 // 设置默认地址
 async function setDefaultAddress(address) {
+  if (address.is_default) {
+    return;
+  }
   try {
     await addressStore.setDefaultAddress(address.id);
   } catch (error) {
@@ -184,54 +218,79 @@ async function setDefaultAddress(address) {
   }
 }
 
+// 收货人姓名校验
+const validateName = () => {
+  if (newAddress.value.name.length > 25) {
+    nameError.value = '收货人姓名不能超过25个字符';
+  } else {
+    nameError.value = '';
+  }
+};
+
+// 详细地址校验
+const validateAddress = () => {
+  const addressLength = newAddress.value.address.length;
+  const emojiPattern = /[\u{1F600}-\u{1F64F}]/u; // 简单的表情符号检测
+  if (
+    addressLength < 2 ||
+    addressLength > 120 ||
+    emojiPattern.test(newAddress.value.address)
+  ) {
+    addressError.value =
+      '详细地址长度需要在2-120个字符之间，且不能包含表情符号';
+    alert('详细地址长度需要在2-120个字符之间，且不能包含表情符号');
+  } else {
+    addressError.value = '';
+  }
+};
+
+// 手机号码校验
+const validatePhone = () => {
+  const phonePattern = /^[0-9]{10,11}$/; // 假设电话号码为10到11位数字
+  if (!phonePattern.test(newAddress.value.phone)) {
+    phoneError.value = '请输入有效的电话号码';
+  } else {
+    phoneError.value = '';
+  }
+};
+
 // 添加新地址
 async function addNewAddress() {
   try {
     const addressData = {
-      user_id: '02',
+      user_id: newAddress.value.user_id,
       consignee: newAddress.value.name,
       phone: newAddress.value.phone,
-      region: newAddress.value.region.split(' '),
+      region: newAddress.value.region,
       detail: newAddress.value.address,
       is_default: newAddress.value.isDefault,
     };
 
-    if (editingAddressId.value) {
-      // 编辑现有地址
-      if (newAddress.value.isDefault) {
-        // 如果设置为默认地址，先将其他地址设置为非默认
-        for (const addr of addressList.value) {
-          if (addr.isDefault && addr.id !== editingAddressId.value) {
-            await addressStore.updateAddress(addr.id, {
-              ...addr,
-              is_default: false,
-            });
-          }
+    // 保证全局唯一
+    if (addressData.is_default) {
+      for (const addr of addressStore.addresses) {
+        if (addr.is_default && addr.id !== editingAddressId.value) {
+          await addressStore.updateAddress(addr.id, {
+            ...addr,
+            is_default: false,
+          });
         }
       }
+    }
+
+    if (editingAddressId.value) {
       await addressStore.updateAddress(editingAddressId.value, addressData);
     } else {
-      // 添加新地址
-      if (newAddress.value.isDefault) {
-        // 如果设置为默认地址，先将其他地址设置为非默认
-        for (const addr of addressList.value) {
-          if (addr.isDefault) {
-            await addressStore.updateAddress(addr.id, {
-              ...addr,
-              is_default: false,
-            });
-          }
-        }
-      }
       await addressStore.addAddress(addressData);
     }
 
     showNewAddressModal.value = false;
-    editingAddressId.value = null;
+    editingAddressId.value = '';
     newAddress.value = {
+      user_id: '02',
       name: '',
       phone: '',
-      region: '',
+      region: [''],
       address: '',
       isDefault: false,
     };
@@ -243,12 +302,16 @@ async function addNewAddress() {
 // 编辑地址
 function editAddress(address) {
   editingAddressId.value = address.id;
+  // 编辑地址
+  console.log('ditingAddressId', editingAddressId.value, address.id);
   newAddress.value = {
-    name: address.name,
+    // id: address.id,
+    user_id: '02',
+    name: address.consignee,
     phone: address.phone,
     region: address.region,
-    address: address.address,
-    isDefault: address.isDefault,
+    address: address.detail,
+    isDefault: address.is_default,
   };
   showNewAddressModal.value = true;
 }
@@ -305,6 +368,15 @@ span > p {
   margin: 0 10px;
 }
 input {
+  border: 1px solid #e5e5e5;
+  border-radius: 7px;
+  height: 36px;
+  margin: 0 10px;
+  padding: 0 10px;
+  outline: none;
+  width: 100%;
+}
+select {
   border: 1px solid #e5e5e5;
   border-radius: 7px;
   height: 36px;

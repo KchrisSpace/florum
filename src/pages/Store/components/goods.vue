@@ -3,7 +3,8 @@
     class="mb-5 pb-3 font-Alibaba hover:cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300"
     v-for="item in goods"
     :key="item.id"
-    @click="handleToDetails(item.id)">
+    @click="handleToDetails(item.id)"
+    >
     <div
       class="relative w-56 bg-bg-thirth"
       @mouseenter="item.showCart = true"
@@ -111,5 +112,10 @@ const handleToDetails = (itemid) => {
     name: 'ProductDetails',
     params: { id: itemid },
   });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滚动
+  });
 };
+
 </script>

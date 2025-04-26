@@ -70,6 +70,10 @@ const goToProductDetails = (productId) => {
     name: 'ProductDetails',
     params: { id: productId }
   });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滚动
+  });
 };
 </script>
 

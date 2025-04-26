@@ -131,3 +131,13 @@ const showFeedback = () => {
   showThanks.value = false;
 };
 </script>
+<style scoped>
+input{
+  outline: none;
+}
+textarea:focus,input:focus{
+  border: 2px solid #FBE4E9;
+  
+}
+</style>
+
