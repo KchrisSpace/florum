@@ -2,7 +2,9 @@
   <div
     class="mb-5 pb-3 font-Alibaba hover:cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300"
     v-for="item in goods"
-    :key="item.id">
+    :key="item.id"
+    @click="handleToDetails(item.id)"
+    >
     <div
       class="relative w-56 bg-bg-thirth"
       @mouseenter="item.showCart = true"
@@ -83,19 +85,20 @@ export default {
     goods: {
       type: Array,
       required: true,
-    },
+    }
   },
 };
 </script>
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import DetailsEject from './details-eject.vue';
 import JoinCart from '../components/join-cart.vue';
 
 const showDetails = ref(false);
 const showJoinCart = ref(false);
 const selectedProduct = ref(null);
-
+const router = useRouter();
 const handleAddToCart = (item) => {
   selectedProduct.value = item;
   showJoinCart.value = true;
@@ -104,4 +107,15 @@ const handleShowDetails = (item) => {
   selectedProduct.value = item;
   showDetails.value = true;
 };
+const handleToDetails = (itemid) => {
+  router.push({
+    name: 'ProductDetails',
+    params: { id: itemid },
+  });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滚动
+  });
+};
+
 </script>

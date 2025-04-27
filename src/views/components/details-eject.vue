@@ -31,7 +31,7 @@
             >
             <span
               class="original-price"
-              v-if="product?.price_info?.original_price"
+              v-if="product?.price_info?.current_price!==product?.price_info?.original_price"
               >￥{{ product.price_info.original_price }}</span
             >
           </div>
@@ -229,7 +229,7 @@ const addItem = async (productId, quantity) => {
 
 <style scoped>
 .product-container {
-  max-width: 100vw;
+  padding:0 220px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -237,7 +237,6 @@ const addItem = async (productId, quantity) => {
 }
 
 .product-content {
-  width: 1000px;
   display: flex;
   gap: 40px;
 }
@@ -299,6 +298,7 @@ const addItem = async (productId, quantity) => {
 }
 
 .product-title {
+  text-align: left;
   font-size: 24px;
   margin-bottom: 20px;
   color: #333;

@@ -62,6 +62,7 @@ import Header2 from '/src/components/Header2.vue';
 import feedback from './components/feedback.vue';
 import thanks from './components/thanks.vue';
 
+
 const showThanks = ref(false);
 
 const closeThanks = () => {

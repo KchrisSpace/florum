@@ -6,10 +6,12 @@
       <span>返回</span>
     </div>
     <details-eject :product-id="productId" />
-    <div class="comments-container">
-      <comments :product-id="productId" class="comments" />
-    </div>
+  
   </div>
+  <div class="mt-20">
+       <!-- 评论区 -->
+    <Comments v-if="productId" :sortId="productId" commentType="product_comments" commentQuery="product_id" />
+    </div>
 </template>
 
 <script setup>
@@ -36,11 +38,10 @@ if (!productId) {
 
 <style scoped>
 .product-details {
-  max-width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden;
+ 
 }
 
 .back-button {
@@ -74,15 +75,9 @@ if (!productId) {
 }
 
 .comments-container {
-  width: 100%;
   display: flex;
   justify-content: center;
-  position: relative;
-  left: 120px;
 }
 
-.comments {
-  position: relative;
-  top: 20px;
-}
+
 </style>
