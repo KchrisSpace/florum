@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <h2>「FLORUM」</h2>
+      <h2 @click="scrollToTop" class="cursor-pointer">「FLORUM」</h2>
     </div>
-   
-    <div class="navbar-center">
+
+    <div @click="scrollToTop" class="navbar-center">
       <router-link to="/">首页</router-link>
       <router-link to="/store">商店</router-link>
       <router-link to="/custom">来图定制</router-link>
@@ -27,8 +27,7 @@
           <font-awesome-icon
             :icon="['far', 'user']"
             size="xl"
-            style="color: #808080"
-          />
+            style="color: #808080" />
         </button>
         <div class="dropdown-content">
           <router-link to="/login">登录</router-link>
@@ -49,18 +48,18 @@
         <font-awesome-icon
           :icon="['fas', 'cart-shopping']"
           size="xl"
-          style="color: #f26371"
-        />
+          style="color: #f26371" />
       </button>
     </div>
   </nav>
   <!-- 使用侧边栏组件 -->
   <SideCart :is-open="isSidebarOpen" @close="closeSidebar" />
+  <button @click="scrollToTop">返回顶部</button>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import SideCart from "./SideCart.vue";
+import { ref } from 'vue';
+import SideCart from './SideCart.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -74,27 +73,35 @@ const closeSidebar = () => {
 
 const handleLogout = () => {
   // 处理退出登录逻辑
-  console.log("用户退出登录");
+  console.log('用户退出登录');
+};
+
+// 定义滚动到顶部的方法
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滚动
+  });
 };
 </script>
 
 <style scoped>
 @font-face {
-  font-family: "logo";
-  src: url("../assets/ttf/engry-2.otf")  ;
+  font-family: 'logo';
+  src: url('../assets/ttf/engry-2.otf');
 }
-h2{
-  font-family: "logo";
+h2 {
+  font-family: 'logo';
   font-size: 30px;
   margin-left: 40px;
 }
 a {
   text-decoration: none;
   color: #000000;
-  font-family: "Hanazono Mincho" !important;
+  font-family: 'Hanazono Mincho' !important;
 }
 .navbar {
-  font-family: "Hanazono Mincho";
+  font-family: 'Hanazono Mincho';
   display: flex; /* 使用 Flexbox */
   align-items: center; /* 垂直居中 */
   justify-content: center;
@@ -108,7 +115,7 @@ a {
 }
 
 .navbar-left {
-  font-family: "Hanazono";
+  font-family: 'Hanazono';
   position: absolute;
   top: 50%;
   left: 0px;

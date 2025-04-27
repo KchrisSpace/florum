@@ -24,6 +24,29 @@
       "id": "e41b"
     }
   ],
+  "user_update": [
+    {
+      "id": "02",
+      "user_name": "Maybe",
+      "user_gender": "女",
+      "user_email": "123456@qq.com",
+      "user_phone": "12345678901",
+      "user_avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T21:56:28.881Z",
+      "updated_at": "2025-04-25T22:58:11.068Z"
+    },
+    {
+      "id": "03",
+      "user_name": "chris",
+      "user_password": "123456",
+      "user_gender": "女",
+      "user_email": "123456@qq.com",
+      "user_phone": "12345678901",
+      "user_avatar": "/images/users/avater/user1.png",
+      "updated_at": "2025-04-25T17:51:56.908Z",
+      "created_at": "2025-04-25T17:51:56.908Z"
+    }
+  ],
   "product_list": [
     {
       "id": "P01",
@@ -581,32 +604,210 @@
       }
     }
   ],
-  "comments": {
-    "product_comments": [
-      {
-        "id": "PC01",
-        "user_name": "chris",
-        "user_id": "1",
-        "product_id": "P01",
-        "content": "花束设计非常精致！",
-        "is_audited": true,
-        "avater": "",
-        "created_at": "2025-04-13T10:30:00Z"
+  "carts": [
+    {
+      "id": "C01",
+      "user_id": "1",
+      "created_at": "2023-04-13T10:30:00Z",
+      "items": [
+        {
+          "item_id": "item_01",
+          "product_id": "prod_658",
+          "sku_id": "sku_658_black_xl",
+          "quantity": 2,
+          "selected": true
+        }
+      ],
+      "total": 299,
+      "summary": {
+        "total_items": 3,
+        "total_quantity": 5,
+        "total_amount": 896
       }
-    ],
-    "article_comments": [
-      {
-        "id": "AC01",
-        "user_name": "Maybe",
-        "user_id": "2",
-        "article_id": "A01",
-        "content": "好有道理",
-        "is_audited": true,
-        "avater": "",
-        "created_at": "2025-04-13T10:30:00Z"
-      }
-    ]
-  },
+    }
+  ],
+  "product_comments": [
+    {
+      "id": "bd9e",
+      "product_id": "P01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "没错",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:51:56.908Z",
+      "is_audited": true
+    },
+    {
+      "id": "1256",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "好烦啊，我好讨厌这个",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:53:27.907Z",
+      "is_audited": true
+    },
+    {
+      "id": "34cb",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "难过",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:53:35.099Z",
+      "is_audited": true
+    },
+    {
+      "id": "60f1",
+      "product_id": "P02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "12",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T20:21:45.747Z",
+      "is_audited": true
+    },
+    {
+      "id": "e6b5",
+      "product_id": "P02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "烦死了，讨厌代码",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-26T06:26:30.522Z",
+      "is_audited": true
+    }
+  ],
+  "article_comments": [
+    {
+      "id": "ace5",
+      "article_id": "A02",
+      "content": "123",
+      "user_id": "2",
+      "avatar": "/images/users/avater/user1.png",
+      "user_name": "Maybe",
+      "created_at": "2025-04-25T16:01:24.724Z",
+      "is_audited": true
+    },
+    {
+      "id": "d32a",
+      "article_id": "A02",
+      "content": "123",
+      "user_id": "2",
+      "avatar": "/images/users/avater/user1.png",
+      "user_name": "Maybe",
+      "created_at": "2025-04-25T16:01:36.163Z",
+      "is_audited": true
+    },
+    {
+      "id": "7a9a",
+      "article_id": "A04",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:04:09.468Z",
+      "is_audited": true
+    },
+    {
+      "id": "e98b",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:19:49.135Z",
+      "is_audited": true
+    },
+    {
+      "id": "6e30",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:20:46.749Z",
+      "is_audited": true
+    },
+    {
+      "id": "623c",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "AI",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:21:15.511Z",
+      "is_audited": true
+    },
+    {
+      "id": "cd59",
+      "article_id": "A01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "牛思瑶",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:22:57.143Z",
+      "is_audited": true
+    },
+    {
+      "id": "4c96",
+      "article_id": "A01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123456",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:32:19.689Z",
+      "is_audited": true
+    },
+    {
+      "id": "31b2",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "1234",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:04:15.754Z",
+      "is_audited": true
+    },
+    {
+      "id": "c220",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123456",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:06:59.872Z",
+      "is_audited": true
+    },
+    {
+      "id": "092c",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "234567",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:17:59.859Z",
+      "is_audited": true
+    },
+    {
+      "id": "213d",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "好",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T20:14:43.003Z",
+      "is_audited": true
+    },
+    {
+      "id": "307e",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "你是对的",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T21:56:28.881Z",
+      "is_audited": true
+    }
+  ],
   "articles": [
     {
       "id": "A01",
@@ -629,7 +830,7 @@
       "id": "A02",
       "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
       "cover_img": "/images/articles/A02/cover.jpg",
-      "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫“除”，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
+      "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫\"除\"，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
       "related_products": [
         "P02",
         "P03"
@@ -675,29 +876,50 @@
       "publish_time": "2025-04-01T09:00:00Z"
     }
   ],
-  "orders": [
+  "normal_orders": [
     {
       "id": "U1",
-      "user_id": "1",
+      "user_id": "02",
       "items": [
         {
           "product_id": "P02",
-          "customization": {
-            "message_card": "生日快乐！"
-          },
           "quantity": 1,
-          "unit_price": 399
+          "single_price": 399
         }
       ],
-      "total": 438,
-      "status": "待发货",
-      "shipping_address": "D01",
+      "status": "进行中",
       "created_at": "2025-04-13T10:15:00Z"
+    },
+    {
+      "id": "U2",
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P03",
+          "quantity": 1,
+          "single_price": 100
+        }
+      ],
+      "status": "已完成",
+      "created_at": "2025-04-01T10:15:00Z"
+    },
+    {
+      "id": "U3",
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P06",
+          "quantity": 1,
+          "single_price": 299
+        }
+      ],
+      "status": "已取消",
+      "created_at": "2025-02-13T09:15:00Z"
     }
   ],
   "addresses": [
     {
-      "id": "D01",
+      "id": "1",
       "user_id": "1",
       "consignee": "李女士",
       "phone": "13800138000",
@@ -707,6 +929,104 @@
         "陆家嘴街道"
       ],
       "detail": "世纪大道100号",
+      "is_default": false
+    },
+    {
+      "id": "2",
+      "user_id": "2",
+      "consignee": "陈先生",
+      "phone": "13800138001",
+      "region": [
+        "北京市",
+        "海淀区",
+        "中关村街道"
+      ],
+      "detail": "中关村大街1号",
+      "is_default": false
+    },
+    {
+      "user_id": "02",
+      "consignee": "555",
+      "phone": "13800138003",
+      "region": "成都市/青羊区",
+      "detail": "55",
+      "is_default": false,
+      "id": "4"
+    },
+    {
+      "user_id": "02",
+      "consignee": "1111111",
+      "phone": "147777777",
+      "region": [
+        "成都市/金牛区"
+      ],
+      "detail": "1111111",
+      "is_default": false,
+      "id": "6004"
+    },
+    {
+      "user_id": "02",
+      "consignee": "1111",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "1111",
+      "is_default": false,
+      "id": "a09b"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "14726839224",
+      "region": [
+        "成都市/青羊区"
+      ],
+      "detail": "11",
+      "is_default": false,
+      "id": "0dea"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "111",
+      "is_default": false,
+      "id": "fc3d"
+    },
+    {
+      "user_id": "02",
+      "consignee": "14",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "444",
+      "is_default": false,
+      "id": "5f12"
+    },
+    {
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "12",
+      "is_default": false,
+      "id": "ace0"
+    },
+    {
+      "id": "1af1",
+      "user_id": "02",
+      "consignee": "111",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "1111",
+      "is_default": false
+    },
+    {
+      "id": "b497",
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "14726839224",
+      "region": "成都市/郫都区",
+      "detail": "成都锦城学院",
       "is_default": true
     }
   ],
@@ -730,32 +1050,77 @@
   ],
   "cart": [
     {
-      "quantity": 2,
-      "id": "P06"
-    },
-    {
-      "quantity": 5,
-      "id": "P09"
-    },
-    {
+      "product_id": "P02",
       "quantity": 1,
-      "id": "P03"
+      "id": "03ae"
     },
     {
-      "quantity": 2,
-      "id": "P10"
-    },
-    {
+      "product_id": "P03",
       "quantity": 1,
-      "id": "P01"
+      "id": "72bf"
+    },
+    {
+      "product_id": "P04",
+      "quantity": 1,
+      "id": "45a0"
     }
   ],
-  "wishlist": [
+  "custom": [
     {
-      "id": "P02"
+      "id": "1",
+      "user_id": "02",
+      "custom_img": "",
+      "email": "123456@qq.com",
+      "phone": "12345678901",
+      "custom_message": "贺卡写上生日快乐",
+      "created_at": "2025-04-25T17:51:56.908Z"
     },
     {
-      "id": "P03"
+      "id": "0ad7",
+      "user_id": "02",
+      "custom_img": "",
+      "email": "maybe3340458807@163.com",
+      "phone": "111111",
+      "custom_message": "哈哈哈哈",
+      "created_at": "2025-04-25T18:11:43.222Z"
+    }
+  ],
+  "feedback": [
+    {
+      "id": "1",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "123456@qq.com",
+      "phone": "12345678901",
+      "feedback_message": "花布很好看，我很喜欢",
+      "created_at": "2025-04-25T17:51:56.908Z"
+    },
+    {
+      "id": "4eb5",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.com",
+      "phone": "14726839224",
+      "feedback_message": "12",
+      "created_at": "2025-04-25T18:08:17.845Z"
+    },
+    {
+      "id": "bc47",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.com",
+      "phone": "14726839224",
+      "feedback_message": "1",
+      "created_at": "2025-04-25T18:15:35.320Z"
+    },
+    {
+      "id": "14ee",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.co",
+      "phone": "14726839224",
+      "feedback_message": "123",
+      "created_at": "2025-04-25T18:15:40.526Z"
     }
   ]
 }

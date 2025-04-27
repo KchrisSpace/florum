@@ -16,7 +16,7 @@
         <hr></hr>
         <div class="price">
           <span class="current-price">￥{{ product.price_info.current_price }}</span>
-          <span class="original-price">￥{{ product.price_info.original_price }}</span>
+          <span v-if="product.price_info.original_price!==product.price_info.current_price" class="original-price">￥{{ product.price_info.original_price }}</span>
         </div>
       </div>
     </div>
@@ -69,6 +69,10 @@ const goToProductDetails = (productId) => {
   router.push({
     name: 'ProductDetails',
     params: { id: productId }
+  });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滚动
   });
 };
 </script>
@@ -123,7 +127,7 @@ hr{
         }
 
 .product {
-  width: 200px;
+  width: 235px;
   height: 400px;
   display: flex;
   flex-direction: column;

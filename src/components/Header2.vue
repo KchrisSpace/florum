@@ -2,7 +2,7 @@
   <div class="header2">
     <div class="headertop">
       <div class="logo">
-        <a class="logo-text" href="#/">「FLORUM」</a>
+         <router-link to="/" class="logo-text">「FLORUM」</router-link>
       </div>
       <div class="search">
         <input type="text" placeholder="搜索" />

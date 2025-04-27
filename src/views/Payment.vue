@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import Header2 from "../components/header2.vue";
 </script>
 
