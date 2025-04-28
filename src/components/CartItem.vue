@@ -1,7 +1,6 @@
 <!--  -->
 <template>
   <div class="cart-item">
-    <hr />
     <button class="remove-btn" @click="removeItem">X</button>
     <img
       class="item-image"
@@ -100,8 +99,6 @@ const decrement = () => {
       id: props.item.id,
       quantity: count.value,
     });
-   
- 
   }
 };
 
@@ -128,7 +125,8 @@ const removeItem = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px;
+
   border-bottom: 1px solid #e0e0e0;
   position: relative;
 }
@@ -165,6 +163,9 @@ const removeItem = async () => {
   width: 200px;
   font-size: 16px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-price {
@@ -218,5 +219,9 @@ const removeItem = async () => {
   text-align: right;
   font-weight: 500;
   color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
 }
 </style>

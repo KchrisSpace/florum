@@ -3,7 +3,6 @@
   <Header2 title="购物车" subtext="cart" />
   <div class="cart">
     <div class="cart-container">
-      <hr />
       <CartItem
         v-for="item in cartStore.cartItems"
         :key="item.id"
@@ -17,7 +16,7 @@
       <p class="total">
         订单总计：<i>￥{{ cartStore.total }}</i>
       </p>
-      <button class="pay-button" @click="handlePay">立即支付</button>
+      <button class="pay-button" @click="createOrder">创建订单</button>
     </div>
   </div>
 </template>
@@ -32,12 +31,12 @@ import { useCartStore } from "../stores/cart";
 const router = useRouter();
 const cartStore = useCartStore();
 
-const handlePay = () => {
+const createOrder = () => {
   if (cartStore.cartItems.length === 0) {
     alert("购物车为空，请先添加商品");
     return;
   }
-  router.push("/payment");
+  // 添加订单
 };
 
 onMounted(async () => {
@@ -61,12 +60,15 @@ onMounted(async () => {
   position: relative;
 }
 .cart-container {
+  margin: 10px;
   width: 80%;
   height: 45vh;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
   border-radius: 10px;
+  /* background-color: #f3efef; */
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   max-height: calc(100vh-60vh); /* 设置最大高度，减去头部和其他元素的高度 */
   overflow-y: auto; /* 添加垂直滚动条 */
 }

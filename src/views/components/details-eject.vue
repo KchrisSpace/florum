@@ -12,7 +12,8 @@
             v-for="(item, index) in product?.images"
             :key="index"
             @mouseenter="changeMainImage(index)"
-            @mouseleave="resetMainImage">
+            @mouseleave="resetMainImage"
+          >
             <img :src="getImagePath(item)" alt="商品图片" />
           </div>
         </div>
@@ -20,13 +21,13 @@
 
       <!-- 右侧商品信息 -->
       <div class="product-info">
-        <h1 class="product-title">{{ product?.title || '加载中...' }}</h1>
+        <h1 class="product-title">{{ product?.title || "加载中..." }}</h1>
 
         <!-- 价格区域 -->
         <div class="price-section">
           <div class="price">
             <span class="current-price"
-              >￥{{ product?.price_info?.current_price || '0.00' }}</span
+              >￥{{ product?.price_info?.current_price || "0.00" }}</span
             >
             <span
               class="original-price"
@@ -45,7 +46,8 @@
               disabled
               show-score
               text-color="#ff9900"
-              :score-template="`评论（${product?.reviews || 0}）`" />
+              :score-template="`评论（${product?.reviews || 0}）`"
+            />
           </div>
         </div>
 
@@ -58,7 +60,8 @@
           <!-- 花语 -->
           <div
             class="flower-language"
-            v-if="product?.promotion.flower_language">
+            v-if="product?.promotion.flower_language"
+          >
             <span class="label">花语：</span>
             <span class="content">{{ product.promotion.flower_language }}</span>
           </div>
@@ -66,7 +69,8 @@
           <!-- 主体 -->
           <div
             class="main_description"
-            v-if="product?.promotion.main_description">
+            v-if="product?.promotion.main_description"
+          >
             <span class="label">主体：</span>
             <span class="content">{{
               product.promotion.main_description
@@ -101,7 +105,7 @@
             @click="addItem(productId, quantity)"
             >加入购物车</el-button
           >
-          <el-button class="wishlist-btn">
+          <el-button class="wishlist-btn" @click="addToWishlist">
             <el-icon><Star /></el-icon>
           </el-button>
         </div>
@@ -112,19 +116,21 @@
 
 <script>
 export default {
-  name: 'DetailsEject',
-  emits: ['close'],
+  name: "DetailsEject",
+  emits: ["close"],
 };
 </script>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { Plus, Minus, Star } from '@element-plus/icons-vue';
-import { useRoute } from 'vue-router';
-import { useCartStore } from '../../stores/cart.js';
-import { ElMessage } from 'element-plus';
+import { ref, onMounted, computed } from "vue";
+import { Plus, Minus, Star } from "@element-plus/icons-vue";
+import { useRoute } from "vue-router";
+import { useCartStore } from "../../stores/cart.js";
+import { useWishlistStore } from "../../stores/wishlist.js";
+import { ElMessage } from "element-plus";
 
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
 const route = useRoute();
 const productId = route.params.id;
@@ -149,21 +155,21 @@ const currentImage = computed(() => {
 
 // 处理图片路径
 const getImagePath = (imagePath) => {
-  if (!imagePath) return '';
+  if (!imagePath) return "";
 
   // 如果已经是完整的URL，直接返回
-  if (imagePath.startsWith('http')) {
+  if (imagePath.startsWith("http")) {
     return imagePath;
   }
 
   // 处理相对路径
-  if (imagePath.startsWith('/')) {
+  if (imagePath.startsWith("/")) {
     return imagePath;
   }
 
   // 处理 public 目录下的图片
-  if (imagePath.includes('public/')) {
-    return imagePath.replace('public/', '/');
+  if (imagePath.includes("public/")) {
+    return imagePath.replace("public/", "/");
   }
 
   // 默认处理
@@ -178,10 +184,10 @@ const fetchProductDetails = async () => {
     );
     const data = await response.json();
     product.value = data;
-    console.log('Product data:', product.value);
-    console.log('Images array:', product.value?.images);
+    console.log("Product data:", product.value);
+    console.log("Images array:", product.value?.images);
   } catch (error) {
-    console.error('获取商品详情失败:', error);
+    console.error("获取商品详情失败:", error);
   }
 };
 
@@ -214,15 +220,32 @@ const addItem = async (productId, quantity) => {
   try {
     await cartStore.addItem(productId, quantity);
     ElMessage({
-      message: '商品已成功添加到购物车',
-      type: 'success',
+      message: "商品已成功添加到购物车",
+      type: "success",
     });
-    emit('close');
+    emit("close");
   } catch (error) {
-    console.error('添加商品到购物车失败:', error);
+    console.error("添加商品到购物车失败:", error);
     ElMessage({
-      message: '添加商品失败，请重试',
-      type: 'error',
+      message: "添加商品失败，请重试",
+      type: "error",
+    });
+  }
+};
+
+// 添加商品到心愿单
+const addToWishlist = async () => {
+  try {
+    await wishlistStore.addItem(productId, 1);
+    ElMessage({
+      message: "商品已成功添加到心愿单",
+      type: "success",
+    });
+  } catch (error) {
+    console.error("添加商品到心愿单失败:", error);
+    ElMessage({
+      message: "添加商品到心愿单失败，请重试",
+      type: "error",
     });
   }
 };
@@ -423,8 +446,9 @@ const addItem = async (productId, quantity) => {
 
 .wishlist-btn {
   position: relative;
+  scale: 2;
   top: 5px;
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   border: none;
 }
 

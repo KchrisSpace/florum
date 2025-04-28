@@ -753,8 +753,20 @@ export let feedback = [
       id: 'P03',
       quantity: 1,
     },
-  ];
-  export let normal_orders = [
+];
+export let wishlist = [
+  {
+    id: 'P01',
+    quantity: 1,
+    created_at: '2024-04-28T10:00:00.000Z'
+  },
+  {
+    id: 'P02',
+    quantity: 1,
+    created_at: '2024-04-28T11:00:00.000Z'
+  }
+];
+export let normal_orders = [
     {
       id: "U1",
       user_id: "01",
