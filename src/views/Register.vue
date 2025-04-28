@@ -27,7 +27,7 @@ import axios from "axios";
 const router = useRouter();
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:3001/users");
+    const response = await axios.get("http://localhost:3000/users");
     validCredentials.value = response.data; // 直接提取数据
     console.log("获取的用户数据:", validCredentials.value); // 打
   } catch (err) {

@@ -44,7 +44,7 @@ const validCredentials = ref([]);
 onMounted(async () => {
   try {
     // 获取登录数据
-    const response = await axios.get("http://localhost:3001/login");
+    const response = await axios.get("http://localhost:3000/login");
     validCredentials.value = response.data;
     console.log("获取的登录数据:", validCredentials.value);
   } catch (err) {

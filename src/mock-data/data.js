@@ -762,3 +762,62 @@ export let feedback = [
       quantity: 1,
     },
   ];
+  export let normal_orders = [
+    {
+      id: "U1",
+      user_id: "02",
+      items: [
+        {
+          product_id: "P02",
+          quantity: 1,
+          single_price: 399
+        }
+      ],
+      status: "进行中",
+      created_at: "2025-04-13T10:15:00Z"
+    },
+    {
+      id: "U2",
+      user_id: "02",
+      items: [
+        {
+          product_id: "P03",
+          quantity: 1,
+          single_price: 100
+        }
+      ],
+      status: "已完成",
+      created_at: "2025-04-01T10:15:00Z"
+    },
+    {
+      id: "U3",
+      user_id: "02",
+      items: [
+        {
+          product_id: "P06",
+          quantity: 1,
+          single_price: 299
+        }
+      ],
+      status: "已取消",
+      created_at: "2025-02-13T09:15:00Z"
+    }
+  ]
+  export let carousel = [
+    {
+      "id": "1",
+      "img": "/carousel-img/carousel-1.png"
+    },
+    {
+      "id": "2",
+      "img": "/carousel-img/carousel-2.png"
+    },
+    {
+      "id": "3",
+      "img": "/carousel-img/carousel-3.png"
+    },
+    {
+      "id": "4",
+      "img": "/carousel-img/carousel-4.png"
+    }
+  ]

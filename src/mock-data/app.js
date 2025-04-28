@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import multer from 'multer';
 import {
   login,
   user_update,
@@ -10,15 +11,17 @@ import {
   articles,
   addresses,
   custom,
+  normal_orders,
   feedback,
+  carousel,
 } from './data.js';
-import multer from 'multer';
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(cors());
 
 const app = express();
 const port = 3000;
-
-app.use(express.json());
-app.use(cors());
 
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
@@ -32,6 +35,18 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+
+// 获取所有用户（注册页用）
+app.get('/users', (req, res) => {
+  res.json(login);
+  console.log('所有用户', login);
+});
+
+// 获取登录数据（登录页用）
+app.get('/login', (req, res) => {
+  res.json(login);
+  console.log('登录数据', login);
+});
 
 // 获取商品列表
 app.get('/product_list', (req, res) => {
@@ -107,19 +122,6 @@ app.get('/product_comments', (req, res) => {
   res.json(comments);
 });
 
-// 获取反馈信息
-app.get('/feedback', (req, res) => {
-  console.log('反馈信息', feedback);
-  res.json(feedback);
-});
-// 添加反馈信息
-app.post('/feedback', (req, res) => {
-  const newItem = req.body;
-  feedback.push(newItem);
-  console.log('反馈信息', feedback);
-  res.status(201).json(newItem);
-});
-
 // 添加文章评论
 app.post('/article_comments', (req, res) => {
   const newComment = req.body;
@@ -133,6 +135,20 @@ app.post('/product_comments', (req, res) => {
   const newComment = req.body;
   res.status(201).json(newComment);
 });
+
+// 获取反馈信息
+app.get('/feedback', (req, res) => {
+  console.log('反馈信息', feedback);
+  res.json(feedback);
+});
+// 添加反馈信息
+app.post('/feedback', (req, res) => {
+  const newItem = req.body;
+  feedback.push(newItem);
+  console.log('反馈信息', feedback);
+  res.status(201).json(newItem);
+});
+
 
 // PUT /user_update/:user_id - 更新用户信息（支持头像上传）
 app.put('/user_update/:user_id', upload.single('user_avatar'), (req, res) => {
@@ -168,6 +184,110 @@ app.get('/user_update/:user_id', (req, res) => {
 });
 
 app.use('/uploads', express.static('public/uploads'));
+
+app.get('/addresses', (req, res) => {
+  res.json(addresses);
+});
+
+app.post('/addresses', (req, res) => {
+  const newAddress = req.body;
+  // 简单生成唯一id
+  newAddress.id = 'A' + (addresses.length + 1).toString().padStart(2, '0');
+  // 如果是默认地址，先把其他地址的 is_default 设为 false
+  if (newAddress.is_default) {
+    addresses.forEach((addr) => (addr.is_default = false));
+  }
+  addresses.push(newAddress);
+  res.status(201).json(newAddress);
+});
+
+app.put('/addresses/:id', (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  const index = addresses.findIndex((addr) => addr.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: '地址未找到' });
+  }
+  // 如果要设置为默认地址，先把其他地址的 is_default 设为 false
+  if (updateData.is_default) {
+    addresses.forEach((addr) => (addr.is_default = false));
+  }
+  addresses[index] = { ...addresses[index], ...updateData };
+  res.json(addresses[index]);
+});
+
+app.delete('/addresses/:id', (req, res) => {
+  const { id } = req.params;
+  const index = addresses.findIndex((addr) => addr.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: '地址未找到' });
+  }
+  const deleted = addresses.splice(index, 1);
+  res.json(deleted[0]);
+});
+
+// 获取所有订单
+app.get('/normal_orders', (req, res) => {
+  const { user_id } = req.query;
+  if (user_id) {
+    return res.json(normal_orders.filter((order) => order.user_id === user_id));
+  }
+  res.json(normal_orders);
+});
+
+app.post('/normal_orders', (req, res) => {
+  const newOrder = req.body;
+  // 简单生成唯一id
+  newOrder.id = 'O' + (normal_orders.length + 1).toString().padStart(2, '0');
+  normal_orders.push(newOrder);
+  res.status(201).json(newOrder);
+});
+
+app.put('/normal_orders/:id', (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  const index = normal_orders.findIndex((order) => order.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: '订单未找到' });
+  }
+  normal_orders[index] = { ...normal_orders[index], ...updateData };
+  res.json(normal_orders[index]);
+});
+
+app.delete('/normal_orders/:id', (req, res) => {
+  const { id } = req.params;
+  const index = normal_orders.findIndex((order) => order.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: '订单未找到' });
+  }
+  const deleted = normal_orders.splice(index, 1);
+  res.json(deleted[0]);
+});
+
+// 根据用户id获取定制信息
+app.get('/custom', (req, res) => {
+  const { user_id } = req.query;
+  if (user_id) {
+    return res.json(custom.filter((item) => item.user_id === user_id));
+  }
+  res.json(custom);
+});
+// 添加定制信息
+app.post('/custom', (req, res) => {
+  const newCustom = req.body;
+  // 简单生成唯一id
+  newCustom.id = 'C' + (custom.length + 1).toString().padStart(2, '0');
+  custom.push(newCustom);
+  // 打印添加后的定制信息
+  console.log('添加定制信息后', custom);
+  res.status(201).json(newCustom);
+});
+
+// 获取轮播图数据
+app.get('/carousel', (req, res) => {
+  res.json(carousel);
+  console.log('轮播图数据', carousel);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
