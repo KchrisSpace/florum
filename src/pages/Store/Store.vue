@@ -166,6 +166,7 @@ export default {
         this.goods = res.data.map((item) => ({ ...item, showCart: false }));
       } catch (error) {
         console.error('Error fetching goods:', error);
+
       }
     },
   },
