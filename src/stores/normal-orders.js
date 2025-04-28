@@ -18,11 +18,14 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
   },
 
   actions: {
-    // 获取所有订单
-    async fetchOrders() {
+    // 获取所有订单或特定用户的订单
+    async fetchOrders(userId = null) {
       this.loading = true;
       try {
-        const response = await axios.get(`${API_URL}/normal_orders`);
+        const url = userId
+          ? `${API_URL}/normal_orders?user_id=${userId}`
+          : `${API_URL}/normal_orders`;
+        const response = await axios.get(url);
         this.orders = response.data;
         this.error = null;
       } catch (error) {

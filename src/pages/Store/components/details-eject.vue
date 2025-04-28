@@ -134,6 +134,34 @@ import { useCartStore } from "../../../stores/cart";
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  current_price: {
+    type: Number,
+    required: true,
+  },
+  original_price: {
+    type: Number,
+    required: true,
+  },
+  main_description: {
+    type: String,
+    required: true,
+  },
+  flower_language: {
+    type: String,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
   id: {
     type: [String, Number],
     required: true

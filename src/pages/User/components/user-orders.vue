@@ -17,7 +17,12 @@
         <td>{{ order.status }}</td>
         <td>￥{{ calcTotal(order.items) }}</td>
         <td>
-          <button><span @click="goToDetail(order.items[0]?.product_id)">查看详情</span> <span @click="deleteOrder(order.id)" class="ml-2">删除</span></button>
+          <button>
+            <span @click="goToDetail(order.items[0]?.product_id)"
+              >查看详情</span
+            >
+            <span @click="deleteOrder(order.id)" class="ml-2">删除</span>
+          </button>
         </td>
       </tr>
     </tbody>
@@ -36,12 +41,19 @@ import { useNormalOrdersStore } from '/src/stores/normal-orders';
 const router = useRouter();
 const normalOrdersStore = useNormalOrdersStore();
 
+// 获取当前用户ID
+// const currentUserId = localStorage.getItem('userId');
+  const currentUserId = '01';
 // 获取订单数据
 onMounted(async () => {
-  await normalOrdersStore.fetchOrders();
+  try {
+    await normalOrdersStore.fetchOrders(currentUserId);
+  } catch (error) {
+    console.error('获取订单失败:', error);
+  }
 });
 
-// 订单列表
+// 订单列表 - 直接使用store中的orders，因为已经按用户ID过滤
 const orders = computed(() => normalOrdersStore.orders);
 
 // 删除订单

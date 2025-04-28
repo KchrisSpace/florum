@@ -3,8 +3,7 @@
     class="mb-5 pb-3 font-Alibaba hover:cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300"
     v-for="item in goods"
     :key="item.id"
-    @click="handleToDetails(item.id)"
-    >
+    @click="handleToDetails(item.id)">
     <div
       class="relative w-56 bg-bg-thirth"
       @mouseenter="item.showCart = true"
@@ -35,12 +34,12 @@
         class="absolute bottom-0 w-full h-20 bg-bg-fourth/46 flex justify-center items-center transition-opacity duration-300">
         <button
           class="w-22 h-9 bg-font-primary text-white text-sm leading-9 text-center cursor-pointer hover:bg-font-primary/80"
-          @click="handleAddToCart(item)">
+          @click.stop="handleAddToCart(item)">
           加入购物车
         </button>
         <div
           class="absolute right-4 flex items-center cursor-pointer"
-          @click="handleShowDetails(item)">
+          @click.stop="handleShowDetails(item)">
           <el-icon :size="36"><ArrowRight /></el-icon>
         </div>
       </div>
@@ -64,13 +63,14 @@
   </div>
   <DetailsEject
     v-if="showDetails"
-    :title="selectedProduct?.title"
+    :title="selectedProduct.title"
     :image="selectedProduct?.images[0]"
     :current_price="selectedProduct?.price_info.current_price"
     :original_price="selectedProduct?.price_info.original_price"
     :main_description="selectedProduct?.promotion.main_description"
     :flower_language="selectedProduct?.promotion.flower_language"
     :rating="selectedProduct?.sales_data.rating"
+    :id="selectedProduct?.id"
     @close="showDetails = false" />
   <JoinCart
     v-if="showJoinCart"
@@ -85,7 +85,7 @@ export default {
     goods: {
       type: Array,
       required: true,
-    }
+    },
   },
 };
 </script>
@@ -97,16 +97,35 @@ import JoinCart from '../components/join-cart.vue';
 
 const showDetails = ref(false);
 const showJoinCart = ref(false);
-const selectedProduct = ref(null);
+const selectedProduct = ref({
+  title: '',
+  images: [''],
+  price_info: {
+    current_price: 0,
+    original_price: 0,
+  },
+  promotion: {
+    main_description: '',
+    flower_language: '',
+  },
+  sales_data: {
+    rating: 0,
+  },
+  id: '',
+});
+
 const router = useRouter();
+
 const handleAddToCart = (item) => {
-  selectedProduct.value = item;
+  selectedProduct.value = { ...item };
   showJoinCart.value = true;
 };
+
 const handleShowDetails = (item) => {
-  selectedProduct.value = item;
+  selectedProduct.value = { ...item };
   showDetails.value = true;
 };
+
 const handleToDetails = (itemid) => {
   router.push({
     name: 'ProductDetails',
@@ -114,8 +133,7 @@ const handleToDetails = (itemid) => {
   });
   window.scrollTo({
     top: 0,
-    behavior: 'smooth', // 平滑滚动
+    behavior: 'smooth',
   });
 };
-
 </script>

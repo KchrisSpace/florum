@@ -23,7 +23,9 @@ export const useAddressStore = defineStore('address', {
     async fetchAddresses() {
       this.loading = true;
       try {
-        const response = await axios.get(`${API_URL}/addresses`);
+        const response = await axios.get(`${API_URL}/addresses`, {
+          params: { user_id: '02' },
+        });
         this.addresses = response.data;
         this.error = null;
       } catch (error) {

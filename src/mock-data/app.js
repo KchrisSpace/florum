@@ -26,7 +26,7 @@ app.use(cors());
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/avatars'); // 头像存放目录（需确保存在）
+    cb(null, './public/uploads/avatars'); // 头像存放目录
   },
   filename: function (req, file, cb) {
     // 用用户ID+时间戳+原始扩展名命名
@@ -34,7 +34,21 @@ const storage = multer.diskStorage({
     cb(null, `${req.params.user_id}_${Date.now()}.${ext}`);
   },
 });
-const upload = multer({ storage });
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // 限制文件大小为2MB
+  },
+  fileFilter: (req, file, cb) => {
+    // 只接受图片文件
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('只允许上传图片文件'));
+    }
+  },
+});
 
 // 获取所有用户（注册页用）
 app.get('/users', (req, res) => {
@@ -57,7 +71,7 @@ app.get('/product_list', (req, res) => {
 // 获取商品详情
 app.get('/product_list/:id', (req, res) => {
   const { id } = req.params;
-  const product = product_list.find(item => item.id === id);
+  const product = product_list.find((item) => item.id === id);
   if (!product) {
     return res.status(404).json({ error: '商品未找到' });
   }
@@ -159,7 +173,6 @@ app.post('/feedback', (req, res) => {
   res.status(201).json(newItem);
 });
 
-
 // PUT /user_update/:user_id - 更新用户信息（支持头像上传）
 app.put('/user_update/:user_id', upload.single('user_avatar'), (req, res) => {
   const { user_id } = req.params;
@@ -173,13 +186,13 @@ app.put('/user_update/:user_id', upload.single('user_avatar'), (req, res) => {
 
   // 如果有文件上传，保存头像路径
   if (req.file) {
-    // 你可以根据实际情况保存相对路径或绝对路径
-    updateData.avatar = `/uploads/avatars/${req.file.filename}`;
+    // 保存相对路径
+    updateData.user_avatar = `/uploads/avatars/${req.file.filename}`;
   }
 
   // 更新用户信息
   user_update[userIndex] = { ...user_update[userIndex], ...updateData };
-
+  console.log('更新用户信息', user_update[userIndex]);
   res.json(user_update[userIndex]);
 });
 
@@ -196,13 +209,23 @@ app.get('/user_update/:user_id', (req, res) => {
 app.use('/uploads', express.static('public/uploads'));
 
 app.get('/addresses', (req, res) => {
+  const { user_id } = req.query;
+  if (user_id) {
+    // 返回该用户的所有地址
+    let add = addresses.filter((addr) => addr.user_id === user_id);
+    console.log(add);
+    return res.json(addresses.filter((addr) => addr.user_id === user_id));
+  }
+  // 不传 user_id 时返回全部地址
   res.json(addresses);
 });
 
 app.post('/addresses', (req, res) => {
   const newAddress = req.body;
-  // 简单生成唯一id
-  newAddress.id = 'A' + (addresses.length + 1).toString().padStart(2, '0');
+  // 自动生成唯一id（简单做法，实际可用uuid等）
+  newAddress.id = (
+    addresses.length ? parseInt(addresses[addresses.length - 1].id) + 1 : 1
+  ).toString();
   // 如果是默认地址，先把其他地址的 is_default 设为 false
   if (newAddress.is_default) {
     addresses.forEach((addr) => (addr.is_default = false));
@@ -211,6 +234,7 @@ app.post('/addresses', (req, res) => {
   res.status(201).json(newAddress);
 });
 
+// 更新地址
 app.put('/addresses/:id', (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
@@ -236,16 +260,23 @@ app.delete('/addresses/:id', (req, res) => {
   res.json(deleted[0]);
 });
 
-// 获取所有订单
+// 获取所有订单或特定用户的订单
 app.get('/normal_orders', (req, res) => {
   const { user_id } = req.query;
+
   if (user_id) {
-    return res.json(normal_orders.filter((order) => order.user_id === user_id));
+    // 如果提供了user_id，则只返回该用户的订单
+    const userOrders = normal_orders.filter(
+      (order) => order.user_id === user_id
+    );
+    res.json(userOrders);
+  } else {
+    // 如果没有提供user_id，则返回所有订单
+    res.json(normal_orders);
   }
-  res.json(normal_orders);
 });
 
-app.post('/normal_orders', (req, res) => {
+app.post('/normal_orders/', (req, res) => {
   const newOrder = req.body;
   // 简单生成唯一id
   newOrder.id = 'O' + (normal_orders.length + 1).toString().padStart(2, '0');

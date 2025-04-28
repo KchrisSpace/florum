@@ -704,27 +704,19 @@ export let articles = [
 export let addresses = [
     {
       id: "1",
-      user_id: "1",
+      user_id: "01",
       consignee: "李女士",
       phone: "13800138000",
-      region: [
-        "上海市",
-        "浦东新区",
-        "陆家嘴街道"
-      ],
+      region: '上海市 浦东新区 陆家嘴街道',
       detail: "世纪大道100号",
       is_default: false
     },
     {
       id: "2",
-      user_id: "2",
+      user_id: "02",
       consignee: "陈先生",
       phone: "13800138001",
-      region: [
-        "北京市",
-        "海淀区",
-        "中关村街道"
-      ],
+      region: '北京市 海淀区 中关村街道',
       detail: "中关村大街1号",
       is_default: false
     },
@@ -755,7 +747,7 @@ export let feedback = [
   export let cart = [
     {
       id: 'P02',
-      quantity: 30,
+      quantity: 1,
     },
     {
       id: 'P03',
@@ -765,10 +757,10 @@ export let feedback = [
   export let normal_orders = [
     {
       id: "U1",
-      user_id: "02",
+      user_id: "01",
       items: [
         {
-          product_id: "P02",
+          product_id: "P01",
           quantity: 1,
           single_price: 399
         }

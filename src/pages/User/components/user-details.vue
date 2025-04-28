@@ -293,9 +293,11 @@ const handleFileChange = (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       avatarUrl.value = e.target.result;
-      formData.value.avatar = file;
     };
     reader.readAsDataURL(file);
+
+    // 直接保存文件对象
+    formData.value.avatar = file;
   }
 };
 
@@ -315,19 +317,18 @@ const handleSubmit = async () => {
   try {
     const formDataToSend = new FormData();
     formDataToSend.append('user_id', formData.value.user_id);
-    formDataToSend.append(
-      'user_name',
-      formData.value.nickname || originalData.value.nickname
-    );
+    formDataToSend.append('user_name', formData.value.nickname);
     formData.value.gender === 'male'
       ? formDataToSend.append('user_gender', '男')
       : formDataToSend.append('user_gender', '女');
     formDataToSend.append('user_email', DEFAULT_EMAIL);
     formDataToSend.append('user_phone', DEFAULT_PHONE);
-    formDataToSend.append(
-      'user_avatar',
-      formData.value.avatar || originalData.value.avatar
-    );
+
+    // 如果有新头像，添加头像文件
+    // if (formData.value.avatar instanceof File) {
+    formDataToSend.append('user_avatar', formData.value.avatar);
+    // }
+
     formDataToSend.append('created_at', CREATED_AT);
     formDataToSend.append('updated_at', new Date().toISOString());
 
