@@ -71,13 +71,12 @@
               加入购物车
             </button>
             <!-- 收藏进心愿单按钮 -->
-            <button class="bg-bg-fifth/85 px-3">
-              <router-link to="/wishlist"
-                ><font-awesome-icon
-                  :icon="['far', 'heart']"
-                  size="lg"
-                  style="color: #808080"
-              /></router-link>
+            <button class="bg-bg-fifth/85 px-3" @click="addToWishlist">
+              <font-awesome-icon
+                :icon="['far', 'heart']"
+                size="lg"
+                style="color: #808080"
+              />
             </button>
           </div>
         </div>
@@ -131,6 +130,7 @@ export default {
 import { ref } from 'vue';
 import { Close, Plus, Minus } from '@element-plus/icons-vue';
 import { useCartStore } from "../../../stores/cart";
+import { useWishlistStore } from "../../../stores/wishlist";
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({
@@ -170,6 +170,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 const quantity = ref(1);
 
 const increaseQuantity = () => {
@@ -195,6 +196,23 @@ const handleAddToCart = async () => {
     console.error("添加商品到购物车失败:", error);
     ElMessage({
       message: '添加商品失败，请重试',
+      type: 'error',
+    });
+  }
+};
+
+// 添加商品到心愿单
+const addToWishlist = async () => {
+  try {
+    await wishlistStore.addItem(props.id);
+    ElMessage({
+      message: '商品已成功添加到心愿单',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error("添加商品到心愿单失败:", error);
+    ElMessage({
+      message: '添加商品到心愿单失败，请重试',
       type: 'error',
     });
   }
