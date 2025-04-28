@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
-import { ref, computed, watch } from "vue";
-import axios from "axios";
+import { defineStore } from 'pinia';
+import { ref, computed, watch } from 'vue';
+import axios from 'axios';
 
-export const useCartStore = defineStore("cart", () => {
+export const useCartStore = defineStore('cart', () => {
   // 从 localStorage 初始化购物车数据
   const initialCartItems = JSON.parse(
-    localStorage.getItem("cartItems") || "[]"
+    localStorage.getItem('cartItems') || '[]'
   );
   const cartItems = ref(initialCartItems);
   const itemTotals = ref({});
@@ -14,7 +14,7 @@ export const useCartStore = defineStore("cart", () => {
   watch(
     cartItems,
     (newValue) => {
-      localStorage.setItem("cartItems", JSON.stringify(newValue));
+      localStorage.setItem('cartItems', JSON.stringify(newValue));
     },
     { deep: true }
   );
@@ -22,7 +22,7 @@ export const useCartStore = defineStore("cart", () => {
   // 获取购物车数据
   const fetchCartData = async () => {
     try {
-      const cartResponse = await axios.get("http://localhost:3000/cart");
+      const cartResponse = await axios.get('http://localhost:3000/cart');
       cartItems.value = cartResponse.data;
 
       // 获取每个商品的详细信息
@@ -42,7 +42,7 @@ export const useCartStore = defineStore("cart", () => {
         itemTotals.value[item.id] = 0;
       });
     } catch (error) {
-      console.error("获取购物车数据失败:", error);
+      console.error('获取购物车数据失败:', error);
     }
   };
 
@@ -72,7 +72,7 @@ export const useCartStore = defineStore("cart", () => {
       // 重新获取购物车数据以确保同步
       await fetchCartData();
     } catch (error) {
-      console.error("删除商品失败:", error);
+      console.error('删除商品失败:', error);
     }
   };
 
@@ -83,7 +83,7 @@ export const useCartStore = defineStore("cart", () => {
         quantity: item.quantity,
       });
     } catch (error) {
-      console.error("更新购物车商品失败:", error);
+      console.error('更新购物车商品失败:', error);
     }
   };
 
@@ -91,7 +91,7 @@ export const useCartStore = defineStore("cart", () => {
   const addItem = async (productId, quantity = 1) => {
     try {
       // 检查商品是否已经在购物车中
-      console.log("cartItems.value", cartItems.value);
+      console.log('cartItems.value', cartItems.value);
       const existingItem = cartItems.value.find(
         (item) => item.id === productId
       );
@@ -103,7 +103,7 @@ export const useCartStore = defineStore("cart", () => {
         });
       } else {
         // 如果商品不存在，添加新商品
-        await axios.post("http://localhost:3000/cart", {
+        await axios.post('http://localhost:3000/cart', {
           id: productId,
           quantity: quantity,
         });
@@ -111,17 +111,29 @@ export const useCartStore = defineStore("cart", () => {
 
       // 重新获取购物车数据以确保同步
       await fetchCartData();
-      console.log("添加商品到购物车成功");
+      console.log('添加商品到购物车成功');
     } catch (error) {
-      console.error("添加商品到购物车失败:", error);
+      console.error('添加商品到购物车失败:', error);
       throw error; // 抛出错误以便组件可以处理
     }
   };
 
   // 清空购物车
-  const clearCart = () => {
-    cartItems.value = [];
-    itemTotals.value = {};
+  const clearCart = async () => {
+    try {
+      // 清空本地状态
+      cartItems.value = [];
+      itemTotals.value = {};
+
+      // 调用后端 API 清空购物车
+      await axios.delete('http://localhost:3000/cart/clear');
+
+      // 重新获取购物车数据以确保同步
+      await fetchCartData();
+    } catch (error) {
+      console.error('清空购物车失败:', error);
+      throw error;
+    }
   };
 
   return {

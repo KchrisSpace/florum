@@ -110,14 +110,24 @@ app.put('/cart/:id', (req, res) => {
 // DELETE /cart/:id - 从购物车中删除指定商品
 app.delete('/cart/:id', (req, res) => {
   const { id } = req.params;
-  const itemIndex = cart.findIndex((item) => item.id === id);
-  if (itemIndex !== -1) {
-    const deletedItem = cart.splice(itemIndex, 1);
-    res.json(deletedItem);
+  if (id === 'clear') {
+    // 清空整个购物车
+    while (cart.length > 0) {
+      cart.pop();
+    }
+    console.log('清空购物车后', cart);
+    res.json({ message: '购物车已清空' });
   } else {
-    res.status(404).send('Item not found');
+    // 删除指定商品
+    const itemIndex = cart.findIndex((item) => item.id === id);
+    if (itemIndex !== -1) {
+      const deletedItem = cart.splice(itemIndex, 1);
+      res.json(deletedItem);
+    } else {
+      res.status(404).send('Item not found');
+    }
+    console.log('cart详情', cart);
   }
-  console.log('cart详情', cart);
 });
 
 // GET /wishlist - 获取心愿单中的所有商品

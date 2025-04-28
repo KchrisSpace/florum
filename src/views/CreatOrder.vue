@@ -61,14 +61,16 @@
               }}
               {{ addressStore.defaultAddress?.detail }}
             </p>
-            <button @click="showNewAddressModal = true" class="edit-address-btn">
+            <button
+              @click="showNewAddressModal = true"
+              class="edit-address-btn">
               新增
             </button>
           </div>
 
           <div v-else class="no-address">
             <p>请先添加收货地址</p>
-            <button  @click="showNewAddressModal = true" class="add-address-btn">
+            <button @click="showNewAddressModal = true" class="add-address-btn">
               添加地址
             </button>
           </div>
@@ -308,18 +310,17 @@ const finalPrice = computed(() => {
 
 // 创建订单
 const createOrder = async () => {
+  if (!selectedDate.value || !selectedTime.value) {
+    ElMessage.error('请选择配送日期和时间');
+    return;
+  }
+
+  if (!addressStore.addresses) {
+    ElMessage.warning('请先选择收货地址');
+    return;
+  }
+
   try {
-    if (!addressStore.addresses) {
-      ElMessage.warning('请先选择收货地址');
-      return;
-    }
-
-    if (!selectedDate.value || !selectedTime.value) {
-      ElMessage.warning('请选择配送日期和时间');
-      return;
-    }
-
-    // 创建订单数据
     const orderData = {
       user_id: '02',
       items: cartStore.cartItems.map((item) => ({
@@ -332,23 +333,20 @@ const createOrder = async () => {
       status: '进行中',
     };
 
-    // 使用 normalOrdersStore 创建订单
-    await normalOrdersStore.addOrder(orderData);
-
-    // 清空购物车
-    cartStore.clearCart();
-
-    // 清空配送时间
-    selectedDate.value = '';
-    selectedTime.value = '';
-
-    ElMessage.success('订单创建成功');
-
-    // 跳转到订单成功页面
-    // router.push('/payment/success');
+    const result = await normalOrdersStore.addOrder(orderData);
+    if (result) {
+      ElMessage.success('订单创建成功');
+      // 清空购物车
+      await cartStore.clearCart();
+      // 清空配送时间
+      selectedDate.value = '';
+      selectedTime.value = '';
+      // 跳转到订单列表页
+      // router.push('/order');
+    }
   } catch (error) {
     console.error('创建订单失败:', error);
-    ElMessage.error('创建订单失败，请重试');
+    ElMessage.error('创建订单失败，请稍后重试');
   }
 };
 
@@ -482,7 +480,6 @@ async function addNewAddress() {
     console.error('保存地址失败:', error);
   }
 }
-
 </script>
 
 <style scoped>
@@ -635,7 +632,7 @@ async function addNewAddress() {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  gap: 0.5rem;
+  font-size: 14px;
 }
 
 .address-card p {
@@ -742,8 +739,7 @@ async function addNewAddress() {
 }
 
 .edit-address-btn {
-  background: #f26371;
-  color: white;
+  color: #f26371;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
