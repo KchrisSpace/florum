@@ -313,24 +313,31 @@ const handleSubmit = async () => {
 
   isLoading.value = true;
   try {
-    const requestData = {
-      id: formData.value.user_id,
-      user_name: formData.value.nickname || originalData.value.nickname,
-      user_gender: formData.value.gender === 'male' ? '男' : '女',
-      user_email: DEFAULT_EMAIL,
-      user_phone: DEFAULT_PHONE,
-      user_avatar: formData.value.avatar || originalData.value.avatar,
-      created_at: CREATED_AT,
-      updated_at: new Date().toISOString(),
-    };
+    const formDataToSend = new FormData();
+    formDataToSend.append('user_id', formData.value.user_id);
+    formDataToSend.append(
+      'user_name',
+      formData.value.nickname || originalData.value.nickname
+    );
+    formData.value.gender === 'male'
+      ? formDataToSend.append('user_gender', '男')
+      : formDataToSend.append('user_gender', '女');
+    formDataToSend.append('user_email', DEFAULT_EMAIL);
+    formDataToSend.append('user_phone', DEFAULT_PHONE);
+    formDataToSend.append(
+      'user_avatar',
+      formData.value.avatar || originalData.value.avatar
+    );
+    formDataToSend.append('created_at', CREATED_AT);
+    formDataToSend.append('updated_at', new Date().toISOString());
 
     // 如果有新密码，添加密码字段
     if (formData.value.newPassword) {
-      requestData.user_password = formData.value.newPassword;
+      formDataToSend.append('user_password', formData.value.newPassword);
     }
 
     // 发送请求
-    const response = await sendUpdateRequest(requestData);
+    const response = await sendUpdateRequest(formDataToSend);
     if (response.status === 200) {
       handleSuccess(response.data);
     }
@@ -343,34 +350,16 @@ const handleSubmit = async () => {
 };
 
 // 提取发送请求的逻辑
-const sendUpdateRequest = async (requestData) => {
-  if (formData.value.avatar instanceof File) {
-    const formDataToSend = new FormData();
-    Object.keys(requestData).forEach((key) => {
-      formDataToSend.append(key, requestData[key]);
-    });
-    formDataToSend.append('user_avatar', formData.value.avatar);
-
-    return await axios.put(
-      `${API_URL}/user_update/${formData.value.user_id}`,
-      formDataToSend,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-  } else {
-    return await axios.put(
-      `${API_URL}/user_update/${formData.value.user_id}`,
-      requestData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  }
+const sendUpdateRequest = async (formDataToSend) => {
+  return await axios.put(
+    `${API_URL}/user_update/${formData.value.user_id}`,
+    formDataToSend,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 };
 
 // 处理更新成功

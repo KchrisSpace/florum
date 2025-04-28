@@ -11,7 +11,7 @@ export const useCommentsStore = defineStore('comments', {
   }),
 
   actions: {
-    // 获取文章评论
+    // 获取评论
     async fetchComments(articleId, commentType, commentQuery) {
       try {
         this.isLoading = true;
@@ -29,7 +29,7 @@ export const useCommentsStore = defineStore('comments', {
       }
     },
 
-    // 添加文章评论
+    // 添加评论
     async addComment(commentData, commentType) {
       try {
         this.isLoading = true;

@@ -214,19 +214,19 @@ watch(
 );
 
 // 修改监听评论列表变化的 watch
-watch(
-  () => commentsStore.allComments,
-  (newComments) => {
-    if (newComments && newComments.length > 0) {
-      const filteredComments = newComments.filter((comment) => {
-        // 使用动态的查询字段进行筛选
-        return comment[props.commentQuery] === props.sortId;
-      });
-      sortComments(filteredComments);
-    }
-  },
-  { deep: true }
-);
+// watch(
+//   () => commentsStore.allComments,
+//   (newComments) => {
+//     if (newComments && newComments.length > 0) {
+//       const filteredComments = newComments.filter((comment) => {
+//         // 使用动态的查询字段进行筛选
+//         return comment[props.commentQuery] === props.sortId;
+//       });
+//       sortComments(filteredComments);
+//     }
+//   },
+//   { deep: true }
+// );
 
 function handleFocus() {
   isFocused.value = true;

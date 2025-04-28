@@ -7,16 +7,17 @@ export const useCartStore = defineStore('cart', () => {
   const itemTotals = ref({});
 
   // 获取购物车数据
+
   const fetchCartData = async () => {
     try {
-      const cartResponse = await axios.get('http://localhost:3000/cart');
+      const cartResponse = await axios.get('http://localhost:3001/cart');
       cartItems.value = cartResponse.data;
 
       // 获取每个商品的详细信息
       for (const item of cartItems.value) {
         try {
           const productResponse = await axios.get(
-            `http://localhost:3000/product_list/${item.product_id}`
+            `http://localhost:3001/api/product_list/${item.product_id}`
           );
           item.product = productResponse.data;
         } catch (error) {
@@ -51,7 +52,7 @@ export const useCartStore = defineStore('cart', () => {
   // 删除商品
   const removeItem = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3000/cart/${productId}`);
+      await axios.delete(`http://localhost:3001/cart/${productId}`);
       // 从本地列表中移除商品
       cartItems.value = cartItems.value.filter(
         (item) => item.product_id !== productId
@@ -68,7 +69,8 @@ export const useCartStore = defineStore('cart', () => {
   // 更新商品数量
   const updateCartItem = async (item) => {
     try {
-      await axios.put(`http://localhost:3000/cart/${item.product_id}`, {
+      console.log(item);
+      await axios.put(`http://localhost:3001/cart/${item.product_id}`, {
         quantity: item.quantity,
       });
     } catch (error) {
