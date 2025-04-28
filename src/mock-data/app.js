@@ -376,3 +376,21 @@ app.get('/carousel', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+// 商品订单的读取和创建增加删除
+// 获取商品订单
+app.get("/product_orders", (req, res) => {
+  res.json(product_orders);
+});
+// 创建商品订单
+app.post("/product_orders", (req, res) => {
+  const newOrder = req.body;
+  product_orders.push(newOrder);
+  res.status(201).json(newOrder);
+});
+// 删除商品订单
+app.delete("/product_orders/:id", (req, res) => {
+  const { id } = req.params;
+  const index = product_orders.findIndex((order) => order.id === id);
+  product_orders.splice(index, 1);
+  res.json({ message: "商品订单删除成功" });
+});
