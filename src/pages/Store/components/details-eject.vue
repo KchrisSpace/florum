@@ -200,3 +200,50 @@ const handleAddToCart = async () => {
   }
 };
 </script>
+
+<style scoped>
+/* 添加一些样式使按钮更美观 */
+.bg-bg-fifth\/85 {
+  background-color: rgba(245, 245, 245, 0.85);
+  border-radius: 4px;
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.el-icon {
+  cursor: pointer;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.font-Harmony {
+  font-family: 'Harmony', sans-serif;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+</style>

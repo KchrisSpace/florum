@@ -94,6 +94,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import DetailsEject from './details-eject.vue';
 import JoinCart from '../components/join-cart.vue';
+import { useCartStore } from '../../../stores/cart';
+import { ElMessage } from 'element-plus';
 
 const showDetails = ref(false);
 const showJoinCart = ref(false);
@@ -115,10 +117,24 @@ const selectedProduct = ref({
 });
 
 const router = useRouter();
+const cartStore = useCartStore();
 
-const handleAddToCart = (item) => {
-  selectedProduct.value = { ...item };
-  showJoinCart.value = true;
+const handleAddToCart = async (item) => {
+  try {
+    await cartStore.addItem(item.id, 1);
+    selectedProduct.value = { ...item };
+    showJoinCart.value = true;
+    ElMessage({
+      message: '商品已成功添加到购物车',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error('添加商品到购物车失败:', error);
+    ElMessage({
+      message: '添加商品失败，请重试',
+      type: 'error',
+    });
+  }
 };
 
 const handleShowDetails = (item) => {

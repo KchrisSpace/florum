@@ -164,7 +164,7 @@ export default {
       try {
         const res = await axios.get(`${API_URL}/product_list`);
         this.goods = res.data.map((item) => ({ ...item, showCart: false }));
-        console.log('获取到的商品数据:', this.goods);
+        // console.log('获取到的商品数据:', this.goods);
       } catch (error) {
         console.error('获取商品数据失败:', error);
       }

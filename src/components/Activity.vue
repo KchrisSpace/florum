@@ -2,7 +2,7 @@
 <template>
   <div class="activity-container">
     <div class="activity" v-for="item in activityList" :key="item.id">
-      <div class="activity-item">
+      <div>
         <img :src="item.img" :alt="item.title || '活动图片'" />
       </div>
     </div>
@@ -34,8 +34,9 @@ axios.get("http://localhost:3000/carousel").then((res) => {
 }
 
 .activity img {
-  width: 80%;
+  width: 100%;
   height: 15vh;
+  padding: 0 20px;
   object-fit: cover;
 }
 </style>

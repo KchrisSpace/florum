@@ -3,14 +3,14 @@
   <div class="carousel">
     <el-carousel
       indicator-position=""
-      height="300px"
-      width="1200px"
+      height="400px"
+      width="800px"
       :autoplay="true"
       :interval="2000"
     >
       <el-carousel-item v-for="item in carouselList" :key="item.id">
         <div class="carousel-item">
-          <img :src="item.img" :alt="item.title || '轮播图'" />
+          <img :src="item.img" :alt="item.title || '轮播图'"/>
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -34,8 +34,6 @@ axios.get("http://localhost:3000/carousel").then((res) => {
 }
 
 .carousel-item {
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
