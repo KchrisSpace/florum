@@ -128,10 +128,10 @@ input {
 }
 .title {
   width: 100%;
-  height: 130px;
+  height: 110px;
   background: #f0f0f0;
   color: #000000;
-  padding: 10px 0;
+  /* padding: 10px 0; */
 }
 .logo-text {
   font-family: "logo";

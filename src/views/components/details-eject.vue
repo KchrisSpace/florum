@@ -446,8 +446,9 @@ const addToWishlist = async () => {
 
 .wishlist-btn {
   position: relative;
+  scale: 2;
   top: 5px;
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   border: none;
 }
 
