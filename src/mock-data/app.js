@@ -16,12 +16,12 @@ import {
   carousel,
 } from './data.js';
 
+const app = express();
+const port = 3000;
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
-
-const app = express();
-const port = 3000;
 
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
@@ -52,6 +52,16 @@ app.get('/login', (req, res) => {
 app.get('/product_list', (req, res) => {
   console.log('商品列表', product_list);
   res.json(product_list);
+});
+
+// 获取商品详情
+app.get('/product_list/:id', (req, res) => {
+  const { id } = req.params;
+  const product = product_list.find(item => item.id === id);
+  if (!product) {
+    return res.status(404).json({ error: '商品未找到' });
+  }
+  res.json(product);
 });
 
 // GET /cart - 获取购物车中的所有商品
