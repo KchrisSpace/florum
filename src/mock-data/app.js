@@ -124,11 +124,11 @@ app.get('/article_comments', (req, res) => {
 
 // 获取商品评论
 app.get('/product_comments', (req, res) => {
-  const { productId } = req.query;
-  if (!productId) {
+  const { product_id } = req.query;
+  if (!product_id) {
     return res.status(400).json({ error: '缺少 productId 参数' });
   }
-  const comments = product_comments.filter((c) => c.productId === productId);
+  const comments = product_comments.filter((c) => c.product_id === product_id);
   res.json(comments);
 });
 

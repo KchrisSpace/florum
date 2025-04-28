@@ -10,7 +10,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const fetchCartData = async () => {
     try {
-      const cartResponse = await axios.get('http://localhost:3001/cart');
+      const cartResponse = await axios.get('http://localhost:3000/cart');
       cartItems.value = cartResponse.data;
 
       // 获取每个商品的详细信息
@@ -52,7 +52,7 @@ export const useCartStore = defineStore('cart', () => {
   // 删除商品
   const removeItem = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3001/cart/${productId}`);
+      await axios.delete(`http://localhost:3000/cart/${productId}`);
       // 从本地列表中移除商品
       cartItems.value = cartItems.value.filter((item) => item.id !== productId);
       // 删除对应的总价记录
@@ -70,7 +70,6 @@ export const useCartStore = defineStore('cart', () => {
       await axios.put(`http://localhost:3000/cart/${item.id}`, {
         quantity: item.quantity,
       });
-     
     } catch (error) {
       console.error('更新购物车商品失败:', error);
     }
@@ -80,7 +79,7 @@ export const useCartStore = defineStore('cart', () => {
   const addItem = async (productId, quantity = 1) => {
     try {
       // 检查商品是否已经在购物车中
-      console.log("cartItems.value", cartItems.value);
+      console.log('cartItems.value', cartItems.value);
       const existingItem = cartItems.value.find(
         (item) => item.id === productId
       );
@@ -92,7 +91,7 @@ export const useCartStore = defineStore('cart', () => {
         });
       } else {
         // 如果商品不存在，添加新商品
-        await axios.post("http://localhost:3000/cart", {
+        await axios.post('http://localhost:3000/cart', {
           id: productId,
           quantity: quantity,
         });
@@ -100,9 +99,9 @@ export const useCartStore = defineStore('cart', () => {
 
       // 重新获取购物车数据以确保同步
       await fetchCartData();
-      console.log("添加商品到购物车成功");
+      console.log('添加商品到购物车成功');
     } catch (error) {
-      console.error("添加商品到购物车失败:", error);
+      console.error('添加商品到购物车失败:', error);
       throw error; // 抛出错误以便组件可以处理
     }
   };
