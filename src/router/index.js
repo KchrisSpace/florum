@@ -13,6 +13,7 @@ import Users from "../admin/views/Users.vue";
 import Products from "../admin/views/Products.vue";
 import Orders from "../admin/views/Orders.vue";
 import Categories from "../admin/views/Categories.vue";
+import Suggestion from "../admin/views/Suggestion.vue";
 
 // 路由配置
 const routes = [
@@ -65,12 +66,12 @@ const routes = [
     name: "Community",
     component: Community,
   },
-    {
-      path: "/article/:id",
-      name: "Article",
-      component: Article,
-      props: true,
-    },
+  {
+    path: "/article/:id",
+    name: "Article",
+    component: Article,
+    props: true,
+  },
   {
     path: "/store",
     name: "Store",
@@ -97,6 +98,17 @@ const routes = [
     name: "Admin",
     component: Admin,
     children: [
+      {
+        path: "",
+        redirect: "/admin/dashboard",
+      },
+      {
+        path: "dashboard",
+        component: Dashboard,
+        meta: {
+          title: "数据概览",
+        },
+      },
       {
         path: "dashboard",
         component: Dashboard,
@@ -130,6 +142,13 @@ const routes = [
         component: Categories,
         meta: {
           title: "分类管理",
+        },
+      },
+      {
+        path: "suggestion",
+        component: Suggestion,
+        meta: {
+          title: "建议和反馈",
         },
       },
     ],

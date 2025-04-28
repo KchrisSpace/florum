@@ -6,7 +6,7 @@
       <hr />
       <CartItem
         v-for="item in cartStore.cartItems"
-        :key="item.product_id"
+        :key="item.id"
         :item="item"
         @update-total="cartStore.updateItemTotal"
         @item-removed="cartStore.removeItem"
@@ -46,13 +46,8 @@ onMounted(async () => {
   // 初始化每个商品的总价
   cartStore.cartItems.forEach((item) => {
     const itemTotal = item.quantity * item.product.price_info.current_price;
-    cartStore.updateItemTotal({ id: item.product_id, total: itemTotal });
+    cartStore.updateItemTotal({ id: item.id, total: itemTotal });
   });
-});
-
-onUnmounted(() => {
-  console.log("Cart view unmounted");
-  cartStore.clearCart();
 });
 </script>
 
