@@ -52,9 +52,9 @@ const routes = [
     component: () => import("../views/Cart.vue"),
   },
   {
-    path: "/payment",
-    name: "Payment",
-    component: () => import("../views/Payment.vue"),
+    path: "/create-order",
+    name: "CreateOrder",
+    component: () => import("../views/CreatOrder.vue"),
   },
   {
     path: "/custom",

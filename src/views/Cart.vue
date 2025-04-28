@@ -16,7 +16,7 @@
       <p class="total">
         订单总计：<i>￥{{ cartStore.total }}</i>
       </p>
-      <button class="pay-button" @click="createOrder">创建订单</button>
+      <button class="pay-button" @click="createOrder">去创建订单</button>
     </div>
   </div>
 </template>
@@ -36,7 +36,9 @@ const createOrder = () => {
     alert("购物车为空，请先添加商品");
     return;
   }
+  router.push("/create-order");
   // 添加订单
+
 };
 
 onMounted(async () => {
