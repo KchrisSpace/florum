@@ -312,40 +312,74 @@ app.get('/normal_orders', (req, res) => {
     const userOrders = normal_orders.filter(
       (order) => order.user_id === user_id
     );
+    console.log('用户订单', userOrders);
     res.json(userOrders);
   } else {
     // 如果没有提供user_id，则返回所有订单
+    console.log('所有订单', normal_orders);
     res.json(normal_orders);
   }
 });
 
-app.post('/normal_orders/', (req, res) => {
+// 创建新订单
+app.post('/normal_orders', (req, res) => {
   const newOrder = req.body;
-  // 简单生成唯一id
+
+  // 验证必要字段
+  if (!newOrder.user_id || !newOrder.items || !Array.isArray(newOrder.items)) {
+    return res.status(400).json({ error: '缺少必要字段' });
+  }
+
+  // 生成订单ID
   newOrder.id = 'O' + (normal_orders.length + 1).toString().padStart(2, '0');
+
+  // 设置创建时间
+  newOrder.created_at = new Date().toISOString();
+
+  // 计算总价
+  // newOrder.total_price = newOrder.items.reduce((total, item) => {
+  //   return total + item.quantity * item.single_price;
+  // }, 0);
+
+  // 添加订单
   normal_orders.push(newOrder);
+  console.log('添加订单后', normal_orders);
   res.status(201).json(newOrder);
 });
 
+// 更新订单状态
 app.put('/normal_orders/:id', (req, res) => {
   const { id } = req.params;
-  const updateData = req.body;
-  const index = normal_orders.findIndex((order) => order.id === id);
-  if (index === -1) {
+  const { status } = req.body;
+
+  // 查找订单
+  const orderIndex = normal_orders.findIndex((order) => order.id === id);
+
+  if (orderIndex === -1) {
     return res.status(404).json({ error: '订单未找到' });
   }
-  normal_orders[index] = { ...normal_orders[index], ...updateData };
-  res.json(normal_orders[index]);
+
+  // 更新订单状态
+  normal_orders[orderIndex].status = status;
+  console.log('更新订单状态后', normal_orders[orderIndex]);
+  res.json(normal_orders[orderIndex]);
 });
 
+// 删除订单
 app.delete('/normal_orders/:id', (req, res) => {
   const { id } = req.params;
-  const index = normal_orders.findIndex((order) => order.id === id);
-  if (index === -1) {
+
+  // 查找订单
+  const orderIndex = normal_orders.findIndex((order) => order.id === id);
+
+  if (orderIndex === -1) {
     return res.status(404).json({ error: '订单未找到' });
   }
-  const deleted = normal_orders.splice(index, 1);
-  res.json(deleted[0]);
+
+  // 删除订单
+  const deletedOrder = normal_orders.splice(orderIndex, 1);
+  console.log('删除订单后', normal_orders);
+  res.json(deletedOrder[0]);
 });
 
 // 根据用户id获取定制信息
@@ -375,22 +409,4 @@ app.get('/carousel', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
-});
-// 商品订单的读取和创建增加删除
-// 获取商品订单
-app.get("/product_orders", (req, res) => {
-  res.json(product_orders);
-});
-// 创建商品订单
-app.post("/product_orders", (req, res) => {
-  const newOrder = req.body;
-  product_orders.push(newOrder);
-  res.status(201).json(newOrder);
-});
-// 删除商品订单
-app.delete("/product_orders/:id", (req, res) => {
-  const { id } = req.params;
-  const index = product_orders.findIndex((order) => order.id === id);
-  product_orders.splice(index, 1);
-  res.json({ message: "商品订单删除成功" });
 });

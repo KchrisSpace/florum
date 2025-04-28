@@ -11,13 +11,11 @@
           <div
             v-for="item in cartStore.cartItems"
             :key="item.id"
-            class="order-item"
-          >
+            class="order-item">
             <img
               :src="item.product?.images[0]"
               :alt="item.product?.title"
-              class="item-image"
-            />
+              class="item-image" />
             <div class="item-info">
               <div class="item-name-price">
                 <p class="item-name">{{ item.product?.title }}</p>
@@ -50,15 +48,29 @@
         <h3>支付信息</h3>
         <div class="delivery-info">
           <h4>收货信息</h4>
-          <div class="address-card" v-if="address">
-            <p class="receiver">收货人：{{ address.consignee }}</p>
-            <p class="phone">电话：{{ address.phone }}</p>
-            <p class="address">
-              地址：{{ address.region.join(" ") }} {{ address.detail }}
+          <div class="address-card" v-if="addressStore.addresses.length > 0">
+            <p class="receiver w-fit">
+              收货人：{{ addressStore.defaultAddress?.consignee }}
             </p>
+            <p class="phone w-fit">
+              电话：{{ addressStore.defaultAddress?.phone }}
+            </p>
+            <p class="address w-fit">
+              地址：{{
+                addressStore.defaultAddress?.region?.replace(/\//g, ' ')
+              }}
+              {{ addressStore.defaultAddress?.detail }}
+            </p>
+            <button class="edit-address-btn">
+              新增地址
+            </button>
           </div>
+
           <div v-else class="no-address">
             <p>请先添加收货地址</p>
+            <button class="add-address-btn">
+              添加地址
+            </button>
           </div>
         </div>
         <div class="delivery-time">
@@ -71,7 +83,7 @@
               :disabled-date="disabledDate"
               format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"
-            />
+              @change="handleDateChange" />
           </div>
           <div class="time-slots">
             <div
@@ -79,10 +91,15 @@
               :key="slot.value"
               class="time-slot"
               :class="{ active: selectedTime === slot.value }"
-              @click="selectedTime = slot.value"
-            >
+              @click="handleTimeSelect(slot.value)">
               {{ slot.label }}
             </div>
+          </div>
+          <!-- 显示已选择的日期和时间 -->
+          <div
+            v-if="selectedDate || selectedTime"
+            class="selected-time-display">
+            <p>已选择：{{ selectedDate }} {{ getTimeLabel(selectedTime) }}</p>
           </div>
         </div>
         <div class="payment-methods">
@@ -95,23 +112,27 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import Header2 from "../components/Header2.vue";
-import { useCartStore } from "../stores/cart";
-import { useRouter } from "vue-router";
-import axios from "axios";
-import { ElDatePicker } from "element-plus";
+import { ref, computed, onMounted, watch } from 'vue';
+import Header2 from '../components/Header2.vue';
+import { useCartStore } from '../stores/cart';
+import { useAddressStore } from '../stores/address';
+import { useRouter } from 'vue-router';
+import { ElDatePicker, ElMessage } from 'element-plus';
+import { useNormalOrdersStore } from '../stores/normal-orders';
 
 const cartStore = useCartStore();
 const router = useRouter();
+const normalOrdersStore = useNormalOrdersStore();
+const addressStore = useAddressStore();
 const cartItems = ref([]);
-const address = ref(null);
-const selectedMethod = ref("wechat");
-const selectedDate = ref("");
-const selectedTime = ref("");
+// const address = ref(null);
+const selectedMethod = ref('wechat');
+const selectedDate = ref('');
+const selectedTime = ref('');
 
 // 禁用过去的日期
 const disabledDate = (time) => {
@@ -119,22 +140,31 @@ const disabledDate = (time) => {
 };
 
 const timeSlots = [
-  { label: "09:00-12:00", value: "morning" },
-  { label: "14:00-18:00", value: "afternoon" },
-  { label: "18:00-21:00", value: "evening" },
+  { label: '09:00-12:00', value: 'morning' },
+  { label: '14:00-18:00', value: 'afternoon' },
+  { label: '18:00-21:00', value: 'evening' },
 ];
 
 // 获取地址数据
 const fetchAddress = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/addresses");
-    // 获取默认地址或第一个地址
-    address.value =
-      response.data.find((addr) => addr.is_default) || response.data[0];
+    await addressStore.fetchAddresses();
+    console.log('地址列表:', addressStore.addresses);
+    console.log('默认地址:', addressStore.defaultAddress);
   } catch (error) {
-    console.error("获取地址失败:", error);
+    console.error('获取地址失败:', error);
+    ElMessage.error('获取地址失败，请重试');
   }
 };
+
+// 监听地址变化
+watch(
+  () => addressStore.addresses,
+  (newAddresses) => {
+    console.log('地址列表变化:', newAddresses);
+  },
+  { immediate: true }
+);
 
 // 计算总价
 const totalPrice = computed(() => {
@@ -158,44 +188,76 @@ const finalPrice = computed(() => {
 // 创建订单
 const createOrder = async () => {
   try {
-    if (!address.value) {
-      alert("请先选择收货地址");
+    if (!addressStore.addresses) {
+      ElMessage.warning('请先选择收货地址');
       return;
     }
 
     if (!selectedDate.value || !selectedTime.value) {
-      alert("请选择配送日期和时间");
+      ElMessage.warning('请选择配送日期和时间');
       return;
     }
 
     // 创建订单数据
     const orderData = {
-      items: cartStore.cartItems,
-      address: address.value,
-      delivery_date: selectedDate.value,
-      delivery_time: selectedTime.value,
+      user_id: '02',
+      items: cartStore.cartItems.map((item) => ({
+        product_id: item.id,
+        quantity: item.quantity,
+      })),
       total_price: finalPrice.value,
       shipping_fee: shippingFee.value,
-      payment_method: selectedMethod.value,
-      status: "pending",
-      created_at: new Date().toISOString(),
+      delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
+      status: '进行中',
     };
 
-    // 发送创建订单请求
-    const response = await axios.post(
-      "http://localhost:3000/product_orders",
-      orderData
-    );
-    console.log("订单创建成功:", response.data);
+    // 使用 normalOrdersStore 创建订单
+    await normalOrdersStore.addOrder(orderData);
 
     // 清空购物车
     cartStore.clearCart();
 
+    // 清空配送时间
+    selectedDate.value = '';
+    selectedTime.value = '';
+
+    ElMessage.success('订单创建成功');
+
     // 跳转到订单成功页面
-    router.push("/payment/success");
+    // router.push('/payment/success');
   } catch (error) {
-    console.error("创建订单失败:", error);
-    alert("创建订单失败，请重试");
+    console.error('创建订单失败:', error);
+    ElMessage.error('创建订单失败，请重试');
+  }
+};
+
+// 处理日期选择
+const handleDateChange = (date) => {
+  selectedDate.value = date;
+  console.log('选择的日期:', date);
+};
+
+// 处理时间选择
+const handleTimeSelect = (time) => {
+  selectedTime.value = time;
+  console.log('选择的时间:', time);
+};
+
+// 获取时间段的显示标签
+const getTimeLabel = (timeValue) => {
+  const slot = timeSlots.find((slot) => slot.value === timeValue);
+  return slot ? slot.label : '';
+};
+
+// 处理地址更新
+const handleAddressUpdate = async (updatedAddress) => {
+  try {
+    await addressStore.updateAddress(updatedAddress);
+    ElMessage.success('地址更新成功');
+    await fetchAddress();
+  } catch (error) {
+    console.error('更新地址失败:', error);
+    ElMessage.error('更新地址失败，请重试');
   }
 };
 
@@ -308,7 +370,7 @@ onMounted(async () => {
 }
 
 .item-price {
-  color: #ff6b6b;
+  color: #f26371;
   font-weight: 500;
   margin: 0;
 }
@@ -344,7 +406,7 @@ onMounted(async () => {
 }
 
 .final-price {
-  color: #ff6b6b;
+  color: #f26371;
   font-size: 1.2rem;
 }
 
@@ -357,7 +419,7 @@ onMounted(async () => {
   padding: 1rem;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-around;
   gap: 0.5rem;
 }
 
@@ -375,9 +437,9 @@ onMounted(async () => {
 }
 
 .pay-button {
-  width: 100%;
+  width: 50%;
   padding: 1rem;
-  background: #ff6b6b;
+  background: #f26371;
   color: white;
   border: none;
   border-radius: 8px;
@@ -389,7 +451,7 @@ onMounted(async () => {
 }
 
 .pay-button:hover {
-  background: #ff5252;
+  background: #fbe4e9;
   transform: translateY(-2px);
 }
 
@@ -447,8 +509,54 @@ onMounted(async () => {
 }
 
 .time-slot.active {
-  background: #ff6b6b;
+  background: #f26371;
   color: white;
+}
+
+.selected-time-display {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: #f0f9ff;
+  border-radius: 4px;
+  color: #333;
+}
+
+.selected-time-display p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.edit-address-btn {
+  background: #f26371;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+  font-size: 16px;
+}
+
+.edit-address-btn:hover {
+  background: #fbe4e9;
+  transform: translateY(-2px);
+}
+
+.add-address-btn {
+  background: #f26371;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.add-address-btn:hover {
+  background: #fbe4e9;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

@@ -707,7 +707,7 @@ export let addresses = [
       user_id: "01",
       consignee: "李女士",
       phone: "13800138000",
-      region: '上海市 浦东新区 陆家嘴街道',
+      region: '上海市/浦东新区/陆家嘴街道',
       detail: "世纪大道100号",
       is_default: false
     },
@@ -716,9 +716,9 @@ export let addresses = [
       user_id: "02",
       consignee: "陈先生",
       phone: "13800138001",
-      region: '北京市 海淀区 中关村街道',
+      region: '北京市/海淀区/中关村街道',
       detail: "中关村大街1号",
-      is_default: false
+      is_default: true
     },
   ]
 export let custom = [
@@ -769,14 +769,21 @@ export let wishlist = [
 export let normal_orders = [
     {
       id: "U1",
-      user_id: "01",
+      user_id: "02",
       items: [
         {
           product_id: "P01",
           quantity: 1,
           single_price: 399
+        },
+        {
+          product_id: "P02",
+          quantity: 1,
         }
       ],
+      total_price: 399,
+      shipping_fee: 0,
+      delivery_time: "2025-04-13T10:15:00Z",
       status: "进行中",
       created_at: "2025-04-13T10:15:00Z"
     },
@@ -787,9 +794,11 @@ export let normal_orders = [
         {
           product_id: "P03",
           quantity: 1,
-          single_price: 100
         }
       ],
+      total_price: 399,
+      shipping_fee: 0,
+      delivery_time: "2025-04-13T10:15:00Z",
       status: "已完成",
       created_at: "2025-04-01T10:15:00Z"
     },
@@ -800,9 +809,11 @@ export let normal_orders = [
         {
           product_id: "P06",
           quantity: 1,
-          single_price: 299
         }
       ],
+      total_price: 399,
+      shipping_fee: 0,
+      delivery_time: "2025-04-13T10:15:00Z",
       status: "已取消",
       created_at: "2025-02-13T09:15:00Z"
     }

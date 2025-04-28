@@ -43,7 +43,7 @@ const normalOrdersStore = useNormalOrdersStore();
 
 // 获取当前用户ID
 // const currentUserId = localStorage.getItem('userId');
-  const currentUserId = '01';
+  const currentUserId = '02';
 // 获取订单数据
 onMounted(async () => {
   try {

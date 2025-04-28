@@ -46,6 +46,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
         );
         this.orders.push(response.data);
         this.error = null;
+        console.log('添加订单后', this.orders);
         return response.data;
       } catch (error) {
         this.error = error.message;
