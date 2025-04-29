@@ -11,11 +11,13 @@
           <div
             v-for="item in cartStore.cartItems"
             :key="item.id"
-            class="order-item">
+            class="order-item"
+          >
             <img
               :src="item.product?.images[0]"
               :alt="item.product?.title"
-              class="item-image" />
+              class="item-image"
+            />
             <div class="item-info">
               <div class="item-name-price">
                 <p class="item-name">{{ item.product?.title }}</p>
@@ -56,14 +58,13 @@
               电话：{{ addressStore.defaultAddress?.phone }}
             </p>
             <p class="address w-fit">
-              地址：{{
-                addressStore.defaultAddress?.region?.replace(/\//g, ' ')
-              }}
+              地址：{{ addressStore.defaultAddress?.region }}
               {{ addressStore.defaultAddress?.detail }}
             </p>
             <button
               @click="showNewAddressModal = true"
-              class="edit-address-btn">
+              class="edit-address-btn"
+            >
               新增
             </button>
           </div>
@@ -85,7 +86,8 @@
               :disabled-date="disabledDate"
               format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"
-              @change="handleDateChange" />
+              @change="handleDateChange"
+            />
           </div>
           <div class="time-slots">
             <div
@@ -93,14 +95,16 @@
               :key="slot.value"
               class="time-slot"
               :class="{ active: selectedTime === slot.value }"
-              @click="handleTimeSelect(slot.value)">
+              @click="handleTimeSelect(slot.value)"
+            >
               {{ slot.label }}
             </div>
           </div>
           <!-- 显示已选择的日期和时间 -->
           <div
             v-if="selectedDate || selectedTime"
-            class="selected-time-display">
+            class="selected-time-display"
+          >
             <p>已选择：{{ selectedDate }} {{ getTimeLabel(selectedTime) }}</p>
           </div>
         </div>
@@ -117,7 +121,8 @@
   <div
     v-if="showNewAddressModal"
     class="modal-overlay"
-    @click="showNewAddressModal = false">
+    @click="showNewAddressModal = false"
+  >
     <div class="modal-content text-right px-4 py-10" @click.stop>
       <h5 class="text-left">添加收货地址</h5>
       <form @submit.prevent="addNewAddress" class="py-6">
@@ -134,7 +139,8 @@
               <option
                 v-for="option in addressOptions"
                 :key="option"
-                :value="option">
+                :value="option"
+              >
                 {{ option }}
               </option>
             </select>
@@ -150,7 +156,8 @@
                 placeholder="请输入详细地址信息，如道路，门牌号，小区，楼栋号，单元等信息"
                 v-model="newAddress.address"
                 @blur="validateAddress"
-                required />
+                required
+              />
               <p class="text-xs text-font-primary text-left">
                 详细地址长度需要在2-120个汉字或字符，不能包含表情符号
               </p>
@@ -166,7 +173,8 @@
               placeholder="长度不超过25字符"
               v-model="newAddress.name"
               @input="validateName"
-              required />
+              required
+            />
           </div>
           <div class="flex">
             <label for="address" class="shrink-0 w-23"
@@ -178,7 +186,8 @@
                 placeholder="必填"
                 v-model="newAddress.phone"
                 @input="validatePhone"
-                required />
+                required
+              />
               <p v-if="phoneError" class="text-red-500">{{ phoneError }}</p>
               <!-- 设置为默认地址 -->
 
@@ -186,7 +195,8 @@
                 <input
                   type="checkbox"
                   v-model="newAddress.isDefault"
-                  id="defaultAddress" />
+                  id="defaultAddress"
+                />
                 <label for="defaultAddress" class="ml-2">设为默认地址</label>
               </div>
             </span>
@@ -197,12 +207,14 @@
           <button
             type="button"
             @click="showNewAddressModal = false"
-            class="border-[1px] border-bg-primary text-font-thirth w-20 h-8 rounded-1">
+            class="border-[1px] border-bg-primary text-font-thirth w-20 h-8 rounded-1"
+          >
             取消
           </button>
           <button
             type="submit"
-            class="bg-font-primary text-white w-20 h-8 rounded-1">
+            class="bg-font-primary text-white w-20 h-8 rounded-1"
+          >
             确认
           </button>
         </div>
@@ -212,13 +224,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import Header2 from '../components/Header2.vue';
-import { useCartStore } from '../stores/cart';
-import { useAddressStore } from '../stores/address';
-import { useRouter } from 'vue-router';
-import { ElDatePicker, ElMessage } from 'element-plus';
-import { useNormalOrdersStore } from '../stores/normal-orders';
+import { ref, computed, onMounted, watch } from "vue";
+import Header2 from "../components/Header2.vue";
+import { useCartStore } from "../stores/cart";
+import { useAddressStore } from "../stores/address";
+import { useRouter } from "vue-router";
+import { ElDatePicker, ElMessage } from "element-plus";
+import { useNormalOrdersStore } from "../stores/normal-orders";
 
 const cartStore = useCartStore();
 const router = useRouter();
@@ -226,35 +238,35 @@ const normalOrdersStore = useNormalOrdersStore();
 const addressStore = useAddressStore();
 const cartItems = ref([]);
 // const address = ref(null);
-const selectedMethod = ref('wechat');
-const selectedDate = ref('');
-const selectedTime = ref('');
+const selectedMethod = ref("wechat");
+const selectedDate = ref("");
+const selectedTime = ref("");
 const showNewAddressModal = ref(false);
-const nameError = ref('');
-const addressError = ref('');
-const phoneError = ref('');
+const nameError = ref("");
+const addressError = ref("");
+const phoneError = ref("");
 // 判断是否为编辑
-const editingAddressId = ref('');
+const editingAddressId = ref("");
 const newAddress = ref({
-  user_id: '02',
-  name: '',
-  phone: '',
-  region: [''],
-  address: '',
+  user_id: "02",
+  name: "",
+  phone: "",
+  region: "",
+  address: "",
   isDefault: false,
 });
 
 // 示例地址选项
 const addressOptions = ref([
-  '成都市/郫都区',
-  '成都市/青羊区',
-  '成都市/金牛区',
-  '成都市/成华区',
-  '成都市/高新区',
-  '成都市/锦江区',
-  '成都市/温江区',
-  '成都市/双流区',
-  '成都市/龙泉驿区',
+  "成都市/郫都区",
+  "成都市/青羊区",
+  "成都市/金牛区",
+  "成都市/成华区",
+  "成都市/高新区",
+  "成都市/锦江区",
+  "成都市/温江区",
+  "成都市/双流区",
+  "成都市/龙泉驿区",
   // 添加更多选项
 ]);
 // 禁用过去的日期
@@ -263,20 +275,20 @@ const disabledDate = (time) => {
 };
 
 const timeSlots = [
-  { label: '09:00-12:00', value: 'morning' },
-  { label: '14:00-18:00', value: 'afternoon' },
-  { label: '18:00-21:00', value: 'evening' },
+  { label: "09:00-12:00", value: "morning" },
+  { label: "14:00-18:00", value: "afternoon" },
+  { label: "18:00-21:00", value: "evening" },
 ];
 
 // 获取地址数据
 const fetchAddress = async () => {
   try {
     await addressStore.fetchAddresses();
-    console.log('地址列表:', addressStore.addresses);
-    console.log('默认地址:', addressStore.defaultAddress);
+    console.log("地址列表:", addressStore.addresses);
+    console.log("默认地址:", addressStore.defaultAddress);
   } catch (error) {
-    console.error('获取地址失败:', error);
-    ElMessage.error('获取地址失败，请重试');
+    console.error("获取地址失败:", error);
+    ElMessage.error("获取地址失败，请重试");
   }
 };
 
@@ -284,7 +296,7 @@ const fetchAddress = async () => {
 watch(
   () => addressStore.addresses,
   (newAddresses) => {
-    console.log('地址列表变化:', newAddresses);
+    console.log("地址列表变化:", newAddresses);
   },
   { immediate: true }
 );
@@ -311,18 +323,18 @@ const finalPrice = computed(() => {
 // 创建订单
 const createOrder = async () => {
   if (!selectedDate.value || !selectedTime.value) {
-    ElMessage.error('请选择配送日期和时间');
+    ElMessage.error("请选择配送日期和时间");
     return;
   }
 
   if (!addressStore.addresses) {
-    ElMessage.warning('请先选择收货地址');
+    ElMessage.warning("请先选择收货地址");
     return;
   }
 
   try {
     const orderData = {
-      user_id: '02',
+      user_id: "02",
       items: cartStore.cartItems.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,
@@ -330,53 +342,53 @@ const createOrder = async () => {
       total_price: finalPrice.value,
       shipping_fee: shippingFee.value,
       delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
-      status: '进行中',
+      status: "进行中",
     };
 
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
-      ElMessage.success('订单创建成功');
+      ElMessage.success("订单创建成功");
       // 清空购物车
       await cartStore.clearCart();
       // 清空配送时间
-      selectedDate.value = '';
-      selectedTime.value = '';
+      selectedDate.value = "";
+      selectedTime.value = "";
       // 跳转到订单列表页
       // router.push('/order');
     }
   } catch (error) {
-    console.error('创建订单失败:', error);
-    ElMessage.error('创建订单失败，请稍后重试');
+    console.error("创建订单失败:", error);
+    ElMessage.error("创建订单失败，请稍后重试");
   }
 };
 
 // 处理日期选择
 const handleDateChange = (date) => {
   selectedDate.value = date;
-  console.log('选择的日期:', date);
+  console.log("选择的日期:", date);
 };
 
 // 处理时间选择
 const handleTimeSelect = (time) => {
   selectedTime.value = time;
-  console.log('选择的时间:', time);
+  console.log("选择的时间:", time);
 };
 
 // 获取时间段的显示标签
 const getTimeLabel = (timeValue) => {
   const slot = timeSlots.find((slot) => slot.value === timeValue);
-  return slot ? slot.label : '';
+  return slot ? slot.label : "";
 };
 
 // 处理地址更新
 const handleAddressUpdate = async (updatedAddress) => {
   try {
     await addressStore.updateAddress(updatedAddress);
-    ElMessage.success('地址更新成功');
+    ElMessage.success("地址更新成功");
     await fetchAddress();
   } catch (error) {
-    console.error('更新地址失败:', error);
-    ElMessage.error('更新地址失败，请重试');
+    console.error("更新地址失败:", error);
+    ElMessage.error("更新地址失败，请重试");
   }
 };
 
@@ -396,16 +408,16 @@ async function setDefaultAddress(address) {
   try {
     await addressStore.setDefaultAddress(address.id);
   } catch (error) {
-    console.error('设置默认地址失败:', error);
+    console.error("设置默认地址失败:", error);
   }
 }
 
 // 收货人姓名校验
 const validateName = () => {
   if (newAddress.value.name.length > 25) {
-    nameError.value = '收货人姓名不能超过25个字符';
+    nameError.value = "收货人姓名不能超过25个字符";
   } else {
-    nameError.value = '';
+    nameError.value = "";
   }
 };
 
@@ -419,10 +431,10 @@ const validateAddress = () => {
     emojiPattern.test(newAddress.value.address)
   ) {
     addressError.value =
-      '详细地址长度需要在2-120个字符之间，且不能包含表情符号';
-    alert('详细地址长度需要在2-120个字符之间，且不能包含表情符号');
+      "详细地址长度需要在2-120个字符之间，且不能包含表情符号";
+    alert("详细地址长度需要在2-120个字符之间，且不能包含表情符号");
   } else {
-    addressError.value = '';
+    addressError.value = "";
   }
 };
 
@@ -430,9 +442,9 @@ const validateAddress = () => {
 const validatePhone = () => {
   const phonePattern = /^[0-9]{10,11}$/; // 假设电话号码为10到11位数字
   if (!phonePattern.test(newAddress.value.phone)) {
-    phoneError.value = '请输入有效的电话号码';
+    phoneError.value = "请输入有效的电话号码";
   } else {
-    phoneError.value = '';
+    phoneError.value = "";
   }
 };
 
@@ -467,17 +479,17 @@ async function addNewAddress() {
     }
 
     showNewAddressModal.value = false;
-    editingAddressId.value = '';
+    editingAddressId.value = "";
     newAddress.value = {
-      user_id: '02',
-      name: '',
-      phone: '',
-      region: [''],
-      address: '',
+      user_id: "02",
+      name: "",
+      phone: "",
+      region: "",
+      address: "",
       isDefault: false,
     };
   } catch (error) {
-    console.error('保存地址失败:', error);
+    console.error("保存地址失败:", error);
   }
 }
 </script>
@@ -839,7 +851,7 @@ textarea::placeholder {
 label {
   color: #424443;
 }
-input[type='checkbox'] {
+input[type="checkbox"] {
   width: 18px;
   height: 18px;
   margin: 0 10px;

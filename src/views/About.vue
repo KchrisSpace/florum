@@ -16,23 +16,23 @@
     <!-- 服务特点 -->
     <div class="features">
       <div class="feature-item">
-        <img src="../assets/free-shipping.svg" alt="免费配送" />
-        <p>免费配送</p>
-        <span>满99元免配送费</span>
+        <img src="/public/about/single-delivery.png" alt="单件配送" />
+        <p>单件配送</p>
+        <span>无起送价</span>
       </div>
       <div class="feature-item">
-        <img src="../assets/guarantee.svg" alt="品质保证" />
-        <p>15天无理由退换</p>
-        <span>为确保品质</span>
+        <img src="/public/about/buy-safe.png" alt="购物无忧" />
+        <p>购物无忧</p>
+        <span>确保品质</span>
       </div>
       <div class="feature-item">
-        <img src="../assets/delivery.svg" alt="闪电发货" />
+        <img src="/public/about/fast-delivery.png" alt="闪电发货" />
         <p>闪电发货</p>
         <span>极速送达</span>
       </div>
       <div class="feature-item">
-        <img src="../assets/service.svg" alt="售后无忧" />
-        <p>售后无忧</p>
+        <img src="/public/about/service.png" alt="贴心服务" />
+        <p>顾客至上</p>
         <span>贴心服务</span>
       </div>
     </div>
@@ -116,6 +116,7 @@ import Header2 from "../components/Header2.vue";
   width: 50px;
   height: 50px;
   margin-bottom: 5px;
+  opacity: 0.5;
 }
 
 .feature-item p {
