@@ -27,7 +27,7 @@
         <button
           type="button"
           @click="triggerFileInput"
-          class="text-center mb-0 mt-2 hover:text-font-primary transition-colors text-sm"
+          class="update-avatar-btn text-center  mb-0 mt-2 hover:text-font-primary transition-colors"
           :disabled="isLoading">
           更换头像
         </button>
@@ -423,5 +423,9 @@ input::placeholder {
 
 .form-radio:focus {
   box-shadow: 0 0 0 2px rgba(242, 99, 113, 0.2);
+}
+.update-avatar-btn {
+  font-size: 12px;
+  color: #f26371;
 }
 </style>

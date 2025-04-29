@@ -20,7 +20,7 @@
         @click="changeView('UserAddress')">
         地址
       </button>
-      <button>退出登录</button>
+      <button @click="handleLogout">退出登录</button>
     </div>
     <!-- 右侧显示内容 -->
     <div class="w-full ml-10 h-screen pb-10 px-4 bg-white overflow-y-scroll">
@@ -38,35 +38,54 @@ export default {
 };
 </script>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import Header from '/src/components/Header.vue';
 import UserDetails from './components/user-details.vue';
 import UserAddress from './components/user-address/user-address.vue';
 import UserOrders from './components/user-orders.vue';
+
+const router = useRouter();
+const route = useRoute();
 const currentView = ref('UserDetails');
 const selectedButton = ref('UserDetails');
-function changeView(view) {
-  currentView.value = view;
+
+// 根据路由参数初始化选中的按钮
+onMounted(() => {
+  const view = route.query.view || 'UserDetails';
   selectedButton.value = view;
-  // console.log(currentView.value);
-}
+  currentView.value = view;
+});
+
+// 切换视图
+const changeView = (view) => {
+  selectedButton.value = view;
+  currentView.value = view;
+  router.push({
+    path: '/user',
+    query: { view },
+  });
+};
+
+// 处理退出登录
+const handleLogout = () => {
+  // 清除用户信息
+  localStorage.removeItem('currentUser');
+  // 跳转到登录页
+  router.push('/login');
+};
 </script>
 <style scoped>
 button {
-  padding: 10px 0;
-  padding-left: 20px;
-  width: 100%;
-  transition: color 0.3s;
+  padding: 10px;
   text-align: left;
-  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 .selected {
   color: #f26371;
- background: rgba(251, 228, 233, 0.6);
-  
+  font-weight: bold;
 }
-button:hover{
-  background: rgba(251, 228, 233, 0.6);
+button:hover {
+  color: #f26371;
 }
-
 </style>
