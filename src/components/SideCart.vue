@@ -42,8 +42,8 @@
         <span class="total-price">¥ {{ totalPrice }}</span>
       </div>
       <div class="action-buttons">
-        <button class="checkout-btn primary" @click="goToPayment">
-          前往支付
+        <button class="checkout-btn primary" @click="goToCreateOrder">
+          去创建订单
         </button>
         <button class="checkout-btn secondary" @click="goToCart">
           购物车查看
@@ -102,8 +102,8 @@ const removeItem = (item) => {
 };
 
 // 路由跳转
-const goToPayment = () => {
-  router.push("/payment");
+const goToCreateOrder = () => {
+  router.push("/create-order");
 };
 
 const goToCart = () => {

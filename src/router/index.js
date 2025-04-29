@@ -15,7 +15,6 @@ import Orders from "../admin/views/Orders.vue";
 import Categories from "../admin/views/Categories.vue";
 import Suggestion from "../admin/views/Suggestion.vue";
 
-
 // 路由配置
 const routes = [
   {
@@ -55,7 +54,7 @@ const routes = [
   {
     path: "/create-order",
     name: "CreateOrder",
-    component: () => import("../views/CreatOrder.vue"),
+    component: () => import("../views/CreateOrder.vue"),
   },
   {
     path: "/custom",

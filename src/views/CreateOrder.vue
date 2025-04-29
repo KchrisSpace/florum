@@ -393,12 +393,19 @@ const handleAddressUpdate = async (updatedAddress) => {
 };
 
 onMounted(async () => {
-  // 获取购物车数据
-  await cartStore.fetchCartData();
-  cartItems.value = [...cartStore.cartItems];
+  try {
+    // 确保购物车数据已加载
+    if (!cartStore.cartItems.length) {
+      await cartStore.fetchCartData();
+    }
+    cartItems.value = [...cartStore.cartItems];
 
-  // 获取地址数据
-  await fetchAddress();
+    // 获取地址数据
+    await fetchAddress();
+  } catch (error) {
+    console.error("初始化数据失败:", error);
+    ElMessage.error("加载数据失败，请重试");
+  }
 });
 // 设置默认地址
 async function setDefaultAddress(address) {
