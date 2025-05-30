@@ -7,28 +7,24 @@
           <el-input
             v-model="searchForm.orderNo"
             placeholder="请输入订单号"
-            clearable
-          />
+            clearable />
         </el-form-item>
         <el-form-item label="用户名">
           <el-input
             v-model="searchForm.username"
             placeholder="请输入用户名"
-            clearable
-          />
+            clearable />
         </el-form-item>
         <el-form-item label="订单状态">
           <el-select
             v-model="searchForm.status"
             placeholder="请选择状态"
-            clearable
-          >
+            clearable>
             <el-option
               v-for="item in orderStatus"
               :key="item.value"
               :label="item.label"
-              :value="item.value"
-            />
+              :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="下单时间">
@@ -38,8 +34,7 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            value-format="YYYY-MM-DD"
-          />
+            value-format="YYYY-MM-DD" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">
@@ -72,45 +67,48 @@
         :data="orderList"
         style="width: 100%"
         v-loading="loading"
-        @selection-change="handleSelectionChange"
-      >
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="orderNo" label="订单号" width="180" />
+        <el-table-column prop="id" label="订单号" width="180" />
         <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="totalAmount" label="订单金额">
+        <el-table-column prop="total_price" label="订单金额">
           <template #default="{ row }">
-            ¥{{ formatNumber(row.totalAmount) }}
+            ¥{{ formatNumber(row.total_price) }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="订单状态">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
-              {{ getStatusLabel(row.status) }}
-            </el-tag>
+            <el-select v-model="row.status" @change="handleStatusChange(row)">
+              <el-option
+                v-for="item in orderStatus"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value" />
+            </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="paymentMethod" label="支付方式" />
-        <el-table-column prop="createTime" label="下单时间" />
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column prop="created_at" label="下单时间" />
+        <el-table-column label="操作" width="250" fixed="right">
           <template #default="{ row }">
             <el-button-group>
               <el-button type="primary" size="small" @click="handleDetail(row)">
                 详情
               </el-button>
+              <el-button type="info" size="small" @click="handleUserInfo(row)">
+                用户信息
+              </el-button>
               <el-button
-                v-if="row.status === 'paid'"
+                v-if="row.status === '进行中'"
                 type="success"
                 size="small"
-                @click="handleShip(row)"
-              >
+                @click="handleShip(row)">
                 发货
               </el-button>
               <el-button
-                v-if="row.status === 'pending'"
+                v-if="row.status === '进行中'"
                 type="danger"
                 size="small"
-                @click="handleCancel(row)"
-              >
+                @click="handleCancel(row)">
                 取消
               </el-button>
             </el-button-group>
@@ -127,8 +125,7 @@
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
@@ -136,41 +133,47 @@
     <el-dialog v-model="detailDialogVisible" title="订单详情" width="800px">
       <el-descriptions :column="2" border>
         <el-descriptions-item label="订单号">{{
-          currentOrder.orderNo
+          currentOrder.id
         }}</el-descriptions-item>
         <el-descriptions-item label="下单时间">{{
-          currentOrder.createTime
+          currentOrder.created_at
         }}</el-descriptions-item>
         <el-descriptions-item label="用户名">{{
           currentOrder.username
         }}</el-descriptions-item>
         <el-descriptions-item label="订单状态">
           <el-tag :type="getStatusType(currentOrder.status)">
-            {{ getStatusLabel(currentOrder.status) }}
+            {{ currentOrder.status }}
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="收货人">{{
-          currentOrder.receiverName
+          currentOrder.user_info?.address
         }}</el-descriptions-item>
         <el-descriptions-item label="联系电话">{{
-          currentOrder.receiverPhone
+          currentOrder.user_info?.phone
         }}</el-descriptions-item>
-        <el-descriptions-item label="收货地址" :span="2">
-          {{ currentOrder.receiverAddress }}
-        </el-descriptions-item>
       </el-descriptions>
 
       <el-table :data="currentOrder.items" style="margin-top: 20px">
-        <el-table-column prop="productName" label="商品名称" />
-        <el-table-column prop="price" label="单价">
+        <el-table-column prop="product_name" label="商品名称" />
+        <el-table-column label="商品图片" width="100">
           <template #default="{ row }">
-            ¥{{ formatNumber(row.price) }}
+            <el-image
+              :src="row.product_image"
+              :preview-src-list="[row.product_image]"
+              fit="cover"
+              style="width: 50px; height: 50px" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="single_price" label="单价">
+          <template #default="{ row }">
+            ¥{{ formatNumber(row.single_price) }}
           </template>
         </el-table-column>
         <el-table-column prop="quantity" label="数量" width="100" />
         <el-table-column label="小计">
           <template #default="{ row }">
-            ¥{{ formatNumber(row.price * row.quantity) }}
+            ¥{{ formatNumber(row.single_price * row.quantity) }}
           </template>
         </el-table-column>
       </el-table>
@@ -178,7 +181,7 @@
       <div class="order-total">
         <span>订单总额：</span>
         <span class="amount"
-          >¥{{ formatNumber(currentOrder.totalAmount) }}</span
+          >¥{{ formatNumber(currentOrder.total_price) }}</span
         >
       </div>
 
@@ -189,14 +192,36 @@
       </template>
     </el-dialog>
 
+    <!-- 用户信息对话框 -->
+    <el-dialog v-model="userInfoDialogVisible" title="用户信息" width="500px">
+      <el-descriptions :column="1" border>
+        <el-descriptions-item label="用户名">
+          {{ currentUser.username }}
+        </el-descriptions-item>
+        <el-descriptions-item label="邮箱">
+          {{ currentUser.user_info?.email }}
+        </el-descriptions-item>
+        <el-descriptions-item label="电话">
+          {{ currentUser.user_info?.phone }}
+        </el-descriptions-item>
+        <el-descriptions-item label="地址">
+          {{ currentUser.user_info?.address }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="userInfoDialogVisible = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
     <!-- 发货对话框 -->
     <el-dialog v-model="shipDialogVisible" title="订单发货" width="500px">
       <el-form
         ref="shipFormRef"
         :model="shipForm"
         :rules="shipRules"
-        label-width="100px"
-      >
+        label-width="100px">
         <el-form-item label="物流公司" prop="company">
           <el-select v-model="shipForm.company" placeholder="请选择物流公司">
             <el-option label="顺丰快递" value="SF" />
@@ -208,8 +233,7 @@
         <el-form-item label="物流单号" prop="trackingNo">
           <el-input
             v-model="shipForm.trackingNo"
-            placeholder="请输入物流单号"
-          />
+            placeholder="请输入物流单号" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -223,24 +247,22 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import { Search, Refresh, Download, Van } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { Search, Refresh, Download, Van } from '@element-plus/icons-vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 // 订单状态选项
 const orderStatus = [
-  { value: "pending", label: "待付款" },
-  { value: "paid", label: "待发货" },
-  { value: "shipped", label: "已发货" },
-  { value: "completed", label: "已完成" },
-  { value: "cancelled", label: "已取消" },
+  { value: '进行中', label: '进行中' },
+  { value: '已完成', label: '已完成' },
+  { value: '已取消', label: '已取消' },
 ];
 
 // 搜索表单
 const searchForm = reactive({
-  orderNo: "",
-  username: "",
-  status: "",
+  orderNo: '',
+  username: '',
+  status: '',
   dateRange: [],
 });
 
@@ -256,26 +278,31 @@ const selectedOrders = ref([]);
 const detailDialogVisible = ref(false);
 const currentOrder = ref({});
 
+// 用户信息
+const userInfoDialogVisible = ref(false);
+const currentUser = ref({});
+
 // 发货表单
 const shipDialogVisible = ref(false);
 const shipFormRef = ref(null);
 const shipForm = reactive({
-  company: "",
-  trackingNo: "",
-  orderId: "",
+  company: '',
+  trackingNo: '',
+  orderId: '',
 });
 
 const shipRules = {
-  company: [{ required: true, message: "请选择物流公司", trigger: "change" }],
+  company: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
   trackingNo: [
-    { required: true, message: "请输入物流单号", trigger: "blur" },
-    { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" },
+    { required: true, message: '请输入物流单号', trigger: 'blur' },
+    { min: 5, max: 20, message: '长度在 5 到 20 个字符', trigger: 'blur' },
   ],
 };
 
 // 格式化数字
 const formatNumber = (num) => {
-  return num.toLocaleString("zh-CN", {
+  if (num === undefined || num === null) return '0.00';
+  return num.toLocaleString('zh-CN', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -284,54 +311,70 @@ const formatNumber = (num) => {
 // 获取状态标签类型
 const getStatusType = (status) => {
   const map = {
-    pending: "warning",
-    paid: "primary",
-    shipped: "success",
-    completed: "info",
-    cancelled: "danger",
+    进行中: 'warning',
+    已完成: 'success',
+    已取消: 'danger',
   };
-  return map[status] || "info";
-};
-
-// 获取状态标签文本
-const getStatusLabel = (status) => {
-  const item = orderStatus.find((item) => item.value === status);
-  return item ? item.label : status;
+  return map[status] || 'info';
 };
 
 // 获取订单列表
 const fetchOrderList = async () => {
   loading.value = true;
   try {
-    // TODO: 调用后端API获取订单列表
-    // const response = await fetch('/api/orders')
-    // const data = await response.json()
-    // 模拟数据
-    orderList.value = [
-      {
-        id: 1,
-        orderNo: "DD20240320001",
-        username: "张三",
-        totalAmount: 299.0,
-        status: "paid",
-        paymentMethod: "微信支付",
-        createTime: "2024-03-20 10:00:00",
-        receiverName: "张三",
-        receiverPhone: "13800138000",
-        receiverAddress: "北京市朝阳区xxx街道xxx号",
-        items: [
-          {
-            productName: "红玫瑰",
-            price: 99.0,
-            quantity: 3,
-          },
-        ],
-      },
-    ];
-    total.value = 100;
+    const response = await fetch('http://localhost:3000/normal_orders');
+    if (!response.ok) {
+      throw new Error(
+        `获取订单列表失败: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    console.log('获取到的订单数据:', data);
+
+    // 确保数据是数组
+    if (!Array.isArray(data)) {
+      console.error('返回的数据不是数组:', data);
+      orderList.value = [];
+      total.value = 0;
+      return;
+    }
+
+    // 应用搜索过滤
+    let filteredData = data;
+    if (searchForm.orderNo) {
+      filteredData = filteredData.filter((order) =>
+        order.id.toLowerCase().includes(searchForm.orderNo.toLowerCase())
+      );
+    }
+    if (searchForm.username) {
+      filteredData = filteredData.filter((order) =>
+        order.username.toLowerCase().includes(searchForm.username.toLowerCase())
+      );
+    }
+    if (searchForm.status) {
+      filteredData = filteredData.filter(
+        (order) => order.status === searchForm.status
+      );
+    }
+    if (searchForm.dateRange && searchForm.dateRange.length === 2) {
+      const [startDate, endDate] = searchForm.dateRange;
+      filteredData = filteredData.filter((order) => {
+        const orderDate = order.created_at?.split('T')[0] || '';
+        return orderDate >= startDate && orderDate <= endDate;
+      });
+    }
+
+    // 分页处理
+    total.value = filteredData.length;
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    orderList.value = filteredData.slice(start, end);
   } catch (error) {
-    console.error("获取订单列表失败:", error);
-    ElMessage.error("获取订单列表失败");
+    console.error('获取订单列表失败:', error);
+    ElMessage.error(error.message || '获取订单列表失败');
+    orderList.value = [];
+    total.value = 0;
   } finally {
     loading.value = false;
   }
@@ -346,7 +389,7 @@ const handleSearch = () => {
 // 重置搜索
 const resetSearch = () => {
   Object.keys(searchForm).forEach((key) => {
-    searchForm[key] = key === "dateRange" ? [] : "";
+    searchForm[key] = key === 'dateRange' ? [] : '';
   });
   handleSearch();
 };
@@ -373,30 +416,64 @@ const handleDetail = (row) => {
   detailDialogVisible.value = true;
 };
 
+// 查看用户信息
+const handleUserInfo = (row) => {
+  currentUser.value = { ...row };
+  userInfoDialogVisible.value = true;
+};
+
+// 修改订单状态
+const handleStatusChange = async (row) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/normal_orders/${row.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: row.status }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('更新订单状态失败');
+    }
+
+    ElMessage.success('更新状态成功');
+    fetchOrderList();
+  } catch (error) {
+    console.error('更新订单状态失败:', error);
+    ElMessage.error('更新状态失败');
+    // 恢复原状态
+    row.status = row._originalStatus;
+  }
+};
+
 // 发货处理
 const handleShip = (row) => {
   shipForm.orderId = row.id;
-  shipForm.company = "";
-  shipForm.trackingNo = "";
+  shipForm.company = '';
+  shipForm.trackingNo = '';
   shipDialogVisible.value = true;
 };
 
 // 批量发货
 const handleBatchShip = () => {
   if (selectedOrders.value.length === 0) {
-    ElMessage.warning("请选择要发货的订单");
+    ElMessage.warning('请选择要发货的订单');
     return;
   }
   const canShip = selectedOrders.value.every(
-    (order) => order.status === "paid"
+    (order) => order.status === '进行中'
   );
   if (!canShip) {
-    ElMessage.warning("只能对待发货的订单进行发货操作");
+    ElMessage.warning('只能对进行中的订单进行发货操作');
     return;
   }
-  shipForm.orderId = selectedOrders.value.map((order) => order.id).join(",");
-  shipForm.company = "";
-  shipForm.trackingNo = "";
+  shipForm.orderId = selectedOrders.value.map((order) => order.id).join(',');
+  shipForm.company = '';
+  shipForm.trackingNo = '';
   shipDialogVisible.value = true;
 };
 
@@ -407,17 +484,32 @@ const submitShipment = async () => {
   await shipFormRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        // TODO: 调用后端API处理发货
-        // await fetch('/api/orders/ship', {
-        //   method: 'POST',
-        //   body: JSON.stringify(shipForm)
-        // })
-        ElMessage.success("发货成功");
+        const orderIds = shipForm.orderId.split(',');
+        const response = await fetch(
+          'http://localhost:3000/orders/batch-ship',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              orderIds,
+              company: shipForm.company,
+              trackingNo: shipForm.trackingNo,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('发货失败');
+        }
+
+        ElMessage.success('发货成功');
         shipDialogVisible.value = false;
         fetchOrderList();
       } catch (error) {
-        console.error("发货失败:", error);
-        ElMessage.error("发货失败");
+        console.error('发货失败:', error);
+        ElMessage.error('发货失败');
       }
     }
   });
@@ -426,27 +518,79 @@ const submitShipment = async () => {
 // 取消订单
 const handleCancel = async (row) => {
   try {
-    await ElMessageBox.confirm("确定要取消该订单吗？", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
+    await ElMessageBox.confirm('确定要取消该订单吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
     });
-    // TODO: 调用后端API取消订单
-    // await fetch(`/api/orders/${row.id}/cancel`, { method: 'PUT' })
-    ElMessage.success("订单已取消");
+
+    const response = await fetch(
+      `http://localhost:3000/normal_orders/${row.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: '已取消' }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('取消订单失败');
+    }
+
+    ElMessage.success('取消成功');
     fetchOrderList();
   } catch (error) {
-    if (error !== "cancel") {
-      console.error("取消订单失败:", error);
-      ElMessage.error("取消订单失败");
+    if (error !== 'cancel') {
+      console.error('取消订单失败:', error);
+      ElMessage.error('取消失败');
     }
   }
 };
 
 // 导出订单
-const handleExport = () => {
-  ElMessage.success("订单导出功能待实现");
+const handleExport = async () => {
+  try {
+    const params = new URLSearchParams({
+      ...searchForm,
+      startDate: searchForm.dateRange?.[0] || '',
+      endDate: searchForm.dateRange?.[1] || '',
+    });
+
+    const response = await fetch(
+      `http://localhost:3000/orders/export?${params.toString()}`
+    );
+    if (!response.ok) {
+      throw new Error('导出失败');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `订单列表_${new Date().toLocaleDateString()}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    ElMessage.success('导出成功');
+  } catch (error) {
+    console.error('导出失败:', error);
+    ElMessage.error('导出失败');
+  }
 };
+
+// 组件卸载前的清理
+onBeforeUnmount(() => {
+  // 清理所有响应式数据
+  orderList.value = [];
+  selectedOrders.value = [];
+  currentOrder.value = {};
+  currentUser.value = {};
+  loading.value = false;
+});
 
 onMounted(() => {
   fetchOrderList();

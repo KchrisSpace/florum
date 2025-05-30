@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, onUnmounted } from "vue";
+import { ref, reactive, onMounted, watch, onUnmounted } from 'vue';
 import {
   User,
   ShoppingCart,
@@ -115,8 +115,9 @@ import {
   Money,
   ArrowUp,
   ArrowDown,
-} from "@element-plus/icons-vue";
-import * as echarts from "echarts";
+} from '@element-plus/icons-vue';
+import * as echarts from 'echarts';
+import { ElMessage } from 'element-plus';
 
 // 统计数据
 const statistics = ref({
@@ -131,11 +132,11 @@ const statistics = ref({
 });
 
 // 时间范围选择
-const timeRange = ref("week");
+const timeRange = ref('week');
 
 // 格式化数字
 const formatNumber = (num) => {
-  return num.toLocaleString("zh-CN", {
+  return num.toLocaleString('zh-CN', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -144,19 +145,19 @@ const formatNumber = (num) => {
 // 销售趋势图配置
 const salesChartOption = ref({
   tooltip: {
-    trigger: "axis",
+    trigger: 'axis',
   },
   xAxis: {
-    type: "category",
-    data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+    type: 'category',
+    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
   },
   yAxis: {
-    type: "value",
+    type: 'value',
   },
   series: [
     {
-      name: "销售额",
-      type: "line",
+      name: '销售额',
+      type: 'line',
       smooth: true,
       data: [3000, 4500, 5000, 7000, 6500, 8000, 9000],
       areaStyle: {
@@ -172,22 +173,22 @@ const salesChartOption = ref({
 // 商品分类占比图配置
 const categoryChartOption = ref({
   tooltip: {
-    trigger: "item",
+    trigger: 'item',
   },
   legend: {
-    orient: "vertical",
+    orient: 'vertical',
     right: 10,
-    top: "center",
+    top: 'center',
   },
   series: [
     {
-      name: "商品分类",
-      type: "pie",
-      radius: ["40%", "70%"],
+      name: '商品分类',
+      type: 'pie',
+      radius: ['40%', '70%'],
       avoidLabelOverlap: false,
       itemStyle: {
         borderRadius: 10,
-        borderColor: "#fff",
+        borderColor: '#fff',
         borderWidth: 2,
       },
       label: {
@@ -196,19 +197,19 @@ const categoryChartOption = ref({
       emphasis: {
         label: {
           show: true,
-          fontSize: "14",
-          fontWeight: "bold",
+          fontSize: '14',
+          fontWeight: 'bold',
         },
       },
       labelLine: {
         show: false,
       },
       data: [
-        { value: 1048, name: "鲜花" },
-        { value: 735, name: "绿植" },
-        { value: 580, name: "花艺" },
-        { value: 484, name: "礼品" },
-        { value: 300, name: "其他" },
+        { value: 1048, name: '鲜花' },
+        { value: 735, name: '绿植' },
+        { value: 580, name: '花艺' },
+        { value: 484, name: '礼品' },
+        { value: 300, name: '其他' },
       ],
     },
   ],
@@ -223,13 +224,82 @@ let categoryChart = null;
 // 获取统计数据
 const fetchStatistics = async () => {
   try {
-    // TODO: 调用后端API获取实际数据
-    // const response = await fetch('/api/statistics')
-    // statistics.value = await response.json()
+    const response = await fetch('http://localhost:3000/statistics');
+    statistics.value = await response.json();
   } catch (error) {
-    console.error("获取统计数据失败:", error);
+    console.error('获取统计数据失败:', error);
+    ElMessage.error('获取统计数据失败');
   }
 };
+
+// 获取销售趋势数据
+const fetchSalesData = async (range) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/statistics/sales?range=${range}`
+    );
+    const { data } = await response.json();
+    salesChartOption.value.series[0].data = data;
+
+    // 更新x轴标签
+    if (range === 'week') {
+      salesChartOption.value.xAxis.data = [
+        '周一',
+        '周二',
+        '周三',
+        '周四',
+        '周五',
+        '周六',
+        '周日',
+      ];
+    } else if (range === 'month') {
+      salesChartOption.value.xAxis.data = ['第1周', '第2周', '第3周', '第4周'];
+    } else {
+      salesChartOption.value.xAxis.data = [
+        '1月',
+        '2月',
+        '3月',
+        '4月',
+        '5月',
+        '6月',
+        '7月',
+        '8月',
+        '9月',
+        '10月',
+        '11月',
+        '12月',
+      ];
+    }
+
+    if (salesChart) {
+      salesChart.setOption(salesChartOption.value);
+    }
+  } catch (error) {
+    console.error('获取销售趋势数据失败:', error);
+    ElMessage.error('获取销售趋势数据失败');
+  }
+};
+
+// 获取商品分类占比数据
+const fetchCategoryData = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/statistics/categories');
+    const { data } = await response.json();
+    categoryChartOption.value.series[0].data = data;
+
+    if (categoryChart) {
+      categoryChart.setOption(categoryChartOption.value);
+    }
+  } catch (error) {
+    console.error('获取分类占比数据失败:', error);
+    ElMessage.error('获取分类占比数据失败');
+  }
+};
+
+// 监听时间范围变化，更新销售趋势图
+watch(timeRange, (newValue) => {
+  fetchSalesData(newValue);
+});
 
 // 初始化图表
 const initCharts = () => {
@@ -246,53 +316,6 @@ const initCharts = () => {
   }
 };
 
-// 监听时间范围变化，更新销售趋势图
-watch(timeRange, () => {
-  // 这里可以根据时间范围更新数据
-  // 模拟不同时间范围的数据
-  if (timeRange.value === "week") {
-    salesChartOption.value.xAxis.data = [
-      "周一",
-      "周二",
-      "周三",
-      "周四",
-      "周五",
-      "周六",
-      "周日",
-    ];
-    salesChartOption.value.series[0].data = [
-      3000, 4500, 5000, 7000, 6500, 8000, 9000,
-    ];
-  } else if (timeRange.value === "month") {
-    salesChartOption.value.xAxis.data = ["第1周", "第2周", "第3周", "第4周"];
-    salesChartOption.value.series[0].data = [20000, 25000, 30000, 35000];
-  } else {
-    salesChartOption.value.xAxis.data = [
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月",
-    ];
-    salesChartOption.value.series[0].data = [
-      30000, 28000, 35000, 40000, 42000, 50000, 55000, 60000, 65000, 70000,
-      75000, 80000,
-    ];
-  }
-
-  // 更新图表
-  if (salesChart) {
-    salesChart.setOption(salesChartOption.value);
-  }
-});
-
 // 监听窗口大小变化，调整图表大小
 const resizeCharts = () => {
   if (salesChart) {
@@ -305,17 +328,19 @@ const resizeCharts = () => {
 
 onMounted(() => {
   fetchStatistics();
+  fetchSalesData(timeRange.value);
+  fetchCategoryData();
 
   // 初始化图表
   initCharts();
 
   // 添加窗口大小变化监听
-  window.addEventListener("resize", resizeCharts);
+  window.addEventListener('resize', resizeCharts);
 });
 
 // 组件卸载时，移除事件监听并销毁图表实例
 onUnmounted(() => {
-  window.removeEventListener("resize", resizeCharts);
+  window.removeEventListener('resize', resizeCharts);
   if (salesChart) {
     salesChart.dispose();
   }

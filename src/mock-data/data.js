@@ -20,7 +20,6 @@ export let login = [
         password: '000000',
       },
     ],
-    id: 'e41b',
   },
 ];
 export let user_update = [
@@ -720,5 +719,80 @@ export let carousel = [
   {
     id: '4',
     img: '/carousel-img/carousel-4.png',
+  },
+];
+
+export let users = [
+  {
+    id: '1',
+    username: 'admin',
+    email: 'admin@example.com',
+    phone: '13800138000',
+    createTime: '2024-04-25T21:56:28.881Z',
+    status: 'active',
+    role_id: 1,
+    password: '000000',
+  },
+  {
+    id: '2',
+    username: 'user',
+    email: 'user@example.com',
+    phone: '13800138001',
+    createTime: '2024-04-25T22:58:11.068Z',
+    status: 'active',
+    role_id: 4,
+    password: '000000',
+  },
+  {
+    id: '3',
+    username: 'user2',
+    email: 'user2@example.com',
+    phone: '13800138002',
+    createTime: '2024-04-25T23:59:59.999Z',
+    status: 'active',
+    role_id: 4,
+  },
+  {
+    id: '4',
+    username: 'user3',
+    email: 'user3@example.com',
+    phone: '13800138003',
+    createTime: '2024-04-26T00:00:00.000Z',
+    status: 'active',
+    role_id: 4,
+  },
+];
+
+export let roles = [
+  {
+    id: 1,
+    name: '超级管理员',
+    permissions: ['all'],
+  },
+  {
+    id: 2,
+    name: '商品管理员',
+    permissions: ['product:read', 'product:write'],
+  },
+  {
+    id: 3,
+    name: '订单管理员',
+    permissions: ['order:read', 'order:write'],
+  },
+  {
+    id: 4,
+    name: '普通用户',
+    permissions: ['read'],
+  },
+];
+
+export let userLogs = [
+  {
+    id: '1',
+    user_id: '1',
+    action: 'LOGIN',
+    target: 'USER',
+    details: '用户登录',
+    created_at: '2024-04-25T21:56:28.881Z',
   },
 ];

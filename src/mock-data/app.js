@@ -15,6 +15,9 @@ import {
   feedback,
   carousel,
   wishlist,
+  users,
+  roles,
+  userLogs,
 } from './data.js';
 
 const app = express();
@@ -51,10 +54,111 @@ const upload = multer({
   },
 });
 
-// 获取所有用户（注册页用）
+// 获取用户列表
 app.get('/users', (req, res) => {
-  res.json(login);
-  console.log('所有用户', login);
+  const { username, email, status } = req.query;
+  let filteredUsers = [...users];
+
+  if (username) {
+    filteredUsers = filteredUsers.filter((user) =>
+      user.username.toLowerCase().includes(username.toLowerCase())
+    );
+  }
+  if (email) {
+    filteredUsers = filteredUsers.filter((user) =>
+      user.email.toLowerCase().includes(email.toLowerCase())
+    );
+  }
+  if (status) {
+    filteredUsers = filteredUsers.filter((user) => user.status === status);
+  }
+
+  res.json({
+    code: 200,
+    message: 'success',
+    data: filteredUsers,
+  });
+});
+
+// 获取单个用户
+app.get('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const user = users.find((u) => u.id === id);
+  if (!user) {
+    return res.status(404).json({
+      code: 404,
+      message: '用户未找到',
+      data: null,
+    });
+  }
+  res.json({
+    code: 200,
+    message: 'success',
+    data: user,
+  });
+});
+
+// 更新用户
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  const userIndex = users.findIndex((u) => u.id === id);
+
+  if (userIndex === -1) {
+    return res.status(404).json({
+      code: 404,
+      message: '用户未找到',
+      data: null,
+    });
+  }
+
+  users[userIndex] = { ...users[userIndex], ...updateData };
+  res.json({
+    code: 200,
+    message: '更新成功',
+    data: users[userIndex],
+  });
+});
+
+// 删除用户
+app.delete('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const userIndex = users.findIndex((u) => u.id === id);
+
+  if (userIndex === -1) {
+    return res.status(404).json({
+      code: 404,
+      message: '用户未找到',
+      data: null,
+    });
+  }
+
+  users.splice(userIndex, 1);
+  res.json({
+    code: 200,
+    message: '删除成功',
+    data: null,
+  });
+});
+
+// 获取角色列表
+app.get('/roles', (req, res) => {
+  res.json({
+    code: 200,
+    message: 'success',
+    data: roles,
+  });
+});
+
+// 获取用户操作日志
+app.get('/users/:id/logs', (req, res) => {
+  const { id } = req.params;
+  const logs = userLogs.filter((log) => log.user_id === id);
+  res.json({
+    code: 200,
+    message: 'success',
+    data: logs,
+  });
 });
 
 // 获取登录数据（登录页用）
