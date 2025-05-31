@@ -196,7 +196,7 @@ const fetchUserInfo = async () => {
   try {
     isLoading.value = true;
     const response = await axios.get(
-      `${API_URL}/user_update/${formData.value.user_id}`
+      `${API_URL}/users/${formData.value.user_id}`
     );
     const userData = response.data;
 
@@ -353,7 +353,7 @@ const handleSubmit = async () => {
 // 提取发送请求的逻辑
 const sendUpdateRequest = async (formDataToSend) => {
   return await axios.put(
-    `${API_URL}/user_update/${formData.value.user_id}`,
+    `${API_URL}/users/${formData.value.user_id}`,
     formDataToSend,
     {
       headers: {

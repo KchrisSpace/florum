@@ -9,18 +9,6 @@
             placeholder="请输入商品名称"
             clearable />
         </el-form-item>
-        <el-form-item label="商品分类">
-          <el-select
-            v-model="searchForm.category"
-            placeholder="请选择分类"
-            clearable>
-            <el-option
-              v-for="item in categories"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="价格区间">
           <el-input-number
             v-model="searchForm.minPrice"
@@ -77,7 +65,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="商品名称" />
-        <el-table-column prop="category" label="分类" />
         <el-table-column prop="price" label="价格">
           <template #default="{ row }">
             ¥{{ formatNumber(row.price) }}
@@ -134,15 +121,6 @@
         <el-form-item label="商品名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入商品名称" />
         </el-form-item>
-        <el-form-item label="商品分类" prop="category">
-          <el-select v-model="form.category" placeholder="请选择分类">
-            <el-option
-              v-for="item in categories"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="商品价格" prop="price">
           <el-input-number
             v-model="form.price"
@@ -151,11 +129,9 @@
             :step="0.1" />
         </el-form-item>
         <el-form-item label="商品库存" prop="stock">
-          <el-input-number
+          <el-input
             v-model="form.stock"
-            :min="0"
-            :precision="0"
-            :step="1" />
+            placeholder='请输入库存状态，如"充足"' />
         </el-form-item>
         <el-form-item label="商品图片" prop="image">
           <el-upload
@@ -189,6 +165,59 @@
         </span>
       </template>
     </el-dialog>
+
+    <!-- 订单详情对话框 -->
+    <el-dialog v-model="orderDialogVisible" title="订单详情" width="800px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="订单编号">{{
+          orderDetail.id
+        }}</el-descriptions-item>
+        <el-descriptions-item label="用户ID">{{
+          orderDetail.user_id
+        }}</el-descriptions-item>
+        <el-descriptions-item label="订单状态">
+          <el-tag
+            :type="orderDetail.status === '进行中' ? 'warning' : 'success'">
+            {{ orderDetail.status }}
+          </el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间">
+          {{ new Date(orderDetail.created_at).toLocaleString() }}
+        </el-descriptions-item>
+        <el-descriptions-item label="配送时间">
+          {{ new Date(orderDetail.delivery_time).toLocaleString() }}
+        </el-descriptions-item>
+        <el-descriptions-item label="运费">
+          ¥{{ orderDetail.shipping_fee }}
+        </el-descriptions-item>
+      </el-descriptions>
+
+      <div class="order-items mt-4">
+        <h3 class="text-lg font-medium mb-2">商品清单</h3>
+        <el-table :data="orderDetail.items" border style="width: 100%">
+          <el-table-column prop="product_id" label="商品ID" width="120" />
+          <el-table-column prop="quantity" label="数量" width="100" />
+          <el-table-column prop="single_price" label="单价">
+            <template #default="{ row }">
+              ¥{{ row.single_price || '暂无价格' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="小计">
+            <template #default="{ row }">
+              ¥{{ row.single_price * row.quantity || '暂无价格' }}
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <div class="order-total mt-4 text-right">
+        <p class="text-lg">
+          订单总额：<span class="text-red-500 font-bold"
+            >¥{{ orderDetail.total_price }}</span
+          >
+        </p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -196,19 +225,11 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 import { Search, Refresh, Download, Plus } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-
-// 商品分类选项
-const categories = [
-  { value: '手机', label: '手机' },
-  { value: '电脑', label: '电脑' },
-  { value: '配件', label: '配件' },
-  { value: '其他', label: '其他' },
-];
+import { API_URL } from '../../pages/const';
 
 // 搜索表单
 const searchForm = reactive({
   name: '',
-  category: '',
   minPrice: null,
   maxPrice: null,
 });
@@ -226,10 +247,10 @@ const dialogVisible = ref(false);
 const dialogType = ref('add');
 const formRef = ref(null);
 const form = reactive({
+  id: '',
   name: '',
-  category: '',
   price: 0,
-  stock: 0,
+  stock: '',
   image: '',
   description: '',
   status: '上架',
@@ -237,9 +258,8 @@ const form = reactive({
 
 const rules = {
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
-  category: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
   price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
-  stock: [{ required: true, message: '请输入商品库存', trigger: 'blur' }],
+  stock: [{ required: true, message: '请输入商品库存状态', trigger: 'blur' }],
   image: [{ required: true, message: '请上传商品图片', trigger: 'change' }],
   description: [{ required: true, message: '请输入商品描述', trigger: 'blur' }],
   status: [{ required: true, message: '请选择商品状态', trigger: 'change' }],
@@ -258,34 +278,39 @@ const formatNumber = (num) => {
 const fetchProductList = async () => {
   loading.value = true;
   try {
-    const response = await fetch('http://localhost:3000/products');
+    const response = await fetch(`${API_URL}/product_list`);
     if (!response.ok) {
       throw new Error(
         `获取商品列表失败: ${response.status} ${response.statusText}`
       );
     }
-
     const data = await response.json();
-    console.log('获取到的商品数据:', data);
 
-    // 确保数据是数组
-    if (!Array.isArray(data)) {
-      console.error('返回的数据不是数组:', data);
-      productList.value = [];
-      total.value = 0;
-      return;
-    }
+    // 适配后端商品数据结构
+    let mappedData = Array.isArray(data)
+      ? data.map((item) => ({
+          id: item.id,
+          name: item.title,
+          image:
+            Array.isArray(item.images) && item.images.length > 0
+              ? item.images[0]
+              : '',
+          price: item.price_info?.current_price ?? 0,
+          stock: item.sales_data?.stock_status || '',
+          sales: item.sales_data?.sales_count ?? 0,
+          description: item.promotion?.main_description || '',
+          status: item.promotion?.is_hot ? '上架' : '下架',
+          raw: item, // 保留原始数据
+        }))
+      : [];
 
-    // 应用搜索过滤
-    let filteredData = data;
+    // 搜索过滤
+    let filteredData = mappedData;
     if (searchForm.name) {
-      filteredData = filteredData.filter((product) =>
-        product.name.toLowerCase().includes(searchForm.name.toLowerCase())
-      );
-    }
-    if (searchForm.category) {
       filteredData = filteredData.filter(
-        (product) => product.category === searchForm.category
+        (product) =>
+          product.name &&
+          product.name.toLowerCase().includes(searchForm.name.toLowerCase())
       );
     }
     if (searchForm.minPrice !== null) {
@@ -299,7 +324,7 @@ const fetchProductList = async () => {
       );
     }
 
-    // 分页处理
+    // 分页
     total.value = filteredData.length;
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
@@ -348,8 +373,7 @@ const handleSelectionChange = (val) => {
 const handleAdd = () => {
   dialogType.value = 'add';
   Object.keys(form).forEach((key) => {
-    form[key] =
-      key === 'status' ? '上架' : key === 'price' || key === 'stock' ? 0 : '';
+    form[key] = key === 'status' ? '上架' : key === 'price' ? 0 : '';
   });
   dialogVisible.value = true;
 };
@@ -367,7 +391,7 @@ const handleEdit = (row) => {
 const handleToggleStatus = async (row) => {
   try {
     const newStatus = row.status === '上架' ? '下架' : '上架';
-    const response = await fetch(`http://localhost:3000/products/${row.id}`, {
+    const response = await fetch(`${API_URL}/product_list/${row.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -396,7 +420,7 @@ const handleDelete = async (row) => {
       type: 'warning',
     });
 
-    const response = await fetch(`http://localhost:3000/products/${row.id}`, {
+    const response = await fetch(`${API_URL}/product_list/${row.id}`, {
       method: 'DELETE',
     });
 
@@ -423,8 +447,8 @@ const submitForm = async () => {
       try {
         const url =
           dialogType.value === 'add'
-            ? 'http://localhost:3000/products'
-            : `http://localhost:3000/products/${form.id}`;
+            ? `${API_URL}/product_list`
+            : `${API_URL}/product_list/${form.id}`;
         const method = dialogType.value === 'add' ? 'POST' : 'PUT';
 
         const response = await fetch(url, {
@@ -480,7 +504,7 @@ const handleExport = async () => {
     });
 
     const response = await fetch(
-      `http://localhost:3000/products/export?${params.toString()}`
+      `${API_URL}/product_list/export?${params.toString()}`
     );
     if (!response.ok) {
       throw new Error('导出失败');
@@ -503,9 +527,27 @@ const handleExport = async () => {
   }
 };
 
+// 订单详情相关
+const orderDialogVisible = ref(false);
+const orderDetail = ref({
+  id: '',
+  user_id: '',
+  items: [],
+  total_price: 0,
+  shipping_fee: 0,
+  delivery_time: '',
+  status: '',
+  created_at: '',
+});
+
+// 显示订单详情
+const showOrderDetail = (order) => {
+  orderDetail.value = order;
+  orderDialogVisible.value = true;
+};
+
 // 组件卸载前的清理
 onBeforeUnmount(() => {
-  // 清理所有响应式数据
   productList.value = [];
   selectedProducts.value = [];
   loading.value = false;

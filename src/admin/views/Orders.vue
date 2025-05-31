@@ -70,7 +70,6 @@
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="订单号" width="180" />
-        <el-table-column prop="username" label="用户名" />
         <el-table-column prop="total_price" label="订单金额">
           <template #default="{ row }">
             ¥{{ formatNumber(row.total_price) }}
@@ -136,53 +135,54 @@
           currentOrder.id
         }}</el-descriptions-item>
         <el-descriptions-item label="下单时间">{{
-          currentOrder.created_at
+          new Date(currentOrder.created_at).toLocaleString()
         }}</el-descriptions-item>
-        <el-descriptions-item label="用户名">{{
-          currentOrder.username
+        <el-descriptions-item label="用户ID">{{
+          currentOrder.user_id
         }}</el-descriptions-item>
         <el-descriptions-item label="订单状态">
-          <el-tag :type="getStatusType(currentOrder.status)">
-            {{ currentOrder.status }}
-          </el-tag>
+          <el-tag :type="getStatusType(currentOrder.status)">{{
+            currentOrder.status
+          }}</el-tag>
         </el-descriptions-item>
+        <el-descriptions-item label="配送时间">{{
+          new Date(currentOrder.delivery_time).toLocaleString()
+        }}</el-descriptions-item>
+        <el-descriptions-item label="运费"
+          >¥{{ formatNumber(currentOrder.shipping_fee) }}</el-descriptions-item
+        >
         <el-descriptions-item label="收货人">{{
-          currentOrder.user_info?.address
+          currentOrder.address?.consignee
         }}</el-descriptions-item>
         <el-descriptions-item label="联系电话">{{
-          currentOrder.user_info?.phone
+          currentOrder.address?.phone
         }}</el-descriptions-item>
+        <el-descriptions-item label="收货地址" :span="2">
+          {{ currentOrder.address?.region }} {{ currentOrder.address?.detail }}
+        </el-descriptions-item>
       </el-descriptions>
 
       <el-table :data="currentOrder.items" style="margin-top: 20px">
-        <el-table-column prop="product_name" label="商品名称" />
-        <el-table-column label="商品图片" width="100">
-          <template #default="{ row }">
-            <el-image
-              :src="row.product_image"
-              :preview-src-list="[row.product_image]"
-              fit="cover"
-              style="width: 50px; height: 50px" />
-          </template>
-        </el-table-column>
-        <el-table-column prop="single_price" label="单价">
-          <template #default="{ row }">
-            ¥{{ formatNumber(row.single_price) }}
-          </template>
-        </el-table-column>
+        <el-table-column prop="product_id" label="商品ID" width="100" />
         <el-table-column prop="quantity" label="数量" width="100" />
         <el-table-column label="小计">
           <template #default="{ row }">
-            ¥{{ formatNumber(row.single_price * row.quantity) }}
+            ¥{{ formatNumber(row.quantity * (row.single_price || 0)) }}
           </template>
         </el-table-column>
       </el-table>
 
       <div class="order-total">
-        <span>订单总额：</span>
-        <span class="amount"
-          >¥{{ formatNumber(currentOrder.total_price) }}</span
-        >
+        <div class="total-item">
+          <span>运费：</span>
+          <span>¥{{ formatNumber(currentOrder.shipping_fee) }}</span>
+        </div>
+        <div class="total-item">
+          <span>订单总额：</span>
+          <span class="amount"
+            >¥{{ formatNumber(currentOrder.total_price) }}</span
+          >
+        </div>
       </div>
 
       <template #footer>
@@ -195,17 +195,42 @@
     <!-- 用户信息对话框 -->
     <el-dialog v-model="userInfoDialogVisible" title="用户信息" width="500px">
       <el-descriptions :column="1" border>
+        <el-descriptions-item label="用户ID">
+          {{ currentUser.id }}
+        </el-descriptions-item>
         <el-descriptions-item label="用户名">
-          {{ currentUser.username }}
+          {{ currentUser.user_name }}
+        </el-descriptions-item>
+        <el-descriptions-item label="性别">
+          {{ currentUser.user_gender }}
         </el-descriptions-item>
         <el-descriptions-item label="邮箱">
-          {{ currentUser.user_info?.email }}
+          {{ currentUser.user_email }}
         </el-descriptions-item>
         <el-descriptions-item label="电话">
-          {{ currentUser.user_info?.phone }}
+          {{ currentUser.user_phone }}
         </el-descriptions-item>
-        <el-descriptions-item label="地址">
-          {{ currentUser.user_info?.address }}
+        <el-descriptions-item label="头像">
+          <el-image
+            :src="currentUser.user_avatar"
+            :preview-src-list="[currentUser.user_avatar]"
+            fit="cover"
+            style="width: 100px; height: 100px; border-radius: 50%" />
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间">
+          {{ new Date(currentUser.created_at).toLocaleString() }}
+        </el-descriptions-item>
+        <el-descriptions-item label="更新时间">
+          {{ new Date(currentUser.updated_at).toLocaleString() }}
+        </el-descriptions-item>
+        <el-descriptions-item label="状态">
+          <el-tag
+            :type="currentUser.status === 'active' ? 'success' : 'danger'">
+            {{ currentUser.status === 'active' ? '正常' : '禁用' }}
+          </el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="角色ID">
+          {{ currentUser.role_id }}
         </el-descriptions-item>
       </el-descriptions>
       <template #footer>
@@ -349,7 +374,9 @@ const fetchOrderList = async () => {
     }
     if (searchForm.username) {
       filteredData = filteredData.filter((order) =>
-        order.username.toLowerCase().includes(searchForm.username.toLowerCase())
+        order.user_name
+          .toLowerCase()
+          .includes(searchForm.username.toLowerCase())
       );
     }
     if (searchForm.status) {
@@ -417,9 +444,46 @@ const handleDetail = (row) => {
 };
 
 // 查看用户信息
-const handleUserInfo = (row) => {
-  currentUser.value = { ...row };
-  userInfoDialogVisible.value = true;
+const handleUserInfo = async (row) => {
+  try {
+    console.log('正在获取用户信息，用户ID:', row.user_id);
+
+    const response = await fetch(`http://localhost:3000/users/${row.user_id}`);
+
+    if (!response.ok) {
+      console.error('API响应错误:', response.status, response.statusText);
+      throw new Error(
+        `获取用户信息失败: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log('API返回数据:', result);
+
+    if (result.code === 200 && result.data) {
+      // 确保data是单个用户对象
+      if (Array.isArray(result.data)) {
+        // 如果返回的是数组，取第一个匹配的用户
+        const user = result.data.find((u) => u.id === row.user_id);
+        if (user) {
+          currentUser.value = user;
+          userInfoDialogVisible.value = true;
+        } else {
+          throw new Error('未找到匹配的用户信息');
+        }
+      } else {
+        // 如果返回的是单个用户对象
+        currentUser.value = result.data;
+        userInfoDialogVisible.value = true;
+      }
+    } else {
+      console.error('API返回错误:', result);
+      throw new Error(result.message || '获取用户信息失败');
+    }
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    ElMessage.error(error.message || '获取用户信息失败');
+  }
 };
 
 // 修改订单状态
@@ -632,6 +696,10 @@ onMounted(() => {
   margin-top: 20px;
   text-align: right;
   font-size: 16px;
+}
+
+.order-total .total-item {
+  margin-bottom: 10px;
 }
 
 .order-total .amount {

@@ -1,27 +1,29 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
-import {
-  login,
-  user_update,
-  product_list,
-  cart,
-  product_comments,
-  article_comments,
-  articles,
-  addresses,
-  custom,
-  normal_orders,
-  feedback,
-  carousel,
-  wishlist,
-  users,
-  roles,
-  userLogs,
-} from './data.js';
+import { MongoClient, ObjectId } from 'mongodb';
 
 const app = express();
 const port = 3000;
+
+// MongoDB连接配置
+const uri =
+  'mongodb+srv://michieda4747:jCGqch1gokJO7yae@travel.28hubvd.mongodb.net/';
+const dbName = 'florum';
+
+// 创建MongoDB客户端
+const client = new MongoClient(uri);
+
+// 连接MongoDB
+async function connectToMongo() {
+  try {
+    await client.connect();
+    console.log('成功连接到MongoDB Atlas');
+    const db = client.db(dbName);
+  } catch (err) {
+    console.error('MongoDB连接错误:', err);
+  }
+}
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -30,10 +32,9 @@ app.use(cors());
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/avatars'); // 头像存放目录
+    cb(null, './public/uploads/avatars');
   },
   filename: function (req, file, cb) {
-    // 用用户ID+时间戳+原始扩展名命名
     const ext = file.originalname.split('.').pop();
     cb(null, `${req.params.user_id}_${Date.now()}.${ext}`);
   },
@@ -42,10 +43,9 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 限制文件大小为2MB
+    fileSize: 2 * 1024 * 1024,
   },
   fileFilter: (req, file, cb) => {
-    // 只接受图片文件
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -55,472 +55,830 @@ const upload = multer({
 });
 
 // 获取用户列表
-app.get('/users', (req, res) => {
-  const { username, email, status } = req.query;
-  let filteredUsers = [...users];
+app.get('/users', async (req, res) => {
+  try {
+    const { username, email, status } = req.query;
+    const db = client.db(dbName);
+    let query = {};
 
-  if (username) {
-    filteredUsers = filteredUsers.filter((user) =>
-      user.username.toLowerCase().includes(username.toLowerCase())
-    );
-  }
-  if (email) {
-    filteredUsers = filteredUsers.filter((user) =>
-      user.email.toLowerCase().includes(email.toLowerCase())
-    );
-  }
-  if (status) {
-    filteredUsers = filteredUsers.filter((user) => user.status === status);
-  }
+    if (username) {
+      query.username = { $regex: username, $options: 'i' };
+    }
+    if (email) {
+      query.email = { $regex: email, $options: 'i' };
+    }
+    if (status) {
+      query.status = status;
+    }
 
-  res.json({
-    code: 200,
-    message: 'success',
-    data: filteredUsers,
-  });
+    const users = await db.collection('users').find(query).toArray();
+    res.json({
+      code: 200,
+      message: 'success',
+      data: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
 // 获取单个用户
-app.get('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const user = users.find((u) => u.id === id);
-  if (!user) {
-    return res.status(404).json({
-      code: 404,
-      message: '用户未找到',
-      data: null,
+app.get('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+    const user = await db
+      .collection('users')
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!user) {
+      return res.status(404).json({
+        code: 404,
+        message: '用户未找到',
+        data: null,
+      });
+    }
+
+    res.json({
+      code: 200,
+      message: 'success',
+      data: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
     });
   }
-  res.json({
-    code: 200,
-    message: 'success',
-    data: user,
-  });
 });
 
 // 更新用户
-app.put('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const updateData = req.body;
-  const userIndex = users.findIndex((u) => u.id === id);
+app.put('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    const db = client.db(dbName);
 
-  if (userIndex === -1) {
-    return res.status(404).json({
-      code: 404,
-      message: '用户未找到',
-      data: null,
+    const result = await db
+      .collection('users')
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: 'after' }
+      );
+
+    if (!result.value) {
+      return res.status(404).json({
+        code: 404,
+        message: '用户未找到',
+        data: null,
+      });
+    }
+
+    res.json({
+      code: 200,
+      message: '更新成功',
+      data: result.value,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
     });
   }
-
-  users[userIndex] = { ...users[userIndex], ...updateData };
-  res.json({
-    code: 200,
-    message: '更新成功',
-    data: users[userIndex],
-  });
 });
 
 // 删除用户
-app.delete('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const userIndex = users.findIndex((u) => u.id === id);
+app.delete('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
 
-  if (userIndex === -1) {
-    return res.status(404).json({
-      code: 404,
-      message: '用户未找到',
+    const result = await db
+      .collection('users')
+      .findOneAndDelete({ _id: new ObjectId(id) });
+
+    if (!result.value) {
+      return res.status(404).json({
+        code: 404,
+        message: '用户未找到',
+        data: null,
+      });
+    }
+
+    res.json({
+      code: 200,
+      message: '删除成功',
       data: null,
     });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-
-  users.splice(userIndex, 1);
-  res.json({
-    code: 200,
-    message: '删除成功',
-    data: null,
-  });
 });
 
 // 获取角色列表
-app.get('/roles', (req, res) => {
-  res.json({
-    code: 200,
-    message: 'success',
-    data: roles,
-  });
+app.get('/roles', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const roles = await db.collection('roles').find().toArray();
+    res.json({
+      code: 200,
+      message: 'success',
+      data: roles,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
 // 获取用户操作日志
-app.get('/users/:id/logs', (req, res) => {
-  const { id } = req.params;
-  const logs = userLogs.filter((log) => log.user_id === id);
-  res.json({
-    code: 200,
-    message: 'success',
-    data: logs,
-  });
+app.get('/users/:id/logs', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+    const logs = await db
+      .collection('userLogs')
+      .find({ user_id: id })
+      .toArray();
+    res.json({
+      code: 200,
+      message: 'success',
+      data: logs,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
-// 获取登录数据（登录页用）
-app.get('/login', (req, res) => {
-  res.json(login);
-  console.log('登录数据', login);
+// 获取登录数据
+app.get('/login', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const loginData = await db.collection('login').find().toArray();
+    res.json(loginData);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
 // 获取商品列表
-app.get('/product_list', (req, res) => {
-  console.log('商品列表', product_list);
-  res.json(product_list);
+app.get('/product_list', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const products = await db.collection('product_list').find().toArray();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
 // 获取商品详情
-app.get('/product_list/:id', (req, res) => {
-  const { id } = req.params;
-  const product = product_list.find((item) => item.id === id);
-  if (!product) {
-    return res.status(404).json({ error: '商品未找到' });
-  }
-  res.json(product);
-});
+app.get('/product_list/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+    const product = await db.collection('product_list').findOne({ id });
 
-// GET /cart - 获取购物车中的所有商品
-app.get('/cart', (req, res) => {
-  console.log('cart详情', cart);
-  res.json(cart);
-});
-
-// POST /cart - 向购物车中添加商品
-app.post('/cart', (req, res) => {
-  const newItem = req.body;
-  cart.push(newItem);
-  res.status(201).json(newItem);
-  console.log('cart详情', cart);
-});
-
-// PUT /cart/:id - 更新购物车中指定商品的数量
-app.put('/cart/:id', (req, res) => {
-  const { id } = req.params;
-  const updatedItem = req.body;
-  const itemIndex = cart.findIndex((item) => item.id === id);
-  if (itemIndex !== -1) {
-    cart[itemIndex] = { ...cart[itemIndex], ...updatedItem };
-    res.json(cart[itemIndex]);
-  } else {
-    res.status(404).send('Item not found');
-  }
-  console.log('cart详情', cart);
-});
-
-// DELETE /cart/:id - 从购物车中删除指定商品
-app.delete('/cart/:id', (req, res) => {
-  const { id } = req.params;
-  if (id === 'clear') {
-    // 清空整个购物车
-    while (cart.length > 0) {
-      cart.pop();
+    if (!product) {
+      return res.status(404).json({ error: '商品未找到' });
     }
-    console.log('清空购物车后', cart);
-    res.json({ message: '购物车已清空' });
-  } else {
-    // 删除指定商品
-    const itemIndex = cart.findIndex((item) => item.id === id);
-    if (itemIndex !== -1) {
-      const deletedItem = cart.splice(itemIndex, 1);
-      res.json(deletedItem);
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 购物车相关接口
+app.get('/cart', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const cartItems = await db.collection('cart').find().toArray();
+    res.json(cartItems);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/cart', async (req, res) => {
+  try {
+    const newItem = req.body;
+    const db = client.db(dbName);
+    await db.collection('cart').insertOne(newItem);
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.put('/cart/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedItem = req.body;
+    const db = client.db(dbName);
+
+    const result = await db
+      .collection('cart')
+      .findOneAndUpdate(
+        { id },
+        { $set: updatedItem },
+        { returnDocument: 'after' }
+      );
+
+    if (!result.value) {
+      return res.status(404).send('Item not found');
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.delete('/cart/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+
+    if (id === 'clear') {
+      await db.collection('cart').deleteMany({});
+      res.json({ message: '购物车已清空' });
     } else {
-      res.status(404).send('Item not found');
+      const result = await db.collection('cart').findOneAndDelete({ id });
+      if (!result.value) {
+        return res.status(404).send('Item not found');
+      }
+      res.json(result.value);
     }
-    console.log('cart详情', cart);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
 });
 
-// GET /wishlist - 获取心愿单中的所有商品
-app.get('/wishlist', (req, res) => {
-  console.log('wishlist详情', wishlist);
-  res.json(wishlist);
-});
-
-// POST /wishlist - 向心愿单中添加商品
-app.post('/wishlist', (req, res) => {
-  const newItem = req.body;
-  wishlist.push(newItem);
-  res.status(201).json(newItem);
-  console.log('wishlist详情', wishlist);
-});
-
-// PUT /wishlist/:id - 更新心愿单中指定商品的数量
-app.put('/wishlist/:id', (req, res) => {
-  const { id } = req.params;
-  const updatedItem = req.body;
-  const itemIndex = wishlist.findIndex((item) => item.id === id);
-  if (itemIndex !== -1) {
-    wishlist[itemIndex] = { ...wishlist[itemIndex], ...updatedItem };
-    res.json(wishlist[itemIndex]);
-  } else {
-    res.status(404).send('Item not found');
+// 心愿单相关接口
+app.get('/wishlist', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const wishlistItems = await db.collection('wishlist').find().toArray();
+    res.json(wishlistItems);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-  console.log('wishlist详情', wishlist);
 });
 
-// DELETE /wishlist/:id - 从心愿单中删除指定商品
-app.delete('/wishlist/:id', (req, res) => {
-  const { id } = req.params;
-  const itemIndex = wishlist.findIndex((item) => item.id === id);
-  if (itemIndex !== -1) {
-    const deletedItem = wishlist.splice(itemIndex, 1);
-    res.json(deletedItem[0]);
-  } else {
-    res.status(404).send('Item not found');
+app.post('/wishlist', async (req, res) => {
+  try {
+    const newItem = req.body;
+    const db = client.db(dbName);
+    await db.collection('wishlist').insertOne(newItem);
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-  console.log('wishlist详情', wishlist);
 });
 
-// 获取文章列表
-app.get('/articles', (req, res) => {
-  console.log('文章列表', articles);
-  res.json(articles);
-});
+app.put('/wishlist/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedItem = req.body;
+    const db = client.db(dbName);
 
-// 获取指定文章评论
-app.get('/article_comments', (req, res) => {
-  const { article_id } = req.query;
-  if (!article_id) {
-    return res.status(400).json({ error: '缺少 articleId 参数' });
+    const result = await db
+      .collection('wishlist')
+      .findOneAndUpdate(
+        { id },
+        { $set: updatedItem },
+        { returnDocument: 'after' }
+      );
+
+    if (!result.value) {
+      return res.status(404).send('Item not found');
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-  // 过滤出对应文章的评论
-  const comments = article_comments.filter((c) => c.article_id === article_id);
-  res.json(comments);
-  console.log('文章评论', comments);
 });
 
-// 获取商品评论
-app.get('/product_comments', (req, res) => {
-  const { product_id } = req.query;
-  if (!product_id) {
-    return res.status(400).json({ error: '缺少 productId 参数' });
+app.delete('/wishlist/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+
+    const result = await db.collection('wishlist').findOneAndDelete({ id });
+    if (!result.value) {
+      return res.status(404).send('Item not found');
+    }
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-  const comments = product_comments.filter((c) => c.product_id === product_id);
-  res.json(comments);
 });
 
-// 添加文章评论
-app.post('/article_comments', (req, res) => {
-  const newComment = req.body;
-  article_comments.unshift(newComment); // 新评论放最前面
-  res.status(201).json(newComment);
-  console.log('添加文章评论后', article_comments);
-});
-
-// 添加商品评论
-app.post('/product_comments', (req, res) => {
-  const newComment = req.body;
-  res.status(201).json(newComment);
-});
-
-// 获取反馈信息
-app.get('/feedback', (req, res) => {
-  console.log('反馈信息', feedback);
-  res.json(feedback);
-});
-// 添加反馈信息
-app.post('/feedback', (req, res) => {
-  const newItem = req.body;
-  feedback.push(newItem);
-  console.log('反馈信息', feedback);
-  res.status(201).json(newItem);
-});
-
-// PUT /user_update/:user_id - 更新用户信息（支持头像上传）
-app.put('/user_update/:user_id', upload.single('user_avatar'), (req, res) => {
-  const { user_id } = req.params;
-  const updateData = req.body;
-
-  // 查找用户
-  const userIndex = user_update.findIndex((u) => u.user_id === user_id);
-  if (userIndex === -1) {
-    return res.status(404).json({ error: '用户未找到' });
+// 文章相关接口
+app.get('/articles', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const articles = await db.collection('articles').find().toArray();
+    res.json(articles);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-
-  // 如果有文件上传，保存头像路径
-  if (req.file) {
-    // 保存相对路径
-    updateData.user_avatar = `/uploads/avatars/${req.file.filename}`;
-  }
-
-  // 更新用户信息
-  user_update[userIndex] = { ...user_update[userIndex], ...updateData };
-  console.log('更新用户信息', user_update[userIndex]);
-  res.json(user_update[userIndex]);
 });
 
-// 获取指定用户信息
-app.get('/user_update/:user_id', (req, res) => {
-  const { user_id } = req.params;
-  const user = user_update.find((u) => u.user_id === user_id);
-  if (!user) {
-    return res.status(404).json({ error: '用户未找到' });
+// 文章评论相关接口
+app.get('/article_comments', async (req, res) => {
+  try {
+    const { article_id } = req.query;
+    if (!article_id) {
+      return res.status(400).json({ error: '缺少 articleId 参数' });
+    }
+
+    const db = client.db(dbName);
+    const comments = await db
+      .collection('article_comments')
+      .find({ article_id })
+      .toArray();
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
   }
-  res.json(user);
+});
+
+app.post('/article_comments', async (req, res) => {
+  try {
+    const newComment = req.body;
+    const db = client.db(dbName);
+    await db.collection('article_comments').insertOne(newComment);
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 商品评论相关接口
+app.get('/product_comments', async (req, res) => {
+  try {
+    const { product_id } = req.query;
+    if (!product_id) {
+      return res.status(400).json({ error: '缺少 productId 参数' });
+    }
+
+    const db = client.db(dbName);
+    const comments = await db
+      .collection('product_comments')
+      .find({ product_id })
+      .toArray();
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/product_comments', async (req, res) => {
+  try {
+    const newComment = req.body;
+    const db = client.db(dbName);
+    await db.collection('product_comments').insertOne(newComment);
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 反馈相关接口
+app.get('/feedback', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const feedbacks = await db.collection('feedback').find().toArray();
+    res.json(feedbacks);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/feedback', async (req, res) => {
+  try {
+    const newItem = req.body;
+    const db = client.db(dbName);
+    await db.collection('feedback').insertOne(newItem);
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 用户更新相关接口
+app.put(
+  '/user_update/:user_id',
+  upload.single('user_avatar'),
+  async (req, res) => {
+    try {
+      const { user_id } = req.params;
+      const updateData = req.body;
+      const db = client.db(dbName);
+
+      if (req.file) {
+        updateData.user_avatar = `/uploads/avatars/${req.file.filename}`;
+      }
+
+      const result = await db
+        .collection('user_update')
+        .findOneAndUpdate(
+          { user_id },
+          { $set: updateData },
+          { returnDocument: 'after' }
+        );
+
+      if (!result.value) {
+        return res.status(404).json({ error: '用户未找到' });
+      }
+
+      res.json(result.value);
+    } catch (err) {
+      res.status(500).json({
+        code: 500,
+        message: '服务器错误',
+        error: err.message,
+      });
+    }
+  }
+);
+
+app.get('/user_update/:user_id', async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const db = client.db(dbName);
+    const user = await db.collection('user_update').findOne({ user_id });
+
+    if (!user) {
+      return res.status(404).json({ error: '用户未找到' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 地址相关接口
+app.get('/addresses', async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    const db = client.db(dbName);
+    let query = {};
+
+    if (user_id) {
+      query.user_id = user_id;
+    }
+
+    const addresses = await db.collection('addresses').find(query).toArray();
+    res.json(addresses);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/addresses', async (req, res) => {
+  try {
+    const newAddress = req.body;
+    const db = client.db(dbName);
+
+    if (newAddress.is_default) {
+      await db
+        .collection('addresses')
+        .updateMany(
+          { user_id: newAddress.user_id },
+          { $set: { is_default: false } }
+        );
+    }
+
+    const result = await db.collection('addresses').insertOne(newAddress);
+    newAddress._id = result.insertedId;
+    res.status(201).json(newAddress);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.put('/addresses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    const db = client.db(dbName);
+
+    if (updateData.is_default) {
+      await db
+        .collection('addresses')
+        .updateMany(
+          { user_id: updateData.user_id },
+          { $set: { is_default: false } }
+        );
+    }
+
+    const result = await db
+      .collection('addresses')
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: 'after' }
+      );
+
+    if (!result.value) {
+      return res.status(404).json({ error: '地址未找到' });
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.delete('/addresses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+
+    const result = await db
+      .collection('addresses')
+      .findOneAndDelete({ _id: new ObjectId(id) });
+
+    if (!result.value) {
+      return res.status(404).json({ error: '地址未找到' });
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 订单相关接口
+app.get('/normal_orders', async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    const db = client.db(dbName);
+    let query = {};
+
+    if (user_id) {
+      query.user_id = user_id;
+    }
+
+    const orders = await db.collection('normal_orders').find(query).toArray();
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/normal_orders', async (req, res) => {
+  try {
+    const newOrder = req.body;
+    const db = client.db(dbName);
+
+    if (
+      !newOrder.user_id ||
+      !newOrder.items ||
+      !Array.isArray(newOrder.items)
+    ) {
+      return res.status(400).json({ error: '缺少必要字段' });
+    }
+
+    newOrder.created_at = new Date().toISOString();
+    await db.collection('normal_orders').insertOne(newOrder);
+    res.status(201).json(newOrder);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.put('/normal_orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const db = client.db(dbName);
+
+    const result = await db
+      .collection('normal_orders')
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { status } },
+        { returnDocument: 'after' }
+      );
+
+    if (!result.value) {
+      return res.status(404).json({ error: '订单未找到' });
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.delete('/normal_orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+
+    const result = await db
+      .collection('normal_orders')
+      .findOneAndDelete({ _id: new ObjectId(id) });
+
+    if (!result.value) {
+      return res.status(404).json({ error: '订单未找到' });
+    }
+
+    res.json(result.value);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 定制相关接口
+app.get('/custom', async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    const db = client.db(dbName);
+    let query = {};
+
+    if (user_id) {
+      query.user_id = user_id;
+    }
+
+    const customs = await db.collection('custom').find(query).toArray();
+    res.json(customs);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+app.post('/custom', async (req, res) => {
+  try {
+    const newCustom = req.body;
+    const db = client.db(dbName);
+    await db.collection('custom').insertOne(newCustom);
+    res.status(201).json(newCustom);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
+
+// 轮播图相关接口
+app.get('/carousel', async (req, res) => {
+  try {
+    const db = client.db(dbName);
+    const carousels = await db.collection('carousel').find().toArray();
+    res.json(carousels);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
 });
 
 app.use('/uploads', express.static('public/uploads'));
 
-app.get('/addresses', (req, res) => {
-  const { user_id } = req.query;
-  if (user_id) {
-    // 返回该用户的所有地址
-    let add = addresses.filter((addr) => addr.user_id === user_id);
-    console.log(add);
-    return res.json(addresses.filter((addr) => addr.user_id === user_id));
-  }
-  // 不传 user_id 时返回全部地址
-  res.json(addresses);
-});
-
-app.post('/addresses', (req, res) => {
-  const newAddress = req.body;
-  // 自动生成唯一id（简单做法，实际可用uuid等）
-  newAddress.id = (
-    addresses.length ? parseInt(addresses[addresses.length - 1].id) + 1 : 1
-  ).toString();
-  // 如果是默认地址，先把其他地址的 is_default 设为 false
-  if (newAddress.is_default) {
-    addresses.forEach((addr) => (addr.is_default = false));
-  }
-  addresses.push(newAddress);
-  res.status(201).json(newAddress);
-});
-
-// 更新地址
-app.put('/addresses/:id', (req, res) => {
-  const { id } = req.params;
-  const updateData = req.body;
-  const index = addresses.findIndex((addr) => addr.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: '地址未找到' });
-  }
-  // 如果要设置为默认地址，先把其他地址的 is_default 设为 false
-  if (updateData.is_default) {
-    addresses.forEach((addr) => (addr.is_default = false));
-  }
-  addresses[index] = { ...addresses[index], ...updateData };
-  res.json(addresses[index]);
-});
-
-app.delete('/addresses/:id', (req, res) => {
-  const { id } = req.params;
-  const index = addresses.findIndex((addr) => addr.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: '地址未找到' });
-  }
-  const deleted = addresses.splice(index, 1);
-  res.json(deleted[0]);
-});
-
-// 获取所有订单或特定用户的订单
-app.get('/normal_orders', (req, res) => {
-  const { user_id } = req.query;
-
-  if (user_id) {
-    // 如果提供了user_id，则只返回该用户的订单
-    const userOrders = normal_orders.filter(
-      (order) => order.user_id === user_id
-    );
-    console.log('用户订单', userOrders);
-    res.json(userOrders);
-  } else {
-    // 如果没有提供user_id，则返回所有订单
-    console.log('所有订单', normal_orders);
-    res.json(normal_orders);
-  }
-});
-
-// 创建新订单
-app.post('/normal_orders', (req, res) => {
-  const newOrder = req.body;
-
-  // 验证必要字段
-  if (!newOrder.user_id || !newOrder.items || !Array.isArray(newOrder.items)) {
-    return res.status(400).json({ error: '缺少必要字段' });
-  }
-
-  // 生成订单ID
-  newOrder.id = 'O' + (normal_orders.length + 1).toString().padStart(2, '0');
-
-  // 设置创建时间
-  newOrder.created_at = new Date().toISOString();
-
-  // 计算总价
-  // newOrder.total_price = newOrder.items.reduce((total, item) => {
-  //   return total + item.quantity * item.single_price;
-  // }, 0);
-
-  // 添加订单
-  normal_orders.push(newOrder);
-  console.log('添加订单后', normal_orders);
-  res.status(201).json(newOrder);
-});
-
-// 更新订单状态
-app.put('/normal_orders/:id', (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  // 查找订单
-  const orderIndex = normal_orders.findIndex((order) => order.id === id);
-
-  if (orderIndex === -1) {
-    return res.status(404).json({ error: '订单未找到' });
-  }
-
-  // 更新订单状态
-  normal_orders[orderIndex].status = status;
-  console.log('更新订单状态后', normal_orders[orderIndex]);
-  res.json(normal_orders[orderIndex]);
-});
-
-// 删除订单
-app.delete('/normal_orders/:id', (req, res) => {
-  const { id } = req.params;
-
-  // 查找订单
-  const orderIndex = normal_orders.findIndex((order) => order.id === id);
-
-  if (orderIndex === -1) {
-    return res.status(404).json({ error: '订单未找到' });
-  }
-
-  // 删除订单
-  const deletedOrder = normal_orders.splice(orderIndex, 1);
-  console.log('删除订单后', normal_orders);
-  res.json(deletedOrder[0]);
-});
-
-// 根据用户id获取定制信息
-app.get('/custom', (req, res) => {
-  const { user_id } = req.query;
-  if (user_id) {
-    return res.json(custom.filter((item) => item.user_id === user_id));
-  }
-  res.json(custom);
-});
-// 添加定制信息
-app.post('/custom', (req, res) => {
-  const newCustom = req.body;
-  // 简单生成唯一id
-  newCustom.id = 'C' + (custom.length + 1).toString().padStart(2, '0');
-  custom.push(newCustom);
-  // 打印添加后的定制信息
-  console.log('添加定制信息后', custom);
-  res.status(201).json(newCustom);
-});
-
-// 获取轮播图数据
-app.get('/carousel', (req, res) => {
-  res.json(carousel);
-  console.log('轮播图数据', carousel);
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// 启动服务器
+connectToMongo().then(() => {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
 });
