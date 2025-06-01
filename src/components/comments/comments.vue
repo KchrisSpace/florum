@@ -2,7 +2,9 @@
   <div class="flex flex-col justify-center px-60">
     <div class="font-Alibaba text-base w-52 flex justify-between items-end">
       <span class="text-3xl text-black"
-        >评论<span class="text-font-thirth text-lg ml-1">{{ commentList.length }}</span></span
+        >评论<span class="text-font-thirth text-lg ml-1">{{
+          commentList.length
+        }}</span></span
       >
       <button
         @click="handleSort('hot')"
@@ -10,8 +12,7 @@
           'text-black': sortType === 'hot',
           'text-font-thirth': sortType !== 'hot',
         }"
-        class="cursor-pointer hover:text-black transition-colors duration-200"
-      >
+        class="cursor-pointer hover:text-black transition-colors duration-200">
         最热
       </button>
       <div class="inline-block h-6 w-0.5 bg-font-primary"></div>
@@ -21,23 +22,18 @@
           'text-black': sortType === 'latest',
           'text-font-thirth': sortType !== 'latest',
         }"
-        class="cursor-pointer hover:text-black transition-colors duration-200"
-      >
+        class="cursor-pointer hover:text-black transition-colors duration-200">
         最新
       </button>
     </div>
     <!-- 发条评论吧 -->
-    <form
-      @submit.prevent="handleSubmit"
-      class="flex flex-col my-6"
-    >
+    <form @submit.prevent="handleSubmit" class="flex flex-col my-6">
       <!-- 头像 -->
       <div class="flex justify-start items-center gap-4">
         <img
           :src="user.avatar"
           alt="avatar"
-          class="bg-font-primary w-18 h-18 rounded-full object-cover"
-        />
+          class="bg-font-primary w-18 h-18 rounded-full object-cover" />
         <div class="grow gap-4 flex justify-start">
           <textarea
             v-if="isFocused"
@@ -47,27 +43,21 @@
             placeholder=""
             class="outline-none bg-bg-fifth rounded-sm p-2 w-full resize-none overflow-hidden"
             :style="{ height: textareaHeight + 'px' }"
-            maxlength="200"
-          ></textarea>
+            maxlength="200"></textarea>
           <input
             v-else
             type="text"
             v-model="commentText"
             @focus="handleFocus"
             placeholder="评论千万条，等你发一条"
-            class="outline-none bg-bg-fifth rounded-sm h-10 p-2 w-full"
-          />
+            class="outline-none bg-bg-fifth rounded-sm h-10 p-2 w-full" />
         </div>
       </div>
-      <div
-        v-if="isFocused"
-        class="flex justify-end"
-      >
+      <div v-if="isFocused" class="flex justify-end">
         <button
           type="submit"
           :disabled="!commentText.trim() || isLoading"
-          class="bg-font-primary text-white mt-2 rounded-sm h-10 py-2 px-4 rounded-2 disabled:opacity-50 transition-opacity duration-200"
-        >
+          class="bg-font-primary text-white mt-2 rounded-sm h-10 py-2 px-4 rounded-2 disabled:opacity-50 transition-opacity duration-200">
           {{ isLoading ? '发布中...' : '发布' }}
         </button>
       </div>
@@ -76,19 +66,16 @@
     <!-- 用户评论列表 -->
     <div
       v-if="commentList.length > 0"
-      class="w-full flex justify-center flex-wrap"
-    >
+      class="w-full flex justify-center flex-wrap">
       <div
         v-for="comment in commentList"
         :key="comment.id"
-        class="text-left flex pt-10 font-Harmony"
-      >
+        class="text-left flex pt-10 font-Harmony">
         <!-- 用户头像 -->
         <img
           :src="comment.avatar"
           alt="avatar"
-          class="w-16 h-16 bg-font-primary rounded-full shrink-0 object-cover"
-        />
+          class="w-16 h-16 bg-font-primary rounded-full shrink-0 object-cover" />
         <div class="mx-2">
           <div class="text-font-thirth font-Alibaba">
             {{ comment.user_name }}
@@ -104,10 +91,7 @@
         </div>
       </div>
     </div>
-    <div
-      v-else
-      class="text-center text-font-thirth py-10"
-    >
+    <div v-else class="text-center text-font-thirth py-10">
       暂无评论，快来发表第一条评论吧！
     </div>
   </div>
@@ -152,8 +136,9 @@ const fetchUser = async () => {
   try {
     const res = await axios.get('http://localhost:3000/users/02');
     const data = res.data.data || res.data;
+    console.log('获取用户信息:', data);
     user.value = {
-      id: data.user_id,
+      id: data.id || data._id,
       name: data.user_name,
       avatar: data.user_avatar,
     };
@@ -161,7 +146,7 @@ const fetchUser = async () => {
     console.error('获取用户信息失败', err);
   }
 };
-
+console.log('user.value', user.value);
 const fetchComment = async () => {
   if (!props.sortId) {
     console.error('Article ID is required');
@@ -213,10 +198,14 @@ const enrichCommentsWithUser = async (comments) => {
 const sortComments = (comments) => {
   if (sortType.value === 'latest') {
     // 按创建时间倒序排列
-    commentList.value = comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    commentList.value = comments.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
   } else {
     // 按点赞数倒序排列（这里假设评论对象中有 likes 字段）
-    commentList.value = comments.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    commentList.value = comments.sort(
+      (a, b) => (b.likes || 0) - (a.likes || 0)
+    );
   }
 };
 

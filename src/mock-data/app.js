@@ -15,6 +15,7 @@ const uploadDirs = [
 ];
 uploadDirs.forEach((dir) => {
   if (!fs.existsSync(dir)) {
+    console.log('创建目录:', dir);
     fs.mkdirSync(dir, { recursive: true });
   }
 });
@@ -45,20 +46,31 @@ app.use(cors());
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/products');
+    // 根据文件类型选择不同的存储目录
+    const dest =
+      file.fieldname === 'user_avatar'
+        ? './public/uploads/avatars'
+        : './public/uploads/products';
+    console.log('文件存储目录:', dest);
+    console.log('文件信息:', file);
+    cb(null, dest);
   },
   filename: function (req, file, cb) {
     const ext = file.originalname.split('.').pop();
-    cb(null, `product_${Date.now()}.${ext}`);
+    const prefix = file.fieldname === 'user_avatar' ? 'avatar' : 'product';
+    const filename = `${prefix}_${Date.now()}.${ext}`;
+    console.log('生成的文件名:', filename);
+    cb(null, filename);
   },
 });
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 2 * 1024 * 1024,
+    fileSize: 2 * 1024 * 1024, // 2MB
   },
   fileFilter: (req, file, cb) => {
+    console.log('文件类型检查:', file.mimetype);
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -157,13 +169,21 @@ app.get('/users/:id', async (req, res) => {
 app.put('/users/:id', upload.single('user_avatar'), async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('更新用户ID:', id);
+    console.log('请求体:', req.body);
+    console.log('上传的文件:', req.file);
+
     const updateData = JSON.parse(req.body.userData || '{}');
-    console.log('更新数据:', updateData);
+    console.log('解析后的更新数据:', updateData);
+
     const db = client.db(dbName);
 
     // 如果有文件上传，处理头像
     if (req.file) {
-      updateData.user_avatar = `/uploads/avatars/${req.file.filename}`;
+      // 确保文件路径正确
+      const avatarPath = `/uploads/avatars/${req.file.filename}`;
+      console.log('新的头像路径:', avatarPath);
+      updateData.user_avatar = avatarPath;
     }
 
     // 构建更新对象，只包含提供的字段
@@ -211,10 +231,15 @@ app.put('/users/:id', upload.single('user_avatar'), async (req, res) => {
       });
     }
 
+    // 获取更新后的完整用户数据
+    const updatedUser = await db.collection('users').findOne({ id: id });
+    console.log('更新后的用户数据:', updatedUser);
+
+    // 返回更新后的完整用户数据
     res.json({
       code: 200,
       message: '更新成功',
-      data: result.value,
+      data: updatedUser,
     });
   } catch (err) {
     console.error('更新用户失败:', err);
@@ -604,19 +629,52 @@ app.put('/cart/:id', async (req, res) => {
 app.delete('/cart/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('删除购物车商品，ID:', id);
+
     const db = client.db(dbName);
 
     if (id === 'clear') {
       await db.collection('cart').deleteMany({});
-      res.json({ message: '购物车已清空' });
+      res.json({
+        code: 200,
+        message: '购物车已清空',
+        data: null,
+      });
     } else {
-      const result = await db.collection('cart').findOneAndDelete({ id });
-      if (!result.value) {
-        return res.status(404).send('Item not found');
+      // 先检查商品是否存在
+      const existingItem = await db.collection('cart').findOne({ id });
+      console.log('查询到的商品:', existingItem);
+
+      if (!existingItem) {
+        console.log('商品不存在:', id);
+        return res.status(404).json({
+          code: 404,
+          message: '商品不存在',
+          data: null,
+        });
       }
-      res.json(result.value);
+
+      // 删除商品
+      const result = await db.collection('cart').deleteOne({ id });
+      console.log('删除结果:', result);
+
+      if (result.deletedCount === 0) {
+        console.log('删除失败，未找到商品:', id);
+        return res.status(404).json({
+          code: 404,
+          message: '商品不存在',
+          data: null,
+        });
+      }
+
+      res.json({
+        code: 200,
+        message: '删除成功',
+        data: existingItem,
+      });
     }
   } catch (err) {
+    console.error('删除购物车商品失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
@@ -686,14 +744,43 @@ app.put('/wishlist/:id', async (req, res) => {
 app.delete('/wishlist/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('删除心愿单商品，ID:', id);
+
     const db = client.db(dbName);
 
-    const result = await db.collection('wishlist').findOneAndDelete({ id });
-    if (!result.value) {
-      return res.status(404).send('Item not found');
+    // 先检查商品是否存在
+    const existingItem = await db.collection('wishlist').findOne({ id });
+    console.log('查询到的商品:', existingItem);
+
+    if (!existingItem) {
+      console.log('商品不存在:', id);
+      return res.status(404).json({
+        code: 404,
+        message: '商品不存在',
+        data: null,
+      });
     }
-    res.json(result.value);
+
+    // 删除商品
+    const result = await db.collection('wishlist').deleteOne({ id });
+    console.log('删除结果:', result);
+
+    if (result.deletedCount === 0) {
+      console.log('删除失败，未找到商品:', id);
+      return res.status(404).json({
+        code: 404,
+        message: '商品不存在',
+        data: null,
+      });
+    }
+
+    res.json({
+      code: 200,
+      message: '删除成功',
+      data: existingItem,
+    });
   } catch (err) {
+    console.error('删除心愿单商品失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
@@ -722,7 +809,11 @@ app.get('/article_comments', async (req, res) => {
   try {
     const { article_id } = req.query;
     if (!article_id) {
-      return res.status(400).json({ error: '缺少 articleId 参数' });
+      return res.status(400).json({
+        code: 400,
+        message: '缺少 articleId 参数',
+        data: null,
+      });
     }
 
     const db = client.db(dbName);
@@ -730,12 +821,19 @@ app.get('/article_comments', async (req, res) => {
       .collection('article_comments')
       .find({ article_id })
       .toArray();
-    res.json(comments);
+
+    res.json({
+      code: 200,
+      message: '获取评论成功',
+      data: comments,
+    });
   } catch (err) {
+    console.error('获取文章评论失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
       error: err.message,
+      data: null,
     });
   }
 });
@@ -743,14 +841,37 @@ app.get('/article_comments', async (req, res) => {
 app.post('/article_comments', async (req, res) => {
   try {
     const newComment = req.body;
+
+    // 验证必要字段
+    if (!newComment.article_id || !newComment.user_id || !newComment.content) {
+      return res.status(400).json({
+        code: 400,
+        message: '缺少必要字段',
+        data: null,
+      });
+    }
+
     const db = client.db(dbName);
-    await db.collection('article_comments').insertOne(newComment);
-    res.status(201).json(newComment);
+    const result = await db
+      .collection('article_comments')
+      .insertOne(newComment);
+
+    if (result.acknowledged) {
+      res.status(201).json({
+        code: 200,
+        message: '评论发布成功',
+        data: newComment,
+      });
+    } else {
+      throw new Error('评论发布失败');
+    }
   } catch (err) {
+    console.error('发布文章评论失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
       error: err.message,
+      data: null,
     });
   }
 });
@@ -760,7 +881,11 @@ app.get('/product_comments', async (req, res) => {
   try {
     const { product_id } = req.query;
     if (!product_id) {
-      return res.status(400).json({ error: '缺少 productId 参数' });
+      return res.status(400).json({
+        code: 400,
+        message: '缺少 productId 参数',
+        data: null,
+      });
     }
 
     const db = client.db(dbName);
@@ -768,12 +893,19 @@ app.get('/product_comments', async (req, res) => {
       .collection('product_comments')
       .find({ product_id })
       .toArray();
-    res.json(comments);
+
+    res.json({
+      code: 200,
+      message: '获取评论成功',
+      data: comments,
+    });
   } catch (err) {
+    console.error('获取商品评论失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
       error: err.message,
+      data: null,
     });
   }
 });
@@ -781,14 +913,37 @@ app.get('/product_comments', async (req, res) => {
 app.post('/product_comments', async (req, res) => {
   try {
     const newComment = req.body;
+
+    // 验证必要字段
+    if (!newComment.product_id || !newComment.user_id || !newComment.content) {
+      return res.status(400).json({
+        code: 400,
+        message: '缺少必要字段',
+        data: null,
+      });
+    }
+
     const db = client.db(dbName);
-    await db.collection('product_comments').insertOne(newComment);
-    res.status(201).json(newComment);
+    const result = await db
+      .collection('product_comments')
+      .insertOne(newComment);
+
+    if (result.acknowledged) {
+      res.status(201).json({
+        code: 200,
+        message: '评论发布成功',
+        data: newComment,
+      });
+    } else {
+      throw new Error('评论发布失败');
+    }
   } catch (err) {
+    console.error('发布商品评论失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
       error: err.message,
+      data: null,
     });
   }
 });
@@ -810,6 +965,13 @@ app.get('/feedback', async (req, res) => {
 
 app.post('/feedback', async (req, res) => {
   try {
+    // 生成反馈ID
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    const feedbackId = `FEEDBACK${timestamp}${randomNum}`;
+    newItem.id = feedbackId;
     const newItem = req.body;
     const db = client.db(dbName);
     await db.collection('feedback').insertOne(newItem);
@@ -984,6 +1146,13 @@ app.get('/normal_orders', async (req, res) => {
 
 app.post('/normal_orders', async (req, res) => {
   try {
+    // 生成订单ID
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    const orderId = `ORDER${timestamp}${randomNum}`;
+    newOrder.id = orderId;
     const newOrder = req.body;
     const db = client.db(dbName);
 
@@ -1082,6 +1251,13 @@ app.get('/custom', async (req, res) => {
 
 app.post('/custom', async (req, res) => {
   try {
+    // 生成定制ID
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    const customId = `CUSTOM${timestamp}${randomNum}`;
+    newCustom.id = customId;
     const newCustom = req.body;
     const db = client.db(dbName);
     await db.collection('custom').insertOne(newCustom);
@@ -1110,6 +1286,7 @@ app.get('/carousel', async (req, res) => {
   }
 });
 
+// 配置静态文件服务
 app.use('/uploads', express.static('public/uploads'));
 
 // 启动服务器

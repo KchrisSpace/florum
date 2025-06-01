@@ -8,7 +8,7 @@
           class="w-20 h-20 bg-font-primary rounded-full overflow-hidden relative group">
           <img
             v-if="avatarUrl"
-            :src="avatarUrl"
+            :src="`/public${avatarUrl}`"
             alt="用户头像"
             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
           <div
@@ -199,28 +199,35 @@ const fetchUserInfo = async () => {
     const response = await axios.get(
       `${API_URL}/users/${formData.value.user_id}`
     );
-    const userData = response.data.data;
-    console.log(userData);
+    console.log('获取用户信息响应:', response.data);
 
-    // 设置默认值
-    formData.value.nickname = userData.user_name || '';
-    formData.value.gender = userData.user_gender === '男' ? 'male' : 'female';
-    originalData.value.password = userData.user_password || '';
-    if (userData.user_avatar) {
-      avatarUrl.value = userData.user_avatar;
-      formData.value.avatar = userData.user_avatar;
+    if (response.data.code === 200 && response.data.data) {
+      const userData = response.data.data;
+      console.log('用户数据:', userData);
+
+      // 设置默认值
+      formData.value.nickname = userData.user_name || '';
+      formData.value.gender = userData.user_gender === '男' ? 'male' : 'female';
+      originalData.value.password = userData.user_password || '';
+      if (userData.user_avatar) {
+        avatarUrl.value = userData.user_avatar;
+        formData.value.avatar = userData.user_avatar;
+      }
+
+      // 保存原始数据
+      originalData.value = {
+        nickname: formData.value.nickname,
+        gender: formData.value.gender,
+        avatar: formData.value.avatar,
+        password: originalData.value.password,
+      };
+    } else {
+      console.error('获取用户信息失败:', response.data);
+      showError('获取用户信息失败，请稍后重试');
     }
-
-    // 保存原始数据
-    originalData.value = {
-      nickname: formData.value.nickname,
-      gender: formData.value.gender,
-      avatar: formData.value.avatar,
-      password: originalData.value.password,
-    };
   } catch (error) {
     console.error('获取用户信息失败:', error);
-    alert('获取用户信息失败，请稍后重试');
+    showError('获取用户信息失败，请稍后重试');
   } finally {
     isLoading.value = false;
   }
@@ -278,7 +285,7 @@ const triggerFileInput = () => {
 };
 
 // 处理文件选择
-const handleFileChange = (event) => {
+const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     // 验证文件类型
@@ -293,15 +300,91 @@ const handleFileChange = (event) => {
       return;
     }
 
-    // 预览图片
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      avatarUrl.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    try {
+      isLoading.value = true;
 
-    // 直接保存文件对象
-    formData.value.avatar = file;
+      // 先检查用户是否存在
+      const checkUserResponse = await axios.get(
+        `${API_URL}/users/${formData.value.user_id}`
+      );
+      console.log('检查用户响应:', checkUserResponse.data);
+
+      if (checkUserResponse.data.code !== 200 || !checkUserResponse.data.data) {
+        throw new Error('用户不存在');
+      }
+
+      // 创建FormData对象
+      const uploadFormData = new FormData();
+
+      // 添加文件
+      uploadFormData.append('user_avatar', file, file.name);
+      console.log('添加的文件:', file);
+
+      // 获取当前用户数据
+      const currentUser = checkUserResponse.data.data;
+
+      // 准备更新数据
+      const updateData = {
+        id: formData.value.user_id,
+        user_name: formData.value.nickname || currentUser.user_name,
+        user_gender:
+          formData.value.gender === 'male'
+            ? '男'
+            : '女' || currentUser.user_gender,
+        user_email: currentUser.user_email,
+        user_phone: currentUser.user_phone,
+        updated_at: new Date().toISOString(),
+      };
+
+      // 添加用户数据
+      uploadFormData.append('userData', JSON.stringify(updateData));
+      console.log('FormData内容:', {
+        file: file.name,
+        userData: updateData,
+      });
+
+      console.log('开始上传头像...');
+
+      // 上传头像
+      const response = await axios.put(
+        `${API_URL}/users/${formData.value.user_id}`,
+        uploadFormData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('服务器响应:', response.data);
+
+      if (response.data.code === 200 && response.data.data) {
+        const userData = response.data.data;
+        console.log('更新后的用户数据:', userData);
+
+        if (userData.user_avatar) {
+          avatarUrl.value = userData.user_avatar;
+          formData.value.avatar = userData.user_avatar;
+          console.log('头像更新成功:', userData.user_avatar);
+          showError('头像更新成功！');
+        } else {
+          console.error('获取到的用户数据中没有头像URL');
+          showError('头像更新失败：无法获取头像URL');
+        }
+      } else {
+        console.error('服务器响应异常:', response.data);
+        showError(response.data.message || '上传头像失败');
+      }
+    } catch (error) {
+      console.error('上传头像失败:', error);
+      if (error.message === '用户不存在') {
+        showError('用户不存在，请先登录');
+      } else {
+        showError('上传头像失败，请稍后重试');
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 };
 
