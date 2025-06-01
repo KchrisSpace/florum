@@ -965,6 +965,7 @@ app.get('/feedback', async (req, res) => {
 
 app.post('/feedback', async (req, res) => {
   try {
+    const newItem = req.body;
     // 生成反馈ID
     const timestamp = Date.now();
     const randomNum = Math.floor(Math.random() * 10000)
@@ -972,7 +973,7 @@ app.post('/feedback', async (req, res) => {
       .padStart(4, '0');
     const feedbackId = `FEEDBACK${timestamp}${randomNum}`;
     newItem.id = feedbackId;
-    const newItem = req.body;
+
     const db = client.db(dbName);
     await db.collection('feedback').insertOne(newItem);
     res.status(201).json(newItem);
@@ -1251,6 +1252,7 @@ app.get('/custom', async (req, res) => {
 
 app.post('/custom', async (req, res) => {
   try {
+    const newCustom = req.body;
     // 生成定制ID
     const timestamp = Date.now();
     const randomNum = Math.floor(Math.random() * 10000)
@@ -1258,7 +1260,6 @@ app.post('/custom', async (req, res) => {
       .padStart(4, '0');
     const customId = `CUSTOM${timestamp}${randomNum}`;
     newCustom.id = customId;
-    const newCustom = req.body;
     const db = client.db(dbName);
     await db.collection('custom').insertOne(newCustom);
     res.status(201).json(newCustom);

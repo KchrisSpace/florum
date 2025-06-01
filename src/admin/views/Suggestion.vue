@@ -92,6 +92,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
+import axios from 'axios';
+import { API_URL } from '/src/pages/const/index';
 
 // 加载状态
 const loading = ref(false);
@@ -109,18 +111,23 @@ const searchKeyword = ref('');
 const detailVisible = ref(false);
 const currentSuggestion = ref({});
 
-// 模拟数据
-const suggestions = ref([
-  {
-    id: '1',
-    user_id: '02',
-    name: '刘盈盈',
-    email: '123456@qq.com',
-    phone: '12345678901',
-    feedback_message: '花布很好看，我很喜欢',
-    created_at: '2025-04-25T17:51:56.908Z',
-  },
-]);
+// 反馈数据
+const suggestions = ref([]);
+
+// 获取反馈数据
+const fetchSuggestions = async () => {
+  try {
+    loading.value = true;
+    const response = await axios.get(`${API_URL}/feedback`);
+    suggestions.value = response.data;
+    total.value = response.data.length;
+  } catch (error) {
+    console.error('获取反馈数据失败:', error);
+    ElMessage.error('获取反馈数据失败');
+  } finally {
+    loading.value = false;
+  }
+};
 
 // 过滤后的建议列表
 const filteredSuggestions = computed(() => {
@@ -162,8 +169,7 @@ const handleCurrentChange = (val) => {
 
 // 初始化
 onMounted(() => {
-  // 这里可以添加获取数据的逻辑
-  total.value = suggestions.value.length;
+  fetchSuggestions();
 });
 </script>
 
