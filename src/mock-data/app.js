@@ -91,9 +91,7 @@ app.get('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const db = client.db(dbName);
-    const user = await db
-      .collection('users')
-      .findOne({ _id: new ObjectId(id) });
+    const user = await db.collection('users').findOne({ id });
 
     if (!user) {
       return res.status(404).json({
@@ -118,21 +116,37 @@ app.get('/users/:id', async (req, res) => {
 });
 
 // 更新用户
-app.put('/users/:id', async (req, res) => {
+app.put('/users/:id', upload.single('user_avatar'), async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = JSON.parse(req.body.userData || '{}');
+    console.log('更新数据:', updateData);
     const db = client.db(dbName);
 
-    const result = await db
-      .collection('users')
-      .findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        { $set: updateData },
-        { returnDocument: 'after' }
-      );
+    // 如果有文件上传，处理头像
+    if (req.file) {
+      updateData.user_avatar = `/uploads/avatars/${req.file.filename}`;
+    }
 
-    if (!result.value) {
+    // 更新用户信息
+    const result = await db.collection('users').findOneAndUpdate(
+      { id: id },
+      {
+        $set: {
+          user_name: updateData.user_name,
+          user_gender: updateData.user_gender,
+          user_email: updateData.user_email,
+          user_phone: updateData.user_phone,
+          user_avatar: updateData.user_avatar,
+          updated_at: updateData.updated_at,
+          status: updateData.status || 'active',
+          role_id: updateData.role_id || '4',
+        },
+      },
+      { returnDocument: 'after' }
+    );
+
+    if (!result) {
       return res.status(404).json({
         code: 404,
         message: '用户未找到',
@@ -146,6 +160,7 @@ app.put('/users/:id', async (req, res) => {
       data: result.value,
     });
   } catch (err) {
+    console.error('更新用户失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
@@ -160,10 +175,8 @@ app.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
     const db = client.db(dbName);
 
-    const result = await db
-      .collection('users')
-      .findOneAndDelete({ _id: new ObjectId(id) });
-
+    const result = await db.collection('users').findOneAndDelete({ id: id });
+    console.log(result);
     if (!result.value) {
       return res.status(404).json({
         code: 404,

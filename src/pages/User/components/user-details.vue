@@ -27,7 +27,7 @@
         <button
           type="button"
           @click="triggerFileInput"
-          class="update-avatar-btn text-center  mb-0 mt-2 hover:text-font-primary transition-colors"
+          class="update-avatar-btn text-center mb-0 mt-2 hover:text-font-primary transition-colors"
           :disabled="isLoading">
           更换头像
         </button>
@@ -81,14 +81,15 @@
       <h4 class="mb-4 text-xl font-medium">修改密码</h4>
       <div class="my-2 flex flex-col">
         <label for="currentPassword" class="mb-1">当前密码：</label>
-        <input
-          id="currentPassword"
-          type="password"
-          v-model="formData.currentPassword"
-          :disabled="isLoading"
-          class="bg-bg-fifth/60 h-10 w-2/3 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
-          :class="{ 'border-red-500': errors.currentPassword }"
-          placeholder="请输入当前密码" />
+        <div class="flex items-center">
+          <input
+            id="currentPassword"
+            type="password"
+            v-model="formData.currentPassword"
+            class="bg-bg-fifth/60 h-10 w-2/3 rounded-md focus:ring-2 focus:ring-font-primary focus:border-transparent"
+            :class="{ 'border-red-500': errors.currentPassword }"
+            :value="originalData.password" />
+        </div>
         <p v-if="errors.currentPassword" class="text-red-500 text-sm mt-1">
           {{ errors.currentPassword }}
         </p>
@@ -184,6 +185,7 @@ const originalData = ref({
   nickname: '',
   gender: '',
   avatar: '',
+  password: '',
 });
 
 // 定义常量
@@ -198,11 +200,13 @@ const fetchUserInfo = async () => {
     const response = await axios.get(
       `${API_URL}/users/${formData.value.user_id}`
     );
-    const userData = response.data;
+    const userData = response.data.data;
+    console.log(userData);
 
     // 设置默认值
     formData.value.nickname = userData.user_name || '';
     formData.value.gender = userData.user_gender === '男' ? 'male' : 'female';
+    originalData.value.password = userData.user_password || '';
     if (userData.user_avatar) {
       avatarUrl.value = userData.user_avatar;
       formData.value.avatar = userData.user_avatar;
@@ -213,6 +217,7 @@ const fetchUserInfo = async () => {
       nickname: formData.value.nickname,
       gender: formData.value.gender,
       avatar: formData.value.avatar,
+      password: originalData.value.password,
     };
   } catch (error) {
     console.error('获取用户信息失败:', error);
@@ -315,31 +320,37 @@ const handleSubmit = async () => {
 
   isLoading.value = true;
   try {
+    // 创建FormData对象用于头像上传
     const formDataToSend = new FormData();
-    formDataToSend.append('user_id', formData.value.user_id);
-    formDataToSend.append('user_name', formData.value.nickname);
-    formData.value.gender === 'male'
-      ? formDataToSend.append('user_gender', '男')
-      : formDataToSend.append('user_gender', '女');
-    formDataToSend.append('user_email', DEFAULT_EMAIL);
-    formDataToSend.append('user_phone', DEFAULT_PHONE);
 
     // 如果有新头像，添加头像文件
-    // if (formData.value.avatar instanceof File) {
-    formDataToSend.append('user_avatar', formData.value.avatar);
-    // }
+    if (formData.value.avatar instanceof File) {
+      formDataToSend.append('user_avatar', formData.value.avatar);
+    }
 
-    formDataToSend.append('created_at', CREATED_AT);
-    formDataToSend.append('updated_at', new Date().toISOString());
+    // 创建用户信息对象
+    const userData = {
+      user_id: formData.value.user_id,
+      user_name: formData.value.nickname,
+      user_gender: formData.value.gender === 'male' ? '男' : '女',
+      user_email: DEFAULT_EMAIL,
+      user_phone: DEFAULT_PHONE,
+      created_at: CREATED_AT,
+      updated_at: new Date().toISOString(),
+    };
 
     // 如果有新密码，添加密码字段
     if (formData.value.newPassword) {
-      formDataToSend.append('user_password', formData.value.newPassword);
+      userData.user_password = formData.value.newPassword;
     }
+
+    // 将用户信息对象转换为JSON字符串
+    formDataToSend.append('userData', JSON.stringify(userData));
 
     // 发送请求
     const response = await sendUpdateRequest(formDataToSend);
     if (response.status === 200) {
+      console.log(response.data);
       handleSuccess(response.data);
     }
   } catch (error) {
