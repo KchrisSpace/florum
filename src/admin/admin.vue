@@ -23,6 +23,10 @@
           <el-icon><List /></el-icon>
           <span>订单管理</span>
         </router-link>
+        <router-link to="/admin/custom" class="nav-item">
+          <el-icon><Brush /></el-icon>
+          <span>定制管理</span>
+        </router-link>
         <router-link to="/admin/suggestion" class="nav-item">
           <el-icon><Files /></el-icon>
           <span>建议和反馈 </span>
@@ -80,6 +84,7 @@ import {
   List,
   Files,
   CaretBottom,
+  Brush,
 } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 

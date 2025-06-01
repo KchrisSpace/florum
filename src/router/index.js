@@ -13,6 +13,7 @@ import Users from "../admin/views/Users.vue";
 import Products from "../admin/views/Products.vue";
 import Orders from "../admin/views/Orders.vue";
 import Suggestion from "../admin/views/Suggestion.vue";
+import BackCustom from "../admin/views/Custom.vue";
 
 
 // 路由配置
@@ -128,6 +129,13 @@ const routes = [
         component: Products,
         meta: {
           title: "商品管理",
+        },
+      },
+      {
+        path: "custom",
+        component: BackCustom,
+        meta: {
+          title: "定制管理",
         },
       },
       {
