@@ -58,7 +58,7 @@
         <el-table-column label="商品图片" width="100">
           <template #default="{ row }">
             <el-image
-              :src="`/${row.image}`"
+              :src="row.image"
               :preview-src-list="[row.image]"
               fit="cover"
               style="width: 50px; height: 50px" />
@@ -117,39 +117,154 @@
       v-model="dialogVisible"
       :title="dialogType === 'add' ? '新增商品' : '编辑商品'"
       width="800px">
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入商品名称" />
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
+        <el-form-item label="商品ID" prop="id">
+          <el-input v-model="form.id" placeholder="系统自动生成" disabled />
         </el-form-item>
-        <el-form-item label="商品价格" prop="price">
+        <el-form-item label="商品名称" prop="title">
+          <el-input v-model="form.title" placeholder="请输入商品名称" />
+        </el-form-item>
+        <el-form-item label="商品分类" prop="main_category">
+          <el-select v-model="form.main_category" placeholder="请选择商品分类">
+            <el-option label="热销" value="热销" />
+            <el-option label="新品" value="新品" />
+            <el-option label="特惠" value="特惠" />
+            <el-option label="礼盒" value="礼盒" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品价格" prop="price_info.current_price">
           <el-input-number
-            v-model="form.price"
+            v-model="form.price_info.current_price"
             :min="0"
             :precision="2"
             :step="0.1" />
         </el-form-item>
-        <el-form-item label="商品库存" prop="stock">
-          <el-input
-            v-model="form.stock"
-            placeholder='请输入库存状态，如"充足"' />
+        <el-form-item label="库存状态" prop="sales_data.stock_status">
+          <el-select
+            v-model="form.sales_data.stock_status"
+            placeholder="请选择库存状态">
+            <el-option label="充足" value="充足" />
+            <el-option label="紧张" value="紧张" />
+            <el-option label="缺货" value="缺货" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品图片" prop="image">
+        <el-form-item label="销量" prop="sales_data.sales_count">
+          <el-input-number
+            v-model="form.sales_data.sales_count"
+            :min="0"
+            :precision="0" />
+        </el-form-item>
+        <el-form-item label="评分" prop="sales_data.rating">
+          <el-rate
+            v-model="form.sales_data.rating"
+            :max="5"
+            :allow-half="true"
+            show-score />
+        </el-form-item>
+        <el-form-item label="商品图片" prop="images">
           <el-upload
             class="avatar-uploader"
-            action="/api/upload"
+            :action="`${API_URL}/uploads`"
             :show-file-list="false"
             :on-success="handleUploadSuccess"
-            :before-upload="beforeUpload">
-            <img v-if="form.image" :src="form.image" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+            :on-error="handleUploadError"
+            :before-upload="beforeUpload"
+            :limit="4"
+            :on-exceed="handleExceed"
+            :headers="uploadHeaders">
+            <el-button type="primary">点击上传</el-button>
+            <template #tip>
+              <div class="el-upload__tip">
+                支持上传4张图片，建议尺寸800x800px，大小不超过2MB
+              </div>
+            </template>
           </el-upload>
+          <div
+            class="image-preview"
+            v-if="form.images && form.images.length > 0">
+            <div
+              v-for="(image, index) in form.images"
+              :key="index"
+              class="image-item">
+              <el-image
+                :src="image"
+                fit="cover"
+                :preview-src-list="image"
+                :initial-index="index" />
+              <el-button
+                type="danger"
+                size="small"
+                circle
+                @click="handleRemoveImage(index)"
+                class="remove-btn">
+                <el-icon><Delete /></el-icon>
+              </el-button>
+            </div>
+          </div>
         </el-form-item>
-        <el-form-item label="商品描述" prop="description">
+        <el-form-item label="商品描述" prop="promotion.main_description">
           <el-input
-            v-model="form.description"
+            v-model="form.promotion.main_description"
             type="textarea"
             :rows="4"
             placeholder="请输入商品描述" />
+        </el-form-item>
+        <el-form-item label="花语" prop="promotion.flower_language">
+          <el-input
+            v-model="form.promotion.flower_language"
+            type="textarea"
+            :rows="2"
+            placeholder="请输入花语" />
+        </el-form-item>
+        <el-form-item label="关键词" prop="promotion.keywords">
+          <el-select
+            v-model="form.promotion.keywords"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请输入关键词">
+            <el-option
+              v-for="item in keywordOptions"
+              :key="item"
+              :label="item"
+              :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="促销结束时间" prop="promotion.end_time">
+          <el-date-picker
+            v-model="form.promotion.end_time"
+            type="datetime"
+            placeholder="选择促销结束时间" />
+        </el-form-item>
+        <el-form-item label="商品分类标签" prop="specification.category">
+          <el-select
+            v-model="form.specification.category"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择或输入分类标签">
+            <el-option
+              v-for="item in categoryOptions"
+              :key="item"
+              :label="item"
+              :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="花材清单" prop="specification.materials">
+          <el-input
+            v-model="form.specification.materials"
+            type="textarea"
+            :rows="4"
+            placeholder="请输入花材清单，每行一个" />
+        </el-form-item>
+        <el-form-item label="包装说明" prop="specification.packaging">
+          <el-input
+            v-model="form.specification.packaging"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入包装说明" />
         </el-form-item>
         <el-form-item label="商品状态" prop="status">
           <el-radio-group v-model="form.status">
@@ -223,9 +338,16 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
-import { Search, Refresh, Download, Plus } from '@element-plus/icons-vue';
+import {
+  Search,
+  Refresh,
+  Download,
+  Plus,
+  Delete,
+} from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { API_URL } from '../../pages/const';
+import * as XLSX from 'xlsx';
 
 // 搜索表单
 const searchForm = reactive({
@@ -248,22 +370,58 @@ const dialogType = ref('add');
 const formRef = ref(null);
 const form = reactive({
   id: '',
-  name: '',
-  price: 0,
-  stock: '',
-  image: '',
-  description: '',
+  title: '',
+  main_category: '热销',
+  images: [],
+  price_info: {
+    original_price: 0,
+    current_price: 0,
+  },
+  sales_data: {
+    sales_count: 0,
+    stock_status: '充足',
+    rating: 0,
+  },
+  promotion: {
+    is_hot: true,
+    main_description: '',
+    keywords: [],
+    flower_language: '',
+    end_time: '',
+  },
+  specification: {
+    category: [],
+    materials: [],
+    packaging: '',
+  },
   status: '上架',
 });
 
-const rules = {
-  name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
-  price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
-  stock: [{ required: true, message: '请输入商品库存状态', trigger: 'blur' }],
-  image: [{ required: true, message: '请上传商品图片', trigger: 'change' }],
-  description: [{ required: true, message: '请输入商品描述', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择商品状态', trigger: 'change' }],
-};
+// 关键词选项
+const keywordOptions = [
+  '热销',
+  '新品',
+  '特惠',
+  '礼盒',
+  '生日',
+  '纪念日',
+  '求婚',
+  '道歉',
+  '感谢',
+  '祝福',
+];
+
+// 分类选项
+const categoryOptions = [
+  '推荐',
+  '生日鲜花',
+  '纪念日',
+  '求婚',
+  '道歉',
+  '感谢',
+  '祝福',
+  '礼盒',
+];
 
 // 格式化数字
 const formatNumber = (num) => {
@@ -374,22 +532,102 @@ const handleAdd = () => {
   dialogType.value = 'add';
   // 重置表单
   Object.keys(form).forEach((key) => {
-    form[key] = key === 'status' ? '上架' : key === 'price' ? 0 : '';
+    if (key === 'price_info') {
+      form[key] = {
+        original_price: 0,
+        current_price: 0,
+      };
+    } else if (key === 'sales_data') {
+      form[key] = {
+        sales_count: 0,
+        stock_status: '充足',
+        rating: 0,
+      };
+    } else if (key === 'promotion') {
+      form[key] = {
+        is_hot: true,
+        main_description: '',
+        keywords: [],
+        flower_language: '',
+        end_time: '',
+      };
+    } else if (key === 'specification') {
+      form[key] = {
+        category: [],
+        materials: '',
+        packaging: '',
+      };
+    } else if (key === 'status') {
+      form[key] = '上架';
+    } else if (key === 'main_category') {
+      form[key] = '热销';
+    } else if (key === 'images') {
+      form[key] = [];
+    } else {
+      form[key] = '';
+    }
   });
   dialogVisible.value = true;
 };
 
 // 编辑商品
 const handleEdit = (row) => {
+  console.log('编辑商品数据:', row);
   dialogType.value = 'edit';
+
   // 将后端数据映射到表单
-  form.id = row.id;
-  form.name = row.title;
-  form.price = row.price_info?.current_price || 0;
-  form.stock = row.sales_data?.stock_status || '';
-  form.image = row.images?.[0] || '';
-  form.description = row.promotion?.main_description || '';
-  form.status = row.status || '上架';
+  const rawData = row.raw || row; // 使用原始数据
+
+  form.id = rawData.id;
+  form.title = rawData.title;
+  form.main_category = rawData.main_category || '热销';
+
+  // 处理图片数组
+  form.images = Array.isArray(rawData.images) ? [...rawData.images] : [];
+
+  // 处理价格信息
+  form.price_info = {
+    original_price: rawData.price_info?.original_price || 0,
+    current_price: rawData.price_info?.current_price || 0,
+  };
+
+  // 处理销售数据
+  form.sales_data = {
+    sales_count: rawData.sales_data?.sales_count || 0,
+    stock_status: rawData.sales_data?.stock_status || '充足',
+    rating: rawData.sales_data?.rating || 0,
+  };
+
+  // 处理促销信息
+  form.promotion = {
+    is_hot: rawData.promotion?.is_hot || false,
+    main_description: rawData.promotion?.main_description || '',
+    keywords: Array.isArray(rawData.promotion?.keywords)
+      ? [...rawData.promotion.keywords]
+      : [],
+    flower_language: rawData.promotion?.flower_language || '',
+    end_time: rawData.promotion?.end_time || '',
+  };
+
+  // 处理规格信息
+  form.specification = {
+    category: Array.isArray(rawData.specification?.category)
+      ? [...rawData.specification.category]
+      : [],
+    materials: Array.isArray(rawData.specification?.materials)
+      ? rawData.specification.materials.join('\n')
+      : '',
+    packaging: rawData.specification?.packaging || '',
+  };
+
+  form.status = rawData.status || '上架';
+
+  // 打印调试信息
+  console.log('编辑商品数据:', {
+    form,
+    originalRow: rawData,
+  });
+
   dialogVisible.value = true;
 };
 
@@ -426,7 +664,7 @@ const handleToggleStatus = async (row) => {
 // 删除商品
 const handleDelete = async (row) => {
   try {
-    await ElMessageBox.confirm('确定要删除该商品吗？', '提示', {
+    await ElMessageBox.confirm('确定要删除该商品吗？此操作不可恢复！', '警告', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning',
@@ -434,11 +672,15 @@ const handleDelete = async (row) => {
 
     const response = await fetch(`${API_URL}/product_list/${row.id}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     const result = await response.json();
     if (result.code === 200) {
       ElMessage.success('删除成功');
+      // 重新获取商品列表
       fetchProductList();
     } else {
       throw new Error(result.message || '删除失败');
@@ -458,33 +700,52 @@ const submitForm = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
+        // 处理图片路径，移除API_URL前缀
+        const processedImages = form.images.map((img) => {
+          if (img.startsWith(API_URL)) {
+            return img.replace(API_URL + '/', '');
+          }
+          return img;
+        });
+
+        // 处理花材清单
+        const materials = form.specification.materials
+          .split('\n')
+          .filter((item) => item.trim());
+
         // 构建商品数据
         const productData = {
-          title: form.name,
-          main_category: '上新', // 默认分类
-          images: form.image ? [form.image] : [],
+          id: form.id || `P${Date.now().toString().slice(-4)}`,
+          title: form.title,
+          main_category: form.main_category,
+          images: processedImages,
           price_info: {
-            original_price: form.price,
-            current_price: form.price,
+            original_price: form.price_info.current_price,
+            current_price: form.price_info.current_price,
           },
           sales_data: {
-            sales_count: 0,
-            stock_status: form.stock,
-            rating: 0,
+            sales_count: form.sales_data.sales_count,
+            stock_status: form.sales_data.stock_status,
+            rating: form.sales_data.rating,
           },
           promotion: {
             is_hot: form.status === '上架',
-            main_description: form.description,
-            keywords: [],
-            flower_language: '',
-            end_time: '',
+            main_description: form.promotion.main_description,
+            keywords: form.promotion.keywords,
+            flower_language: form.promotion.flower_language,
+            end_time: form.promotion.end_time
+              ? new Date(form.promotion.end_time).toISOString()
+              : '',
           },
           specification: {
-            category: [],
-            materials: [],
-            packaging: '',
+            category: form.specification.category,
+            materials: materials,
+            packaging: form.specification.packaging,
           },
           status: form.status,
+          timestamps: {
+            updated_at: new Date().toISOString().split('T')[0],
+          },
         };
 
         const url =
@@ -518,56 +779,95 @@ const submitForm = async () => {
   });
 };
 
-// 图片上传相关
-const handleUploadSuccess = (response) => {
-  form.image = response.url;
+// 上传请求头
+const uploadHeaders = {
+  Authorization: `Bearer ${localStorage.getItem('token')}`, // 如果需要认证
 };
 
-const beforeUpload = (file) => {
-  const isImage = file.type.startsWith('image/');
-  const isLt2M = file.size / 1024 / 1024 < 2;
+// 处理上传错误
+const handleUploadError = (error) => {
+  console.error('图片上传失败:', error);
+  ElMessage.error('图片上传失败，请重试');
+};
 
-  if (!isImage) {
-    ElMessage.error('上传文件只能是图片格式!');
-    return false;
-  }
-  if (!isLt2M) {
-    ElMessage.error('上传图片大小不能超过 2MB!');
-    return false;
-  }
-  return true;
+// 添加图片超出限制的处理函数
+const handleExceed = () => {
+  ElMessage.warning('最多只能上传4张图片');
 };
 
 // 导出商品
 const handleExport = async () => {
   try {
-    const params = new URLSearchParams({
-      ...searchForm,
-      minPrice: searchForm.minPrice || '',
-      maxPrice: searchForm.maxPrice || '',
-    });
-
-    const response = await fetch(
-      `${API_URL}/product_list/export?${params.toString()}`
-    );
+    // 获取所有商品数据
+    const response = await fetch(`${API_URL}/product_list`);
     if (!response.ok) {
-      throw new Error('导出失败');
+      throw new Error('获取商品数据失败');
     }
+    const data = await response.json();
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `商品列表_${new Date().toLocaleDateString()}.xlsx`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    // 处理数据格式
+    const exportData = data.map((item) => ({
+      商品ID: item.id,
+      商品名称: item.title,
+      商品分类: item.main_category,
+      当前价格: item.price_info?.current_price || 0,
+      原价: item.price_info?.original_price || 0,
+      库存状态: item.sales_data?.stock_status || '',
+      销量: item.sales_data?.sales_count || 0,
+      评分: item.sales_data?.rating || 0,
+      商品描述: item.promotion?.main_description || '',
+      花语: item.promotion?.flower_language || '',
+      关键词: Array.isArray(item.promotion?.keywords)
+        ? item.promotion.keywords.join(',')
+        : '',
+      促销结束时间: item.promotion?.end_time || '',
+      商品分类标签: Array.isArray(item.specification?.category)
+        ? item.specification.category.join(',')
+        : '',
+      花材清单: Array.isArray(item.specification?.materials)
+        ? item.specification.materials.join(',')
+        : '',
+      包装说明: item.specification?.packaging || '',
+      商品状态: item.status || '',
+      更新时间: item.timestamps?.updated_at || '',
+    }));
+
+    // 创建工作簿
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(exportData);
+
+    // 设置列宽
+    const colWidths = [
+      { wch: 10 }, // 商品ID
+      { wch: 20 }, // 商品名称
+      { wch: 15 }, // 商品分类
+      { wch: 12 }, // 当前价格
+      { wch: 12 }, // 原价
+      { wch: 12 }, // 库存状态
+      { wch: 10 }, // 销量
+      { wch: 10 }, // 评分
+      { wch: 30 }, // 商品描述
+      { wch: 20 }, // 花语
+      { wch: 20 }, // 关键词
+      { wch: 20 }, // 促销结束时间
+      { wch: 20 }, // 商品分类标签
+      { wch: 30 }, // 花材清单
+      { wch: 20 }, // 包装说明
+      { wch: 10 }, // 商品状态
+      { wch: 20 }, // 更新时间
+    ];
+    ws['!cols'] = colWidths;
+
+    // 将工作表添加到工作簿
+    XLSX.utils.book_append_sheet(wb, ws, '商品列表');
+
+    // 导出文件
+    XLSX.writeFile(wb, `商品列表_${new Date().toLocaleDateString()}.xlsx`);
 
     ElMessage.success('导出成功');
   } catch (error) {
     console.error('导出失败:', error);
-    ElMessage.error('导出失败');
+    ElMessage.error('导出失败，请重试');
   }
 };
 
@@ -588,6 +888,91 @@ const orderDetail = ref({
 const showOrderDetail = (order) => {
   orderDetail.value = order;
   orderDialogVisible.value = true;
+};
+
+// 处理花材清单
+const handleMaterialsChange = (value) => {
+  form.specification.materials = value
+    .split('\n')
+    .filter((item) => item.trim());
+};
+
+// 修改表单验证规则
+const rules = {
+  title: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
+  main_category: [
+    { required: true, message: '请选择商品分类', trigger: 'change' },
+  ],
+  'price_info.current_price': [
+    { required: true, message: '请输入商品价格', trigger: 'blur' },
+  ],
+  'sales_data.stock_status': [
+    { required: true, message: '请选择库存状态', trigger: 'change' },
+  ],
+  'sales_data.rating': [
+    { required: true, message: '请选择商品评分', trigger: 'change' },
+  ],
+  images: [{ required: true, message: '请上传商品图片', trigger: 'change' }],
+  'promotion.main_description': [
+    { required: true, message: '请输入商品描述', trigger: 'blur' },
+  ],
+  'promotion.flower_language': [
+    { required: true, message: '请输入花语', trigger: 'blur' },
+  ],
+  'specification.category': [
+    { required: true, message: '请选择商品分类标签', trigger: 'change' },
+  ],
+  'specification.materials': [
+    { required: true, message: '请输入花材清单', trigger: 'blur' },
+  ],
+  'specification.packaging': [
+    { required: true, message: '请输入包装说明', trigger: 'blur' },
+  ],
+  status: [{ required: true, message: '请选择商品状态', trigger: 'change' }],
+};
+
+// 处理上传成功
+const handleUploadSuccess = (response) => {
+  console.log('上传响应:', response);
+  if (!form.images) {
+    form.images = [];
+  }
+  if (form.images.length >= 4) {
+    ElMessage.warning('最多只能上传4张图片');
+    return;
+  }
+  if (response.code === 200 && response.url) {
+    console.log('添加图片URL:', response.url);
+    form.images.push(response.url);
+    console.log('当前图片列表:', form.images);
+  } else {
+    console.error('上传响应异常:', response);
+    ElMessage.error('图片上传失败：未获取到图片地址');
+  }
+};
+
+// 上传前验证
+const beforeUpload = (file) => {
+  console.log('准备上传文件:', file);
+  const isImage = file.type.startsWith('image/');
+  if (!isImage) {
+    ElMessage.error('只能上传图片文件！');
+    return false;
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    ElMessage.error('图片大小不能超过 2MB！');
+    return false;
+  }
+  return true;
+};
+
+// 处理图片移除
+const handleRemoveImage = (index) => {
+  console.log('移除图片索引:', index);
+  console.log('移除前图片列表:', form.images);
+  form.images.splice(index, 1);
+  console.log('移除后图片列表:', form.images);
 };
 
 // 组件卸载前的清理
@@ -638,31 +1023,55 @@ onMounted(() => {
 }
 
 .avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-item {
   position: relative;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
   overflow: hidden;
-  width: 178px;
-  height: 178px;
 }
 
-.avatar-uploader:hover {
-  border-color: #409eff;
+.image-item .el-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-  line-height: 178px;
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 4px;
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1;
 }
 
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
+.remove-btn:hover {
+  /* background-color: #f56c6c; */
+  transform: scale(1.1);
+}
+
+.remove-btn .el-icon {
+  font-size: 14px;
+}
+
+.el-upload__tip {
+  color: #909399;
+  font-size: 12px;
+  margin-top: 5px;
 }
 </style>

@@ -2,9 +2,23 @@ import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import { MongoClient, ObjectId } from 'mongodb';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 const port = 3000;
+
+// 确保上传目录存在
+const uploadDirs = [
+  './public/uploads',
+  './public/uploads/products',
+  './public/uploads/avatars',
+];
+uploadDirs.forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
 
 // MongoDB连接配置
 const uri =
@@ -32,11 +46,11 @@ app.use(cors());
 // 设置文件存储路径和文件名
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/avatars');
+    cb(null, './public/uploads/products');
   },
   filename: function (req, file, cb) {
     const ext = file.originalname.split('.').pop();
-    cb(null, `${req.params.user_id}_${Date.now()}.${ext}`);
+    cb(null, `product_${Date.now()}.${ext}`);
   },
 });
 
@@ -52,6 +66,31 @@ const upload = multer({
       cb(new Error('只允许上传图片文件'));
     }
   },
+});
+
+// 商品图片上传路由
+app.post('/uploads', upload.single('file'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        code: 400,
+        message: '没有上传文件',
+      });
+    }
+
+    res.json({
+      code: 200,
+      message: '上传成功',
+      url: `/uploads/products/${req.file.filename}`,
+    });
+  } catch (error) {
+    console.error('文件上传失败:', error);
+    res.status(500).json({
+      code: 500,
+      message: '文件上传失败',
+      error: error.message,
+    });
+  }
 });
 
 // 获取用户列表
