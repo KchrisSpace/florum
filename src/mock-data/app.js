@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fs from 'fs';
-import path from 'path';
 
 const app = express();
 const port = 3000;
@@ -851,6 +850,14 @@ app.post('/addresses', async (req, res) => {
     const newAddress = req.body;
     const db = client.db(dbName);
 
+    // 生成地址ID
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    const addressId = `ADDR${timestamp}${randomNum}`;
+    newAddress.id = addressId;
+
     if (newAddress.is_default) {
       await db
         .collection('addresses')
@@ -878,6 +885,17 @@ app.put('/addresses/:id', async (req, res) => {
     const updateData = req.body;
     const db = client.db(dbName);
 
+    // 构建更新对象，确保字段名称与数据库模型一致
+    const updateFields = {
+      user_id: updateData.user_id,
+      consignee: updateData.consignee,
+      phone: updateData.phone,
+      region: updateData.region,
+      detail: updateData.detail,
+      is_default: updateData.is_default,
+    };
+
+    // 如果设置为默认地址，先将其他地址设为非默认
     if (updateData.is_default) {
       await db
         .collection('addresses')
@@ -887,20 +905,30 @@ app.put('/addresses/:id', async (req, res) => {
         );
     }
 
+    // 使用id字段进行查询和更新
     const result = await db
       .collection('addresses')
       .findOneAndUpdate(
         { id: id },
-        { $set: updateData },
+        { $set: updateFields },
         { returnDocument: 'after' }
       );
 
     if (!result) {
-      return res.status(404).json({ error: '地址未找到' });
+      return res.status(404).json({
+        code: 404,
+        message: '地址未找到',
+        error: '地址未找到',
+      });
     }
 
-    res.json(result.value);
+    res.json({
+      code: 200,
+      message: '更新成功',
+      data: result.value,
+    });
   } catch (err) {
+    console.error('更新地址失败:', err);
     res.status(500).json({
       code: 500,
       message: '服务器错误',
