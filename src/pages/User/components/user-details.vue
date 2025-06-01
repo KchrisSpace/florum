@@ -189,10 +189,9 @@ const originalData = ref({
 });
 
 // 定义常量
-const DEFAULT_EMAIL = '123456@qq.com';
-const DEFAULT_PHONE = '12345678901';
-const CREATED_AT = '2025-04-25T21:56:28.881Z';
-
+// const DEFAULT_EMAIL = '123456@qq.com';
+// const DEFAULT_PHONE = '12345678901';
+// const CREATED_AT = '2025-04-25T21:56:28.881Z';
 // 获取用户信息
 const fetchUserInfo = async () => {
   try {
@@ -330,12 +329,12 @@ const handleSubmit = async () => {
 
     // 创建用户信息对象
     const userData = {
-      user_id: formData.value.user_id,
+      id: formData.value.user_id,
       user_name: formData.value.nickname,
       user_gender: formData.value.gender === 'male' ? '男' : '女',
-      user_email: DEFAULT_EMAIL,
-      user_phone: DEFAULT_PHONE,
-      created_at: CREATED_AT,
+      // user_email: DEFAULT_EMAIL,
+      // user_phone: DEFAULT_PHONE,
+      // created_at: CREATED_AT,
       updated_at: new Date().toISOString(),
     };
 

@@ -58,7 +58,7 @@
         <el-table-column label="商品图片" width="100">
           <template #default="{ row }">
             <el-image
-              :src="row.image"
+              :src="`/${row.image}`"
               :preview-src-list="[row.image]"
               fit="cover"
               style="width: 50px; height: 50px" />
@@ -372,6 +372,7 @@ const handleSelectionChange = (val) => {
 // 新增商品
 const handleAdd = () => {
   dialogType.value = 'add';
+  // 重置表单
   Object.keys(form).forEach((key) => {
     form[key] = key === 'status' ? '上架' : key === 'price' ? 0 : '';
   });
@@ -381,9 +382,14 @@ const handleAdd = () => {
 // 编辑商品
 const handleEdit = (row) => {
   dialogType.value = 'edit';
-  Object.keys(form).forEach((key) => {
-    form[key] = row[key];
-  });
+  // 将后端数据映射到表单
+  form.id = row.id;
+  form.name = row.title;
+  form.price = row.price_info?.current_price || 0;
+  form.stock = row.sales_data?.stock_status || '';
+  form.image = row.images?.[0] || '';
+  form.description = row.promotion?.main_description || '';
+  form.status = row.status || '上架';
   dialogVisible.value = true;
 };
 
@@ -396,18 +402,24 @@ const handleToggleStatus = async (row) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({
+        status: newStatus,
+        promotion: {
+          is_hot: newStatus === '上架',
+        },
+      }),
     });
 
-    if (!response.ok) {
-      throw new Error('更新商品状态失败');
+    const result = await response.json();
+    if (result.code === 200) {
+      ElMessage.success('更新状态成功');
+      fetchProductList();
+    } else {
+      throw new Error(result.message || '更新状态失败');
     }
-
-    ElMessage.success('更新状态成功');
-    fetchProductList();
   } catch (error) {
     console.error('更新商品状态失败:', error);
-    ElMessage.error('更新状态失败');
+    ElMessage.error(error.message || '更新状态失败');
   }
 };
 
@@ -424,16 +436,17 @@ const handleDelete = async (row) => {
       method: 'DELETE',
     });
 
-    if (!response.ok) {
-      throw new Error('删除商品失败');
+    const result = await response.json();
+    if (result.code === 200) {
+      ElMessage.success('删除成功');
+      fetchProductList();
+    } else {
+      throw new Error(result.message || '删除失败');
     }
-
-    ElMessage.success('删除成功');
-    fetchProductList();
   } catch (error) {
     if (error !== 'cancel') {
       console.error('删除商品失败:', error);
-      ElMessage.error('删除失败');
+      ElMessage.error(error.message || '删除失败');
     }
   }
 };
@@ -445,10 +458,40 @@ const submitForm = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
+        // 构建商品数据
+        const productData = {
+          title: form.name,
+          main_category: '上新', // 默认分类
+          images: form.image ? [form.image] : [],
+          price_info: {
+            original_price: form.price,
+            current_price: form.price,
+          },
+          sales_data: {
+            sales_count: 0,
+            stock_status: form.stock,
+            rating: 0,
+          },
+          promotion: {
+            is_hot: form.status === '上架',
+            main_description: form.description,
+            keywords: [],
+            flower_language: '',
+            end_time: '',
+          },
+          specification: {
+            category: [],
+            materials: [],
+            packaging: '',
+          },
+          status: form.status,
+        };
+
         const url =
           dialogType.value === 'add'
             ? `${API_URL}/product_list`
             : `${API_URL}/product_list/${form.id}`;
+
         const method = dialogType.value === 'add' ? 'POST' : 'PUT';
 
         const response = await fetch(url, {
@@ -456,19 +499,20 @@ const submitForm = async () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify(productData),
         });
 
-        if (!response.ok) {
-          throw new Error('保存商品失败');
+        const result = await response.json();
+        if (result.code === 200) {
+          ElMessage.success('保存成功');
+          dialogVisible.value = false;
+          fetchProductList();
+        } else {
+          throw new Error(result.message || '保存失败');
         }
-
-        ElMessage.success('保存成功');
-        dialogVisible.value = false;
-        fetchProductList();
       } catch (error) {
         console.error('保存商品失败:', error);
-        ElMessage.error('保存失败');
+        ElMessage.error(error.message || '保存失败');
       }
     }
   });
