@@ -270,7 +270,61 @@ app.get('/product_list/:id', async (req, res) => {
     });
   }
 });
+//更新商品信息
+app.put('/product_list/:id', async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  const db = client.db(dbName);
 
+  // 只允许更新部分字段
+  const allowedFields = [
+    'title',
+    'main_category',
+    'images',
+    'price_info',
+    'sales_data',
+    'promotion',
+    'specification',
+    'status',
+    'timestamps',
+  ];
+  const setData = {};
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) setData[field] = updateData[field];
+  });
+
+  // 用id查找
+  const result = await db
+    .collection('product_list')
+    .findOneAndUpdate({ id }, { $set: setData }, { returnDocument: 'after' });
+
+  if (!result) {
+    return res.status(404).json({ code: 404, message: '未找到该商品' });
+  }
+
+  res.json({ code: 200, message: '更新成功', data: result.value });
+});
+// 删除商品
+app.delete('/product_list/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = client.db(dbName);
+
+    const result = await db.collection('product_list').findOneAndDelete({ id });
+
+    if (!result) {
+      return res.status(404).json({ error: '商品未找到' });
+    }
+
+    res.json({ message: '商品已删除' });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+      error: err.message,
+    });
+  }
+});
 // 购物车相关接口
 app.get('/cart', async (req, res) => {
   try {
@@ -906,14 +960,7 @@ app.put('/custom/:id', async (req, res) => {
     const db = client.db(dbName);
 
     // 只允许更新部分字段
-    const allowedFields = [
-      'user_id',
-      'custom_img',
-      'email',
-      'phone',
-      'custom_message',
-      'status'
-    ];
+    const allowedFields = ['user_id', 'custom_img', 'email', 'phone', 'custom_message', 'status'];
     const setData = {};
     allowedFields.forEach((field) => {
       if (updateData[field] !== undefined) setData[field] = updateData[field];
@@ -928,12 +975,7 @@ app.put('/custom/:id', async (req, res) => {
     // 先尝试用id字段查找
     let result = await db
       .collection('custom')
-      .findOneAndUpdate(
-        { id },
-        { $set: setData },
-        { returnDocument: 'after' }
-      );
-
+      .findOneAndUpdate({ id }, { $set: setData }, { returnDocument: 'after' });
 
     if (!result) {
       return res.status(404).json({ code: 404, message: '未找到该定制信息' });
@@ -952,7 +994,6 @@ app.put('/custom/:id', async (req, res) => {
     });
   }
 });
- 
 
 // 轮播图相关接口
 app.get('/carousel', async (req, res) => {

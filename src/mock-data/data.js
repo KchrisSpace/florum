@@ -50,10 +50,10 @@ export let product_list = [
     id: 'P01',
     main_category: '热销',
     images: [
-      'public/images/products_list/p01/01.jpg',
-      'public/images/products_list/p01/02.jpg',
-      'public/images/products_list/p01/03.jpg',
-      'public/images/products_list/p01/04.jpg',
+      '/public/images/products_list/p01/01.jpg',
+      '/public/images/products_list/p01/02.jpg',
+      '/public/images/products_list/p01/03.jpg',
+      '/public/images/products_list/p01/04.jpg',
     ],
     title: 'Love you',
     price_info: {
@@ -88,15 +88,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+  status: '上架',
   },
   {
     id: 'P02',
     main_category: '热销',
     images: [
-      'public/images/products_list/p02/01.jpg',
-      'public/images/products_list/p02/02.jpg',
-      'public/images/products_list/p02/03.jpg',
-      'public/images/products_list/p02/04.jpg',
+      '/public/images/products_list/p02/01.jpg',
+      '/public/images/products_list/p02/02.jpg',
+      '/public/images/products_list/p02/03.jpg',
+      '/public/images/products_list/p02/04.jpg',
     ],
     title: '星辰大海',
     price_info: {
@@ -127,15 +128,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P03',
     main_category: '上新',
     images: [
-      'public/images/products_list/p03/01.jpg',
-      'public/images/products_list/p03/02.jpg',
-      'public/images/products_list/p03/03.jpg',
-      'public/images/products_list/p03/04.jpg',
+      '/public/images/products_list/p03/01.jpg',
+      '/public/images/products_list/p03/02.jpg',
+      '/public/images/products_list/p03/03.jpg',
+      '/public/images/products_list/p03/04.jpg',
     ],
     title: '灿烂阳光/鲜花抱抱桶',
     price_info: {
@@ -167,15 +169,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P04',
     main_category: '上新',
     images: [
-      'public/images/products_list/p04/01.jpg',
-      'public/images/products_list/p04/02.jpg',
-      'public/images/products_list/p04/03.jpg',
-      'public/images/products_list/p04/04.jpg',
+      '/public/images/products_list/p04/01.jpg',
+      '/public/images/products_list/p04/02.jpg',
+      '/public/images/products_list/p04/03.jpg',
+      '/public/images/products_list/p04/04.jpg',
     ],
     title: '幸福时光/鲜花抱抱桶',
     price_info: {
@@ -206,15 +209,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P05',
     main_category: '上新',
     images: [
-      'public/images/products_list/p05/01.jpg',
-      'public/images/products_list/p05/02.jpg',
-      'public/images/products_list/p05/03.jpg',
-      'public/images/products_list/p05/04.jpg',
+      '/public/images/products_list/p05/01.jpg',
+      '/public/images/products_list/p05/02.jpg',
+      '/public/images/products_list/p05/03.jpg',
+      '/public/images/products_list/p05/04.jpg',
     ],
     title: '星河谜底/鲜花抱抱桶',
     price_info: {
@@ -245,15 +249,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P06',
     main_category: '上新',
     images: [
-      'public/images/products_list/p06/01.jpg',
-      'public/images/products_list/p06/02.jpg',
-      'public/images/products_list/p06/03.jpg',
-      'public/images/products_list/p06/04.jpg',
+      '/public/images/products_list/p06/01.jpg',
+      '/public/images/products_list/p06/02.jpg',
+      '/public/images/products_list/p06/03.jpg',
+      '/public/images/products_list/p06/04.jpg',
     ],
     title: '花漾甜蜜/鲜花抱抱桶',
     price_info: {
@@ -284,15 +289,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P07',
     main_category: '热销',
     images: [
-      'public/images/products_list/p07/01.jpg',
-      'public/images/products_list/p07/02.jpg',
-      'public/images/products_list/p07/03.jpg',
-      'public/images/products_list/p07/04.jpg',
+      '/public/images/products_list/p07/01.jpg',
+      '/public/images/products_list/p07/02.jpg',
+      '/public/images/products_list/p07/03.jpg',
+      '/public/images/products_list/p07/04.jpg',
     ],
     title: '有幸相郁/粉白郁金香',
     price_info: {
@@ -321,15 +327,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P08',
     main_category: '热销',
     images: [
-      'public/images/products_list/p08/01.jpg',
-      'public/images/products_list/p08/02.jpg',
-      'public/images/products_list/p08/03.jpg',
-      'public/images/products_list/p08/04.jpg',
+      '/public/images/products_list/p08/01.jpg',
+      '/public/images/products_list/p08/02.jpg',
+      '/public/images/products_list/p08/03.jpg',
+      '/public/images/products_list/p08/04.jpg',
     ],
     title: '心湖微蓝',
     price_info: {
@@ -361,15 +368,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P09',
     main_category: '特价出售',
     images: [
-      'public/images/products_list/p09/01.jpg',
-      'public/images/products_list/p09/02.jpg',
-      'public/images/products_list/p09/03.jpg',
-      'public/images/products_list/p09/04.jpg',
+      '/public/images/products_list/p09/01.jpg',
+      '/public/images/products_list/p09/02.jpg',
+      '/public/images/products_list/p09/03.jpg',
+      '/public/images/products_list/p09/04.jpg',
     ],
     title: '韩式系列/绽放',
     price_info: {
@@ -400,15 +408,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P10',
     main_category: '特价出售',
     images: [
-      'public/images/products_list/p10/01.jpg',
-      'public/images/products_list/p10/02.jpg',
-      'public/images/products_list/p10/03.jpg',
-      'public/images/products_list/p10/04.jpg',
+      '/public/images/products_list/p10/01.jpg',
+      '/public/images/products_list/p10/02.jpg',
+      '/public/images/products_list/p10/03.jpg',
+      '/public/images/products_list/p10/04.jpg',
     ],
     title: '香妃',
     price_info: {
@@ -437,15 +446,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P11',
     main_category: '特价出售',
     images: [
-      'public/images/products_list/p11/01.jpg',
-      'public/images/products_list/p11/02.jpg',
-      'public/images/products_list/p11/03.jpg',
-      'public/images/products_list/p11/04.jpg',
+      '/public/images/products_list/p11/01.jpg',
+      '/public/images/products_list/p11/02.jpg',
+      '/public/images/products_list/p11/03.jpg',
+      '/public/images/products_list/p11/04.jpg',
     ],
     title: '真挚祝福',
     price_info: {
@@ -473,15 +483,16 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
   {
     id: 'P12',
     main_category: '特价出售',
     images: [
-      'public/images/products_list/p12/01.jpg',
-      'public/images/products_list/p12/02.jpg',
-      'public/images/products_list/p12/03.jpg',
-      'public/images/products_list/p12/04.jpg',
+      '/public/images/products_list/p12/01.jpg',
+      '/public/images/products_list/p12/02.jpg',
+      '/public/images/products_list/p12/03.jpg',
+      '/public/images/products_list/p12/04.jpg',
     ],
     title: '向日葵之歌',
     price_info: {
@@ -511,6 +522,7 @@ export let product_list = [
       created_at: '2023-03-25',
       updated_at: '2023-03-25',
     },
+    status: '上架',
   },
 ];
 export let product_comments = [
@@ -669,7 +681,7 @@ export let normal_orders = [
     total_price: 399,
     shipping_fee: 0,
     delivery_time: '2025-04-13T10:15:00Z',
-    status: '进行中',
+    status: '上架',
     created_at: '2025-04-13T10:15:00Z',
   },
   {

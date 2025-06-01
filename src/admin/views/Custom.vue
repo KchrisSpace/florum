@@ -20,10 +20,22 @@
           clearable
           style="width: 140px; margin-left: 10px"
         >
-          <el-option label="待处理" value="待处理" />
-          <el-option label="进行中" value="进行中" />
-          <el-option label="已完成" value="已完成" />
-          <el-option label="已取消" value="已取消" />
+          <el-option
+            label="待处理"
+            value="待处理"
+          />
+          <el-option
+            label="进行中"
+            value="进行中"
+          />
+          <el-option
+            label="已完成"
+            value="已完成"
+          />
+          <el-option
+            label="已取消"
+            value="已取消"
+          />
         </el-select>
       </div>
     </div>
@@ -166,6 +178,7 @@
             :src="custom.custom_img"
             style="width: 100px; height: 100px"
             fit="cover"
+            :preview-src-list="[custom.custom_img]"
           />
           <span v-else>无</span>
         </div>
@@ -266,7 +279,7 @@ const filteredCustoms = computed(() => {
 
   // 状态筛选
   if (statusFilter.value) {
-    result = result.filter(item => item.status === statusFilter.value);
+    result = result.filter((item) => item.status === statusFilter.value);
   }
 
   // 关键词搜索
