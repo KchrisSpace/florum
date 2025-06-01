@@ -56,9 +56,6 @@
             <el-button type="primary" @click="handleExport">
               <el-icon><Download /></el-icon>导出订单
             </el-button>
-            <el-button type="success" @click="handleBatchShip">
-              <el-icon><Van /></el-icon>批量发货
-            </el-button>
           </el-button-group>
         </div>
       </template>
@@ -87,7 +84,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="created_at" label="下单时间" />
-        <el-table-column label="操作" width="250" fixed="right">
+        <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button-group>
               <el-button type="primary" size="small" @click="handleDetail(row)">
@@ -95,20 +92,6 @@
               </el-button>
               <el-button type="info" size="small" @click="handleUserInfo(row)">
                 用户信息
-              </el-button>
-              <el-button
-                v-if="row.status === '进行中'"
-                type="success"
-                size="small"
-                @click="handleShip(row)">
-                发货
-              </el-button>
-              <el-button
-                v-if="row.status === '进行中'"
-                type="danger"
-                size="small"
-                @click="handleCancel(row)">
-                取消
               </el-button>
             </el-button-group>
           </template>
@@ -162,15 +145,40 @@
         </el-descriptions-item>
       </el-descriptions>
 
-      <el-table :data="currentOrder.items" style="margin-top: 20px">
-        <el-table-column prop="product_id" label="商品ID" width="100" />
-        <el-table-column prop="quantity" label="数量" width="100" />
-        <el-table-column label="小计">
-          <template #default="{ row }">
-            ¥{{ formatNumber(row.quantity * (row.single_price || 0)) }}
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="order-items mt-4">
+        <h3 class="text-lg font-medium mb-2">商品清单</h3>
+        <el-table :data="currentOrder.items" border style="width: 100%">
+          <el-table-column label="商品图片" width="100">
+            <template #default="{ row }">
+              <el-image
+                v-if="row.productDetail?.images?.[0]"
+                :src="row.productDetail.images[0]"
+                :preview-src-list="row.productDetail.images"
+                fit="cover"
+                style="width: 50px; height: 50px" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="productDetail.title" label="商品名称" />
+          <el-table-column prop="quantity" label="数量" width="100" />
+          <el-table-column label="单价">
+            <template #default="{ row }">
+              ¥{{
+                formatNumber(row.productDetail?.price_info?.current_price || 0)
+              }}
+            </template>
+          </el-table-column>
+          <el-table-column label="小计">
+            <template #default="{ row }">
+              ¥{{
+                formatNumber(
+                  (row.productDetail?.price_info?.current_price || 0) *
+                    row.quantity
+                )
+              }}
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <div class="order-total">
         <div class="total-item">
@@ -273,8 +281,9 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
-import { Search, Refresh, Download, Van } from '@element-plus/icons-vue';
+import { Search, Refresh, Download } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import * as XLSX from 'xlsx';
 
 // 订单状态选项
 const orderStatus = [
@@ -438,9 +447,38 @@ const handleSelectionChange = (val) => {
 };
 
 // 查看订单详情
-const handleDetail = (row) => {
-  currentOrder.value = { ...row };
-  detailDialogVisible.value = true;
+const handleDetail = async (row) => {
+  try {
+    currentOrder.value = { ...row };
+
+    // 获取每个商品的详细信息
+    const productDetails = await Promise.all(
+      row.items.map(async (item) => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/product_list/${item.product_id}`
+          );
+          if (!response.ok) {
+            throw new Error(`获取商品详情失败: ${response.status}`);
+          }
+          const data = await response.json();
+          return {
+            ...item,
+            productDetail: data,
+          };
+        } catch (error) {
+          console.error(`获取商品 ${item.product_id} 详情失败:`, error);
+          return item;
+        }
+      })
+    );
+
+    currentOrder.value.items = productDetails;
+    detailDialogVisible.value = true;
+  } catch (error) {
+    console.error('获取订单详情失败:', error);
+    ElMessage.error('获取订单详情失败');
+  }
 };
 
 // 查看用户信息
@@ -514,135 +552,130 @@ const handleStatusChange = async (row) => {
   }
 };
 
-// 发货处理
-const handleShip = (row) => {
-  shipForm.orderId = row.id;
-  shipForm.company = '';
-  shipForm.trackingNo = '';
-  shipDialogVisible.value = true;
-};
-
-// 批量发货
-const handleBatchShip = () => {
-  if (selectedOrders.value.length === 0) {
-    ElMessage.warning('请选择要发货的订单');
-    return;
-  }
-  const canShip = selectedOrders.value.every(
-    (order) => order.status === '进行中'
-  );
-  if (!canShip) {
-    ElMessage.warning('只能对进行中的订单进行发货操作');
-    return;
-  }
-  shipForm.orderId = selectedOrders.value.map((order) => order.id).join(',');
-  shipForm.company = '';
-  shipForm.trackingNo = '';
-  shipDialogVisible.value = true;
-};
-
-// 提交发货
-const submitShipment = async () => {
-  if (!shipFormRef.value) return;
-
-  await shipFormRef.value.validate(async (valid) => {
-    if (valid) {
-      try {
-        const orderIds = shipForm.orderId.split(',');
-        const response = await fetch(
-          'http://localhost:3000/orders/batch-ship',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              orderIds,
-              company: shipForm.company,
-              trackingNo: shipForm.trackingNo,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('发货失败');
-        }
-
-        ElMessage.success('发货成功');
-        shipDialogVisible.value = false;
-        fetchOrderList();
-      } catch (error) {
-        console.error('发货失败:', error);
-        ElMessage.error('发货失败');
-      }
-    }
-  });
-};
-
-// 取消订单
-const handleCancel = async (row) => {
-  try {
-    await ElMessageBox.confirm('确定要取消该订单吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    });
-
-    const response = await fetch(
-      `http://localhost:3000/normal_orders/${row.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: '已取消' }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error('取消订单失败');
-    }
-
-    ElMessage.success('取消成功');
-    fetchOrderList();
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('取消订单失败:', error);
-      ElMessage.error('取消失败');
-    }
-  }
-};
-
 // 导出订单
 const handleExport = async () => {
   try {
-    const params = new URLSearchParams({
-      ...searchForm,
-      startDate: searchForm.dateRange?.[0] || '',
-      endDate: searchForm.dateRange?.[1] || '',
+    loading.value = true;
+    // 获取所有订单数据
+    const response = await fetch('http://localhost:3000/normal_orders');
+    if (!response.ok) {
+      throw new Error('获取订单数据失败');
+    }
+    const orders = await response.json();
+
+    // 获取每个订单的商品详情
+    const ordersWithDetails = await Promise.all(
+      orders.map(async (order) => {
+        const itemsWithDetails = await Promise.all(
+          order.items.map(async (item) => {
+            try {
+              const productResponse = await fetch(
+                `http://localhost:3000/product_list/${item.product_id}`
+              );
+              if (!productResponse.ok) {
+                throw new Error(`获取商品详情失败: ${productResponse.status}`);
+              }
+              const productData = await productResponse.json();
+              return {
+                ...item,
+                productDetail: productData,
+              };
+            } catch (error) {
+              console.error(`获取商品 ${item.product_id} 详情失败:`, error);
+              return item;
+            }
+          })
+        );
+
+        return {
+          ...order,
+          items: itemsWithDetails,
+        };
+      })
+    );
+
+    // 处理导出数据
+    const exportData = ordersWithDetails.map((order) => {
+      // 处理商品信息
+      const itemsInfo = order.items.map((item) => {
+        const productDetail = item.productDetail || {};
+        return {
+          商品ID: item.product_id,
+          商品名称: productDetail.title || '',
+          商品分类: productDetail.main_category || '',
+          商品单价: productDetail.price_info?.current_price || 0,
+          购买数量: item.quantity,
+          小计金额:
+            (productDetail.price_info?.current_price || 0) * item.quantity,
+        };
+      });
+
+      // 合并订单基本信息
+      return {
+        订单号: order.id,
+        用户ID: order.user_id,
+        订单状态: order.status,
+        下单时间: new Date(order.created_at).toLocaleString(),
+        配送时间: new Date(order.delivery_time).toLocaleString(),
+        收货人: order.address?.consignee || '',
+        联系电话: order.address?.phone || '',
+        收货地址: `${order.address?.region || ''} ${
+          order.address?.detail || ''
+        }`,
+        运费: order.shipping_fee,
+        订单总额: order.total_price,
+        ...itemsInfo.reduce(
+          (acc, item, index) => ({
+            ...acc,
+            [`商品${index + 1}ID`]: item.商品ID,
+            [`商品${index + 1}名称`]: item.商品名称,
+            [`商品${index + 1}分类`]: item.商品分类,
+            [`商品${index + 1}单价`]: item.商品单价,
+            [`商品${index + 1}数量`]: item.购买数量,
+            [`商品${index + 1}小计`]: item.小计金额,
+          }),
+          {}
+        ),
+      };
     });
 
-    const response = await fetch(
-      `http://localhost:3000/orders/export?${params.toString()}`
-    );
-    if (!response.ok) {
-      throw new Error('导出失败');
-    }
+    // 创建工作簿
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(exportData);
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `订单列表_${new Date().toLocaleDateString()}.xlsx`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    // 设置列宽
+    const colWidths = [
+      { wch: 20 }, // 订单号
+      { wch: 10 }, // 用户ID
+      { wch: 10 }, // 订单状态
+      { wch: 20 }, // 下单时间
+      { wch: 20 }, // 配送时间
+      { wch: 10 }, // 收货人
+      { wch: 15 }, // 联系电话
+      { wch: 40 }, // 收货地址
+      { wch: 10 }, // 运费
+      { wch: 10 }, // 订单总额
+      { wch: 15 }, // 商品ID
+      { wch: 20 }, // 商品名称
+      { wch: 15 }, // 商品分类
+      { wch: 10 }, // 商品单价
+      { wch: 10 }, // 商品数量
+      { wch: 10 }, // 商品小计
+    ];
+    ws['!cols'] = colWidths;
+
+    // 将工作表添加到工作簿
+    XLSX.utils.book_append_sheet(wb, ws, '订单列表');
+
+    // 导出文件
+    XLSX.writeFile(wb, `订单列表_${new Date().toLocaleDateString()}.xlsx`);
 
     ElMessage.success('导出成功');
   } catch (error) {
     console.error('导出失败:', error);
-    ElMessage.error('导出失败');
+    ElMessage.error('导出失败，请重试');
+  } finally {
+    loading.value = false;
   }
 };
 
