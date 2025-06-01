@@ -19,9 +19,12 @@ export const useCommentsStore = defineStore('comments', {
           `${API_URL}/${commentType}?${commentQuery}=${articleId}`
         );
 
-        if (response.data && Array.isArray(response.data)) {
-          this.allComments = response.data;
-          return response.data;
+        if (
+          response.data &&
+          Array.isArray(response.data.data)
+        ) {
+          this.allComments = response.data.data;
+          return response.data.data;
         } else {
           console.error('获取评论失败: 响应数据格式不正确', response.data);
           return [];
@@ -36,45 +39,31 @@ export const useCommentsStore = defineStore('comments', {
     },
 
     // 添加评论
-    async addComment(commentData, commentType) {
-      try {
-        this.isLoading = true;
-
-        // 生成评论ID
-        const timestamp = Date.now();
-        const randomNum = Math.floor(Math.random() * 10000)
-          .toString()
-          .padStart(4, '0');
-        const commentId = `COMMENT${timestamp}${randomNum}`;
-
-        // 准备评论数据
-        const newComment = {
-          ...commentData,
-          id: commentId,
-          created_at: new Date().toISOString(),
-          is_audited: true,
-        };
-
-        const response = await axios.post(
-          `${API_URL}/${commentType}`,
-          newComment
-        );
-
-        if (response.data) {
-          // 更新评论状态
-          this.allComments = [response.data, ...this.allComments];
-          return response.data;
-        } else {
-          throw new Error('添加评论失败：服务器响应数据为空');
-        }
-      } catch (err) {
-        this.error = err.message;
-        console.error('添加评论失败:', err);
-        throw err;
-      } finally {
-        this.isLoading = false;
-      }
-    },
+   async addComment(commentData, commentType) {
+  try {
+    this.isLoading = true;
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    const commentId = `COMMENT${timestamp}${randomNum}`;
+    const newComment = {
+      ...commentData,
+      id: commentId,
+      created_at: new Date().toISOString(), // 必须有
+      is_audited: true,
+      likes: 0,
+    };
+    this.comments.unshift(newComment);
+    this.allComments.unshift(newComment);
+    return newComment;
+  } catch (err) {
+    this.error = err.message;
+    throw err;
+  } finally {
+    this.isLoading = false;
+  }
+},
 
     // 删除评论
     async deleteComment(commentId, commentType) {

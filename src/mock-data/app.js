@@ -112,10 +112,10 @@ app.get('/users', async (req, res) => {
     let query = {};
 
     if (username) {
-      query.username = { $regex: username, $options: 'i' };
+      query.user_name = { $regex: username, $options: 'i' };
     }
     if (email) {
-      query.email = { $regex: email, $options: 'i' };
+      query.user_email = { $regex: email, $options: 'i' };
     }
     if (status) {
       query.status = status;
@@ -392,7 +392,7 @@ app.delete('/product_list/:id', async (req, res) => {
     res.json({
       code: 200,
       message: '删除成功',
-      data: result.value,
+      data: result,
     });
   } catch (err) {
     console.error('删除商品失败:', err);
@@ -484,7 +484,7 @@ app.put('/product_list/:id', async (req, res) => {
     res.json({
       code: 200,
       message: '更新成功',
-      data: result.value,
+      data: result,
     });
   } catch (err) {
     console.error('更新商品失败:', err);
@@ -616,7 +616,7 @@ app.put('/cart/:id', async (req, res) => {
       return res.status(404).send('Item not found');
     }
 
-    res.json(result.value);
+    res.json(result);
   } catch (err) {
     res.status(500).json({
       code: 500,
@@ -731,7 +731,7 @@ app.put('/wishlist/:id', async (req, res) => {
       return res.status(404).send('Item not found');
     }
 
-    res.json(result.value);
+    res.json(result);
   } catch (err) {
     res.status(500).json({
       code: 500,
@@ -1088,7 +1088,7 @@ app.put('/addresses/:id', async (req, res) => {
     res.json({
       code: 200,
       message: '更新成功',
-      data: result.value,
+      data: result,
     });
   } catch (err) {
     console.error('更新地址失败:', err);
@@ -1113,7 +1113,7 @@ app.delete('/addresses/:id', async (req, res) => {
       return res.status(404).json({ error: '地址未找到' });
     }
 
-    res.json(result.value);
+    res.json(result);
   } catch (err) {
     res.status(500).json({
       code: 500,
@@ -1147,6 +1147,7 @@ app.get('/normal_orders', async (req, res) => {
 
 app.post('/normal_orders', async (req, res) => {
   try {
+        const newOrder = req.body;
     // 生成订单ID
     const timestamp = Date.now();
     const randomNum = Math.floor(Math.random() * 10000)
@@ -1154,7 +1155,6 @@ app.post('/normal_orders', async (req, res) => {
       .padStart(4, '0');
     const orderId = `ORDER${timestamp}${randomNum}`;
     newOrder.id = orderId;
-    const newOrder = req.body;
     const db = client.db(dbName);
 
     if (
@@ -1195,7 +1195,7 @@ app.put('/normal_orders/:id', async (req, res) => {
       return res.status(404).json({ error: '订单未找到' });
     }
 
-    res.json(result.value);
+    res.json(result);
   } catch (err) {
     res.status(500).json({
       code: 500,
@@ -1218,7 +1218,7 @@ app.delete('/normal_orders/:id', async (req, res) => {
       return res.status(404).json({ error: '订单未找到' });
     }
 
-    res.json(result.value);
+    res.json(result);
   } catch (err) {
     res.status(500).json({
       code: 500,
