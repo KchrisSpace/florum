@@ -168,6 +168,12 @@ const handleLogout = () => {
   background-color: #263445;
 }
 
+.nav-item.router-link-active,
+.nav-item.router-link-exact-active {
+  background-color: #1890ff;
+  color: #fff;
+}
+
 .nav-item .el-icon {
   margin-right: 10px;
   font-size: 18px;
