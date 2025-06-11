@@ -35,9 +35,9 @@
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" size="small" @click="showDetail(row)">
-              查看详情
-            </el-button>
+            <span class="link-item detail" @click="showDetail(row)"
+              >查看详情</span
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -229,5 +229,15 @@ onMounted(() => {
   background-color: #f5f7fa;
   border-radius: 4px;
   margin: 0;
+}
+
+.link-item {
+  cursor: pointer;
+  font-size: 14px;
+  color: #409eff;
+}
+
+.link-item:hover {
+  opacity: 0.8;
 }
 </style>

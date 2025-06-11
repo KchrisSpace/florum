@@ -8,8 +8,7 @@
           v-model="searchKeyword"
           placeholder="搜索用户ID/邮箱/手机号/留言"
           class="search-input"
-          clearable
-        >
+          clearable>
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
@@ -18,122 +17,58 @@
           v-model="statusFilter"
           placeholder="全部状态"
           clearable
-          style="width: 140px; margin-left: 10px"
-        >
-          <el-option
-            label="待处理"
-            value="待处理"
-          />
-          <el-option
-            label="进行中"
-            value="进行中"
-          />
-          <el-option
-            label="已完成"
-            value="已完成"
-          />
-          <el-option
-            label="已取消"
-            value="已取消"
-          />
+          style="width: 140px; margin-left: 10px">
+          <el-option label="待处理" value="待处理" />
+          <el-option label="进行中" value="进行中" />
+          <el-option label="已完成" value="已完成" />
+          <el-option label="已取消" value="已取消" />
         </el-select>
       </div>
     </div>
 
     <el-card class="custom-card">
-      <el-table
-        :data="filteredCustoms"
-        style="width: 100%"
-        v-loading="loading"
-      >
-        <el-table-column
-          prop="user_id"
-          label="用户ID"
-          width="120"
-        />
-        <el-table-column
-          prop="email"
-          label="邮箱"
-          width="180"
-        />
-        <el-table-column
-          prop="phone"
-          label="手机号"
-          width="140"
-        />
-        <el-table-column
-          prop="custom_img"
-          label="图片"
-          width="100"
-        >
+      <el-table :data="filteredCustoms" style="width: 100%" v-loading="loading">
+        <el-table-column prop="user_id" label="用户ID" width="120" />
+        <el-table-column prop="email" label="邮箱" width="180" />
+        <el-table-column prop="phone" label="手机号" width="140" />
+        <el-table-column prop="custom_img" label="图片" width="100">
           <template #default="{ row }">
             <el-image
               v-if="row.custom_img"
               :src="row.custom_img"
               style="width: 60px; height: 60px"
-              fit="cover"
-            />
+              fit="cover" />
             <span v-else>无</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="custom_message"
           label="定制留言"
-          min-width="200"
-        />
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="140"
-        >
+          min-width="200" />
+        <el-table-column prop="status" label="状态" width="140">
           <template #default="{ row }">
             <el-select
               v-model="row.status"
               placeholder="请选择"
               size="small"
-              @change="handleStatusChange(row)"
-            >
-              <el-option
-                label="待处理"
-                value="待处理"
-              />
-              <el-option
-                label="进行中"
-                value="进行中"
-              />
-              <el-option
-                label="已完成"
-                value="已完成"
-              />
-              <el-option
-                label="已取消"
-                value="已取消"
-              />
+              @change="handleStatusChange(row)">
+              <el-option label="待处理" value="待处理" />
+              <el-option label="进行中" value="进行中" />
+              <el-option label="已完成" value="已完成" />
+              <el-option label="已取消" value="已取消" />
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="created_at"
-          label="提交时间"
-          width="180"
-        >
+        <el-table-column prop="created_at" label="提交时间" width="180">
           <template #default="{ row }">
             {{ new Date(row.created_at).toLocaleString() }}
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="100"
-          fixed="right"
-        >
+        <el-table-column label="操作" width="100" fixed="right">
           <template #default="{ row }">
-            <el-button
-              type="primary"
-              size="small"
-              @click="showDetail(row)"
+            <span class="link-item detail" @click="showDetail(row)"
+              >查看详情</span
             >
-              查看详情
-            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -146,8 +81,7 @@
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
@@ -156,8 +90,7 @@
       v-model="detailVisible"
       title="定制详情"
       width="50%"
-      :close-on-click-modal="false"
-    >
+      :close-on-click-modal="false">
       <div class="detail-content">
         <div class="detail-item">
           <span class="label">用户ID：</span>
@@ -178,8 +111,7 @@
             :src="custom.custom_img"
             style="width: 100px; height: 100px"
             fit="cover"
-            :preview-src-list="[custom.custom_img]"
-          />
+            :preview-src-list="[custom.custom_img]" />
           <span v-else>无</span>
         </div>
         <div class="detail-item">
@@ -290,7 +222,8 @@ const filteredCustoms = computed(() => {
         (item.user_id && item.user_id.toLowerCase().includes(keyword)) ||
         (item.email && item.email.toLowerCase().includes(keyword)) ||
         (item.phone && item.phone.toLowerCase().includes(keyword)) ||
-        (item.custom_message && item.custom_message.toLowerCase().includes(keyword))
+        (item.custom_message &&
+          item.custom_message.toLowerCase().includes(keyword))
     );
   }
 
@@ -372,5 +305,15 @@ onMounted(() => {
   margin-top: 10px;
   line-height: 1.5;
   color: #303133;
+}
+
+.link-item {
+  cursor: pointer;
+  font-size: 14px;
+  color: #409eff;
+}
+
+.link-item:hover {
+  opacity: 0.8;
 }
 </style>

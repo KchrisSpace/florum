@@ -86,14 +86,14 @@
         <el-table-column prop="created_at" label="下单时间" />
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
-            <el-button-group>
-              <el-button type="primary" size="small" @click="handleDetail(row)">
-                详情
-              </el-button>
-              <el-button type="info" size="small" @click="handleUserInfo(row)">
-                用户信息
-              </el-button>
-            </el-button-group>
+            <div class="operation-links">
+              <span class="link-item detail" @click="handleDetail(row)"
+                >详情</span
+              >
+              <span class="link-item user" @click="handleUserInfo(row)"
+                >用户信息</span
+              >
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -740,5 +740,27 @@ onMounted(() => {
   font-size: 20px;
   font-weight: bold;
   margin-left: 10px;
+}
+
+.operation-links {
+  display: flex;
+  gap: 12px;
+}
+
+.link-item {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.link-item:hover {
+  opacity: 0.8;
+}
+
+.link-item.detail {
+  color: #409eff;
+}
+
+.link-item.user {
+  color: #909399;
 }
 </style>

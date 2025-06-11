@@ -58,23 +58,18 @@
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
-            <el-button-group>
-              <el-button type="primary" size="small" @click="handleEdit(row)">
-                编辑
-              </el-button>
-              <el-button
-                type="warning"
-                size="small"
-                @click="handleStatusChange(row)">
+            <div class="operation-links">
+              <span class="link-item edit" @click="handleEdit(row)">编辑</span>
+              <span class="link-item status" @click="handleStatusChange(row)">
                 {{ row.status === 'active' ? '禁用' : '启用' }}
-              </el-button>
-              <el-button type="danger" size="small" @click="handleDelete(row)">
-                删除
-              </el-button>
-              <el-button type="info" size="small" @click="handleDetail(row)">
-                详情
-              </el-button>
-            </el-button-group>
+              </span>
+              <span class="link-item delete" @click="handleDelete(row)"
+                >删除</span
+              >
+              <span class="link-item detail" @click="handleDetail(row)"
+                >详情</span
+              >
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -577,5 +572,35 @@ onMounted(() => {
 
 .permission-tag {
   margin-right: 5px;
+}
+
+.operation-links {
+  display: flex;
+  gap: 12px;
+}
+
+.link-item {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.link-item:hover {
+  opacity: 0.8;
+}
+
+.link-item.edit {
+  color: #409eff;
+}
+
+.link-item.status {
+  color: #e6a23c;
+}
+
+.link-item.delete {
+  color: #f56c6c;
+}
+
+.link-item.detail {
+  color: #909399;
 }
 </style>

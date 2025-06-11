@@ -2,38 +2,28 @@
   <div class="products-page">
     <!-- 搜索和操作栏 -->
     <el-card class="search-card">
-      <el-form
-        :inline="true"
-        :model="searchForm"
-        class="search-form"
-      >
+      <el-form :inline="true" :model="searchForm" class="search-form">
         <el-form-item label="商品名称">
           <el-input
             v-model="searchForm.name"
             placeholder="请输入商品名称"
-            clearable
-          />
+            clearable />
         </el-form-item>
         <el-form-item label="价格区间">
           <el-input-number
             v-model="searchForm.minPrice"
             :min="0"
             :precision="2"
-            placeholder="最低价"
-          />
+            placeholder="最低价" />
           <span class="separator">-</span>
           <el-input-number
             v-model="searchForm.maxPrice"
             :min="0"
             :precision="2"
-            placeholder="最高价"
-          />
+            placeholder="最高价" />
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="handleSearch"
-          >
+          <el-button type="primary" @click="handleSearch">
             <el-icon><Search /></el-icon>搜索
           </el-button>
           <el-button @click="resetSearch">
@@ -49,16 +39,10 @@
         <div class="card-header">
           <span>商品列表</span>
           <el-button-group>
-            <el-button
-              type="primary"
-              @click="handleAdd"
-            >
+            <el-button type="primary" @click="handleAdd">
               <el-icon><Plus /></el-icon>新增商品
             </el-button>
-            <el-button
-              type="success"
-              @click="handleExport"
-            >
+            <el-button type="success" @click="handleExport">
               <el-icon><Download /></el-icon>导出商品
             </el-button>
           </el-button-group>
@@ -69,100 +53,57 @@
         :data="productList"
         style="width: 100%"
         v-loading="loading"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <el-table-column
-          label="商品图片"
-          width="100"
-        >
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="商品图片" width="100">
           <template #default="{ row }">
             <el-image
               :src="row.image"
               :preview-src-list="row.raw.images"
               fit="cover"
-              style="width: 50px; height: 50px"
-            />
+              style="width: 50px; height: 50px" />
           </template>
         </el-table-column>
-        <el-table-column
-          prop="title"
-          label="商品名称"
-        />
-        <el-table-column
-          label="热销"
-          width="60"
-        >
+        <el-table-column prop="title" label="商品名称" />
+        <el-table-column label="热销" width="60">
           <template #default="{ row }">
-            <el-tag
-              v-if="row.raw.promotion?.is_hot"
-              type="danger"
-              size="small"
+            <el-tag v-if="row.raw.promotion?.is_hot" type="danger" size="small"
               >热销</el-tag
             >
           </template>
         </el-table-column>
-        <el-table-column
-          prop="price"
-          label="价格"
-        >
-          <template #default="{ row }"> ¥{{ formatNumber(row.price) }} </template>
+        <el-table-column prop="price" label="价格">
+          <template #default="{ row }">
+            ¥{{ formatNumber(row.price) }}
+          </template>
         </el-table-column>
-        <el-table-column
-          prop="stock"
-          label="库存"
-          width="100"
-        />
-        <el-table-column
-          prop="sales"
-          label="销量"
-          width="100"
-        />
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="100"
-        >
+        <el-table-column prop="stock" label="库存" width="100" />
+        <el-table-column prop="sales" label="销量" width="100" />
+        <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag
-              :type="row.status === '上架' ? 'success' : row.status === '下架' ? 'info' : 'default'"
-            >
+              :type="
+                row.status === '上架'
+                  ? 'success'
+                  : row.status === '下架'
+                  ? 'info'
+                  : 'default'
+              ">
               {{ row.status }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          fixed="right"
-        >
+        <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
-            <el-button-group>
-              <el-button
-                type="primary"
-                size="small"
-                @click="handleEdit(row)"
-              >
-                编辑
-              </el-button>
-              <el-button
-                type="success"
-                size="small"
-                @click="handleToggleStatus(row)"
-              >
+            <div class="operation-links">
+              <span class="link-item edit" @click="handleEdit(row)">编辑</span>
+              <span class="link-item status" @click="handleToggleStatus(row)">
                 {{ row.status === '上架' ? '下架' : '上架' }}
-              </el-button>
-              <el-button
-                type="danger"
-                size="small"
-                @click="handleDelete(row)"
+              </span>
+              <span class="link-item delete" @click="handleDelete(row)"
+                >删除</span
               >
-                删除
-              </el-button>
-            </el-button-group>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -176,8 +117,7 @@
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
@@ -185,121 +125,53 @@
     <el-dialog
       v-model="dialogVisible"
       :title="dialogType === 'add' ? '新增商品' : '编辑商品'"
-      width="800px"
-    >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="120px"
-      >
-        <el-form-item
-          label="商品ID"
-          prop="id"
-        >
-          <el-input
-            v-model="form.id"
-            placeholder="系统自动生成"
-            disabled
-          />
+      width="800px">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
+        <el-form-item label="商品ID" prop="id">
+          <el-input v-model="form.id" placeholder="系统自动生成" disabled />
         </el-form-item>
-        <el-form-item
-          label="商品名称"
-          prop="title"
-        >
-          <el-input
-            v-model="form.title"
-            placeholder="请输入商品名称"
-          />
+        <el-form-item label="商品名称" prop="title">
+          <el-input v-model="form.title" placeholder="请输入商品名称" />
         </el-form-item>
-        <el-form-item
-          label="商品分类"
-          prop="main_category"
-        >
-          <el-select
-            v-model="form.main_category"
-            placeholder="请选择商品分类"
-          >
-            <el-option
-              label="热销"
-              value="热销"
-            />
-            <el-option
-              label="新品"
-              value="新品"
-            />
-            <el-option
-              label="特惠"
-              value="特惠"
-            />
-            <el-option
-              label="礼盒"
-              value="礼盒"
-            />
+        <el-form-item label="商品分类" prop="main_category">
+          <el-select v-model="form.main_category" placeholder="请选择商品分类">
+            <el-option label="热销" value="热销" />
+            <el-option label="新品" value="新品" />
+            <el-option label="特惠" value="特惠" />
+            <el-option label="礼盒" value="礼盒" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="商品价格"
-          prop="price_info.current_price"
-        >
+        <el-form-item label="商品价格" prop="price_info.current_price">
           <el-input-number
             v-model="form.price_info.current_price"
             :min="0"
             :precision="2"
-            :step="0.1"
-          />
+            :step="0.1" />
         </el-form-item>
-        <el-form-item
-          label="库存状态"
-          prop="sales_data.stock_status"
-        >
+        <el-form-item label="库存状态" prop="sales_data.stock_status">
           <el-select
             v-model="form.sales_data.stock_status"
-            placeholder="请选择库存状态"
-          >
-            <el-option
-              label="充足"
-              value="充足"
-            />
-            <el-option
-              label="紧张"
-              value="紧张"
-            />
-            <el-option
-              label="缺货"
-              value="缺货"
-            />
-            <el-option
-              label="有限"
-              value="有限"
-            />
+            placeholder="请选择库存状态">
+            <el-option label="充足" value="充足" />
+            <el-option label="紧张" value="紧张" />
+            <el-option label="缺货" value="缺货" />
+            <el-option label="有限" value="有限" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="销量"
-          prop="sales_data.sales_count"
-        >
+        <el-form-item label="销量" prop="sales_data.sales_count">
           <el-input-number
             v-model="form.sales_data.sales_count"
             :min="0"
-            :precision="0"
-          />
+            :precision="0" />
         </el-form-item>
-        <el-form-item
-          label="评分"
-          prop="sales_data.rating"
-        >
+        <el-form-item label="评分" prop="sales_data.rating">
           <el-rate
             v-model="form.sales_data.rating"
             :max="5"
             :allow-half="true"
-            show-score
-          />
+            show-score />
         </el-form-item>
-        <el-form-item
-          label="商品图片"
-          prop="images"
-        >
+        <el-form-item label="商品图片" prop="images">
           <el-upload
             class="avatar-uploader"
             :action="`${API_URL}/uploads`"
@@ -309,166 +181,121 @@
             :before-upload="beforeUpload"
             :limit="4"
             :on-exceed="handleExceed"
-            :headers="uploadHeaders"
-          >
+            :headers="uploadHeaders">
             <el-button type="primary">点击上传</el-button>
             <template #tip>
-              <div class="el-upload__tip">支持上传4张图片，建议尺寸800x800px，大小不超过2MB</div>
+              <div class="el-upload__tip">
+                支持上传4张图片，建议尺寸800x800px，大小不超过2MB
+              </div>
             </template>
           </el-upload>
           <div
             class="image-preview"
-            v-if="form.images && form.images.length > 0"
-          >
+            v-if="form.images && form.images.length > 0">
             <div
               v-for="(image, index) in form.images"
               :key="index"
-              class="image-item"
-            >
+              class="image-item">
               <el-image
                 :src="image"
                 fit="cover"
                 :preview-src-list="form.images"
-                :initial-index="index"
-              />
+                :initial-index="index" />
               <el-button
                 type="danger"
                 size="small"
                 circle
                 @click="handleRemoveImage(index)"
-                class="remove-btn"
-              >
+                class="remove-btn">
                 <el-icon><Delete /></el-icon>
               </el-button>
             </div>
           </div>
         </el-form-item>
-        <el-form-item
-          label="商品描述"
-          prop="promotion.main_description"
-        >
+        <el-form-item label="商品描述" prop="promotion.main_description">
           <el-input
             v-model="form.promotion.main_description"
             type="textarea"
             :rows="4"
-            placeholder="请输入商品描述"
-          />
+            placeholder="请输入商品描述" />
         </el-form-item>
-        <el-form-item
-          label="花语"
-          prop="promotion.flower_language"
-        >
+        <el-form-item label="花语" prop="promotion.flower_language">
           <el-input
             v-model="form.promotion.flower_language"
             type="textarea"
             :rows="2"
-            placeholder="请输入花语"
-          />
+            placeholder="请输入花语" />
         </el-form-item>
-        <el-form-item
-          label="关键词"
-          prop="promotion.keywords"
-        >
+        <el-form-item label="关键词" prop="promotion.keywords">
           <el-select
             v-model="form.promotion.keywords"
             multiple
             filterable
             allow-create
             default-first-option
-            placeholder="请输入关键词"
-          >
+            placeholder="请输入关键词">
             <el-option
               v-for="item in keywordOptions"
               :key="item"
               :label="item"
-              :value="item"
-            />
+              :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="促销结束时间"
-          prop="promotion.end_time"
-        >
+        <el-form-item label="促销结束时间" prop="promotion.end_time">
           <el-date-picker
             v-model="form.promotion.end_time"
             type="datetime"
-            placeholder="选择促销结束时间"
-          />
+            placeholder="选择促销结束时间" />
         </el-form-item>
-        <el-form-item
-          label="商品分类标签"
-          prop="specification.category"
-        >
+        <el-form-item label="商品分类标签" prop="specification.category">
           <el-select
             v-model="form.specification.category"
             multiple
             filterable
             allow-create
             default-first-option
-            placeholder="请选择或输入分类标签"
-          >
+            placeholder="请选择或输入分类标签">
             <el-option
               v-for="item in categoryOptions"
               :key="item"
               :label="item"
-              :value="item"
-            />
+              :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="花材清单"
-          prop="specification.materials"
-        >
+        <el-form-item label="花材清单" prop="specification.materials">
           <el-input
             v-model="form.specification.materials"
             type="textarea"
             :rows="4"
-            placeholder="请输入花材清单，每行一个"
-          />
+            placeholder="请输入花材清单，每行一个" />
         </el-form-item>
-        <el-form-item
-          label="包装说明"
-          prop="specification.packaging"
-        >
+        <el-form-item label="包装说明" prop="specification.packaging">
           <el-input
             v-model="form.specification.packaging"
             type="textarea"
             :rows="3"
-            placeholder="请输入包装说明"
-          />
+            placeholder="请输入包装说明" />
         </el-form-item>
-        <el-form-item
-          label="商品状态"
-          prop="status"
-        >
+        <el-form-item label="商品状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio label="上架">上架</el-radio>
             <el-radio label="下架">下架</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item
-          label="热销"
-          prop="promotion.is_hot"
-        >
+        <el-form-item label="热销" prop="promotion.is_hot">
           <el-switch
             v-model="form.promotion.is_hot"
             active-text="是"
-            inactive-text="否"
-          />
+            inactive-text="否" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button
-            type="primary"
-            @click="submitForm"
-            >确定</el-button
-          >
+          <el-button type="primary" @click="submitForm">确定</el-button>
         </span>
       </template>
     </el-dialog>
-
   </div>
 </template>
 
@@ -541,7 +368,16 @@ const keywordOptions = [
 ];
 
 // 分类选项
-const categoryOptions = ['推荐', '生日鲜花', '纪念日', '求婚', '道歉', '感谢', '祝福', '礼盒'];
+const categoryOptions = [
+  '推荐',
+  '生日鲜花',
+  '纪念日',
+  '求婚',
+  '道歉',
+  '感谢',
+  '祝福',
+  '礼盒',
+];
 
 // 格式化数字
 const formatNumber = (num) => {
@@ -558,7 +394,9 @@ const fetchProductList = async () => {
   try {
     const response = await fetch(`${API_URL}/product_list`);
     if (!response.ok) {
-      throw new Error(`获取商品列表失败: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `获取商品列表失败: ${response.status} ${response.statusText}`
+      );
     }
     const data = await response.json();
 
@@ -567,7 +405,10 @@ const fetchProductList = async () => {
       ? data.map((item) => ({
           id: item.id,
           title: item.title,
-          image: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '',
+          image:
+            Array.isArray(item.images) && item.images.length > 0
+              ? item.images[0]
+              : '',
           price: item.price_info?.current_price ?? 0,
           stock: item.sales_data?.stock_status || '',
           sales: item.sales_data?.sales_count ?? 0,
@@ -581,14 +422,19 @@ const fetchProductList = async () => {
     if (searchForm.name) {
       filteredData = filteredData.filter(
         (product) =>
-          product.title && product.title.toLowerCase().includes(searchForm.name.toLowerCase())
+          product.title &&
+          product.title.toLowerCase().includes(searchForm.name.toLowerCase())
       );
     }
     if (searchForm.minPrice !== null) {
-      filteredData = filteredData.filter((product) => product.price >= searchForm.minPrice);
+      filteredData = filteredData.filter(
+        (product) => product.price >= searchForm.minPrice
+      );
     }
     if (searchForm.maxPrice !== null) {
-      filteredData = filteredData.filter((product) => product.price <= searchForm.maxPrice);
+      filteredData = filteredData.filter(
+        (product) => product.price <= searchForm.maxPrice
+      );
     }
 
     // 分页
@@ -700,7 +546,9 @@ const handleEdit = (row) => {
   form.promotion = {
     is_hot: rawData.promotion?.is_hot ?? false,
     main_description: rawData.promotion?.main_description || '',
-    keywords: Array.isArray(rawData.promotion?.keywords) ? [...rawData.promotion.keywords] : [],
+    keywords: Array.isArray(rawData.promotion?.keywords)
+      ? [...rawData.promotion.keywords]
+      : [],
     flower_language: rawData.promotion?.flower_language || '',
     end_time: rawData.promotion?.end_time || '',
   };
@@ -798,7 +646,9 @@ const submitForm = async () => {
         // 处理花材清单
         const materials =
           typeof form.specification.materials === 'string'
-            ? form.specification.materials.split('\n').filter((item) => item.trim())
+            ? form.specification.materials
+                .split('\n')
+                .filter((item) => item.trim())
             : form.specification.materials;
 
         // 构建商品数据
@@ -902,7 +752,9 @@ const handleExport = async () => {
       评分: item.sales_data?.rating || 0,
       商品描述: item.promotion?.main_description || '',
       花语: item.promotion?.flower_language || '',
-      关键词: Array.isArray(item.promotion?.keywords) ? item.promotion.keywords.join(',') : '',
+      关键词: Array.isArray(item.promotion?.keywords)
+        ? item.promotion.keywords.join(',')
+        : '',
       促销结束时间: item.promotion?.end_time || '',
       商品分类标签: Array.isArray(item.specification?.category)
         ? item.specification.category.join(',')
@@ -946,7 +798,6 @@ const handleExport = async () => {
     ElMessage.error('导出失败，请重试');
   }
 };
-
 
 // 组件卸载前的清理
 onBeforeUnmount(() => {
@@ -1044,5 +895,31 @@ onMounted(() => {
   color: #909399;
   font-size: 12px;
   margin-top: 5px;
+}
+
+.operation-links {
+  display: flex;
+  gap: 12px;
+}
+
+.link-item {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.link-item:hover {
+  opacity: 0.8;
+}
+
+.link-item.edit {
+  color: #409eff;
+}
+
+.link-item.status {
+  color: #67c23a;
+}
+
+.link-item.delete {
+  color: #f56c6c;
 }
 </style>
