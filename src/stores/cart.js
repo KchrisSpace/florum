@@ -64,22 +64,27 @@ export const useCartStore = defineStore("cart", () => {
   // 删除商品
   const removeItem = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3000/cart/${productId}`);
-      // 从本地列表中移除商品
-      cartItems.value = cartItems.value.filter((item) => item.id !== productId);
-      // 删除对应的总价记录
-      delete itemTotals.value[productId];
-      // 重新获取购物车数据以确保同步
-      await fetchCartData();
-      // 重新计算总价
-      cartItems.value.forEach((item) => {
-        if (!itemTotals.value[item.id]) {
-          itemTotals.value[item.id] =
-            (item.product?.price_info?.current_price || 0) * item.quantity;
-        }
-      });
+      console.log('开始删除商品:', productId);
+      const response = await axios.delete(
+        `http://localhost:3000/cart/${productId}`
+      );
+      console.log('删除响应:', response.data);
+
+      if (response.data.code === 200) {
+        // 从本地列表中移除商品
+        cartItems.value = cartItems.value.filter(
+          (item) => item.id !== productId
+        );
+        // 删除对应的总价记录
+        delete itemTotals.value[productId];
+        console.log('商品删除成功');
+      } else {
+        console.error('删除商品失败:', response.data.message);
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      console.error("删除商品失败:", error);
+      console.error('删除商品失败:', error);
+      throw error;
     }
   };
 

@@ -6,12 +6,13 @@
       <div class="cart-items" v-for="item in cartItems" :key="item.id">
         <div class="cart-item">
           <img
-            :src="item.product?.images[0] || '../assets/flower-product.png'"
-            :alt="item.product?.title"
-            class="item-image"
-          />
+            :src="item.product?.images?.[0] || '/src/assets/flower-product.png'"
+            :alt="item.product?.title || '商品图片'"
+            class="item-image" />
           <div class="item-details">
-            <div class="item-name">{{ item.product?.title }}</div>
+            <div class="item-name">
+              {{ item.product?.title || '加载中...' }}
+            </div>
             <div class="item-row">
               <div class="controls-group">
                 <button class="quantity-btn" @click="decreaseQuantity(item)">
@@ -23,7 +24,7 @@
                 </button>
               </div>
               <span class="price"
-                >¥{{ item.product?.price_info?.current_price }}</span
+                >¥{{ item.product?.price_info?.current_price || '0.00' }}</span
               >
               <div class="delete-container">
                 <button class="delete-btn" @click="removeItem(item)">
@@ -42,8 +43,8 @@
         <span class="total-price">¥ {{ totalPrice }}</span>
       </div>
       <div class="action-buttons">
-        <button class="checkout-btn primary" @click="goToCreateOrder">
-          去创建订单
+        <button class="checkout-btn primary" @click="goToPayment">
+          前往结算
         </button>
         <button class="checkout-btn secondary" @click="goToCart">
           购物车查看
@@ -56,9 +57,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useCartStore } from "../stores/cart";
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '../stores/cart';
 
 const router = useRouter();
 const cartStore = useCartStore();
@@ -71,7 +72,7 @@ defineProps({
   },
 });
 
-defineEmits(["close"]);
+defineEmits(['close']);
 
 // 计算属性
 const cartItems = computed(() => cartStore.cartItems);
@@ -102,12 +103,12 @@ const removeItem = (item) => {
 };
 
 // 路由跳转
-const goToCreateOrder = () => {
-  router.push("/create-order");
+const goToPayment = () => {
+  router.push('/create-order');
 };
 
 const goToCart = () => {
-  router.push("/cart");
+  router.push('/cart');
 };
 
 // 生命周期钩子
@@ -115,8 +116,10 @@ onMounted(async () => {
   await cartStore.fetchCartData();
   // 初始化每个商品的总价
   cartItems.value.forEach((item) => {
-    const itemTotal = item.quantity * item.product.price_info.current_price;
-    cartStore.updateItemTotal({ id: item.id, total: itemTotal });
+    if (item?.product?.price_info?.current_price) {
+      const itemTotal = item.quantity * item.product.price_info.current_price;
+      cartStore.updateItemTotal({ id: item.id, total: itemTotal });
+    }
   });
 });
 </script>

@@ -280,6 +280,13 @@ const timeSlots = [
   { label: "18:00-21:00", value: "evening" },
 ];
 
+// 时间段映射
+const timeSlotMap = {
+  morning: '09:00:00',
+  afternoon: '14:00:00',
+  evening: '18:00:00',
+};
+
 // 获取地址数据
 const fetchAddress = async () => {
   try {
@@ -327,8 +334,8 @@ const createOrder = async () => {
     return;
   }
 
-  if (!addressStore.addresses) {
-    ElMessage.warning("请先选择收货地址");
+  if (!addressStore.defaultAddress) {
+    ElMessage.warning('请先选择收货地址');
     return;
   }
 
@@ -341,8 +348,14 @@ const createOrder = async () => {
       })),
       total_price: finalPrice.value,
       shipping_fee: shippingFee.value,
-      delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
-      status: "进行中",
+      delivery_time: `${selectedDate.value}T${timeSlotMap[selectedTime.value]}Z`,
+      status: '进行中',
+      address: {
+        consignee: addressStore.defaultAddress.consignee,
+        phone: addressStore.defaultAddress.phone,
+        region: addressStore.defaultAddress.region,
+        detail: addressStore.defaultAddress.detail,
+      },
     };
 
     const result = await normalOrdersStore.addOrder(orderData);

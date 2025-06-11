@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import axios from "axios";
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import axios from 'axios';
 
-export const useWishlistStore = defineStore("wishlist", () => {
+export const useWishlistStore = defineStore('wishlist', () => {
   // 状态
   const wishlistItems = ref([]);
   const isLoading = ref(false);
@@ -18,7 +18,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
     error.value = null;
 
     try {
-      const response = await axios.get("http://localhost:3000/wishlist");
+      const response = await axios.get('http://localhost:3000/wishlist');
       wishlistItems.value = response.data;
 
       // 获取每个商品的详细信息
@@ -35,7 +35,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
     } catch (error) {
       error.value = error.message;
       wishlistItems.value = [];
-      console.error("获取心愿单数据失败:", error);
+      console.error('获取心愿单数据失败:', error);
     } finally {
       isLoading.value = false;
     }
@@ -44,15 +44,25 @@ export const useWishlistStore = defineStore("wishlist", () => {
   // 删除商品
   const removeItem = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3000/wishlist/${productId}`);
-      // 从本地列表中移除商品
-      wishlistItems.value = wishlistItems.value.filter(
-        (item) => item.id !== productId
+      console.log('开始删除心愿单商品:', productId);
+      const response = await axios.delete(
+        `http://localhost:3000/wishlist/${productId}`
       );
-      // 重新获取心愿单数据以确保同步
-      await fetchWishlistData();
+      console.log('删除响应:', response.data);
+
+      if (response.data.code === 200) {
+        // 从本地列表中移除商品
+        wishlistItems.value = wishlistItems.value.filter(
+          (item) => item.id !== productId
+        );
+        console.log('商品删除成功');
+      } else {
+        console.error('删除商品失败:', response.data.message);
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      console.error("删除商品失败:", error);
+      console.error('删除商品失败:', error);
+      throw error;
     }
   };
 
@@ -66,7 +76,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
 
       if (!existingItem) {
         // 如果商品不存在，添加新商品
-        await axios.post("http://localhost:3000/wishlist", {
+        await axios.post('http://localhost:3000/wishlist', {
           id: productId,
           created_at: new Date().toISOString(),
         });
@@ -74,7 +84,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
         await fetchWishlistData();
       }
     } catch (error) {
-      console.error("添加商品到心愿单失败:", error);
+      console.error('添加商品到心愿单失败:', error);
       throw error;
     }
   };
@@ -89,7 +99,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
       // 清空本地状态
       wishlistItems.value = [];
     } catch (error) {
-      console.error("清空心愿单失败:", error);
+      console.error('清空心愿单失败:', error);
     }
   };
 

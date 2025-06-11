@@ -12,8 +12,8 @@ import Dashboard from "../admin/views/Dashboard.vue";
 import Users from "../admin/views/Users.vue";
 import Products from "../admin/views/Products.vue";
 import Orders from "../admin/views/Orders.vue";
-import Categories from "../admin/views/Categories.vue";
 import Suggestion from "../admin/views/Suggestion.vue";
+import BackCustom from "../admin/views/Custom.vue";
 
 // 路由配置
 const routes = [
@@ -131,17 +131,17 @@ const routes = [
         },
       },
       {
+        path: "custom",
+        component: BackCustom,
+        meta: {
+          title: "定制管理",
+        },
+      },
+      {
         path: "orders",
         component: Orders,
         meta: {
           title: "订单管理",
-        },
-      },
-      {
-        path: "categories",
-        component: Categories,
-        meta: {
-          title: "分类管理",
         },
       },
       {

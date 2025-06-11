@@ -23,13 +23,13 @@
           <el-icon><List /></el-icon>
           <span>订单管理</span>
         </router-link>
-        <router-link to="/admin/categories" class="nav-item">
-          <el-icon><Files /></el-icon>
-          <span>分类管理</span>
+        <router-link to="/admin/custom" class="nav-item">
+          <el-icon><Brush /></el-icon>
+          <span>定制管理</span>
         </router-link>
         <router-link to="/admin/suggestion" class="nav-item">
           <el-icon><Files /></el-icon>
-          <span>建议和反馈	</span>
+          <span>建议和反馈 </span>
         </router-link>
       </nav>
     </div>
@@ -75,8 +75,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import {
   DataLine,
   User,
@@ -84,14 +84,15 @@ import {
   List,
   Files,
   CaretBottom,
-} from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+  Brush,
+} from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 const route = useRoute();
 
 const currentRoute = computed(() => {
-  return route.meta.title || "首页";
+  return route.meta.title || '首页';
 });
 
 // 获取当前登录用户信息
@@ -99,34 +100,34 @@ const currentUser = ref(null);
 
 onMounted(() => {
   // 从本地存储获取用户信息
-  const userJson = localStorage.getItem("currentUser");
+  const userJson = localStorage.getItem('currentUser');
   if (userJson) {
     currentUser.value = JSON.parse(userJson);
 
     // 检查是否是管理员
     if (
       !currentUser.value ||
-      (currentUser.value.role !== "admin" &&
-        currentUser.value.username !== "admin")
+      (currentUser.value.role !== 'admin' &&
+        currentUser.value.username !== 'admin')
     ) {
       // 不是管理员，跳转到登录页
-      ElMessage.error("您没有管理员权限");
-      router.push("/login");
+      ElMessage.error('您没有管理员权限');
+      router.push('/login');
     }
   } else {
     // 未登录，跳转到登录页
-    router.push("/login");
+    router.push('/login');
   }
 });
 
 const handleProfile = () => {
-  router.push("/admin/profile");
+  router.push('/admin/profile');
 };
 
 const handleLogout = () => {
   // 实现登出逻辑
-  localStorage.removeItem("currentUser");
-  router.push("/login");
+  localStorage.removeItem('currentUser');
+  router.push('/login');
 };
 </script>
 

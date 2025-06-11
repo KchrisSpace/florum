@@ -31,8 +31,8 @@
       <!-- 头像 -->
       <div class="flex justify-start items-center gap-4">
         <img
-          :src="'/images/users/avater/user1.png'"
-          alt="avater"
+          :src="user.avatar"
+          alt="avatar"
           class="bg-font-primary w-18 h-18 rounded-full object-cover" />
         <div class="grow gap-4 flex justify-start">
           <textarea
@@ -98,8 +98,9 @@
 </template>
 
 <script setup name="Comments">
+import axios from 'axios';
 import { useCommentsStore } from '/src/stores/comments';
-import { defineProps, ref, watch } from 'vue';
+import { ref, onMounted, defineProps, watch } from 'vue';
 
 const props = defineProps({
   sortId: {
@@ -124,7 +125,28 @@ const textareaHeight = ref(40);
 const minHeight = 40;
 const isLoading = ref(false);
 const sortType = ref('latest'); // 默认按最新排序
+const user = ref({
+  id: '',
+  name: '',
+  avatar: '',
+});
+const userCache = {};
 
+const fetchUser = async () => {
+  try {
+    const res = await axios.get('http://localhost:3000/users/02');
+    const data = res.data.data || res.data;
+    console.log('获取用户信息:', data);
+    user.value = {
+      id: data.id || data._id,
+      name: data.user_name,
+      avatar: data.user_avatar,
+    };
+  } catch (err) {
+    console.error('获取用户信息失败', err);
+  }
+};
+console.log('user.value', user.value);
 const fetchComment = async () => {
   if (!props.sortId) {
     console.error('Article ID is required');
@@ -138,13 +160,38 @@ const fetchComment = async () => {
       props.commentType,
       props.commentQuery
     );
-    // 根据排序类型排序评论
-    sortComments(comments);
+    // 合并用户信息
+    const enrichedComments = await enrichCommentsWithUser(comments);
+    sortComments(enrichedComments);
   } catch (error) {
     console.error('获取评论失败:', error);
   } finally {
     isLoading.value = false;
   }
+};
+
+// 合并用户信息
+const enrichCommentsWithUser = async (comments) => {
+  const enriched = await Promise.all(
+    comments.map(async (comment) => {
+      const uid = comment.user_id;
+      // 只请求一次
+      if (!userCache[uid]) {
+        try {
+          const res = await axios.get(`http://localhost:3000/users/${uid}`);
+          userCache[uid] = res.data.data || res.data;
+        } catch (e) {
+          userCache[uid] = { user_avatar: '', user_name: '未知用户' };
+        }
+      }
+      return {
+        ...comment,
+        avatar: userCache[uid].user_avatar,
+        user_name: userCache[uid].user_name,
+      };
+    })
+  );
+  return enriched;
 };
 
 // 排序评论列表
@@ -178,10 +225,10 @@ const handleSubmit = async (e) => {
     const newComment = await commentsStore.addComment(
       {
         [props.commentQuery]: props.sortId,
-        user_id: '2',
-        user_name: 'Maybe',
+        user_id: user.value.id,
+        user_name: user.value.name,
         content: commentText.value.trim(),
-        avatar: '/images/users/avater/user1.png',
+        avatar: user.value.avatar,
       },
       props.commentType
     );
@@ -261,4 +308,8 @@ function formatDate(dateString) {
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+onMounted(() => {
+  fetchUser();
+});
 </script>
